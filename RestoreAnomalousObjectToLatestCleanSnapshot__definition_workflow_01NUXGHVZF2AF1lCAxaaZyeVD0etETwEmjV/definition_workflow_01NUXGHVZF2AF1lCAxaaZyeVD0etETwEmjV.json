@@ -1,0 +1,106 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV",
+    "name": "Restore Anomalous Object To Latest Clean Snapshot",
+    "title": "Restore Anomalous Object To Latest Clean Snapshot",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Source",
+          "type": "datatype.string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01O3MEC60ILI76DLlFF2eTgzMZAQm4uzXL3",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "HeliosAPIKey",
+          "type": "datatype.string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01O3ME19OZGP11cpZaVetpbgD5XKTFKpvdg",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Object",
+          "type": "datatype.string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01O3ME8DULQR92X9uzL0LnkGb0A8aUVVn53",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Cluster",
+          "type": "datatype.string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01O3MEJBRHJDG5LqO6GF9MEqogjlTZCxDVm",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "This workflow restores the anomolous object to the latest clean snapshot for a given object, source and cluster names",
+      "display_name": "Restore Anomalous Object To Latest Clean Snapshot",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01O3MC7VAUEO77GjZ3U9Z2Q8OMY2pPnH6eG",
+        "name": "Execute Python Script",
+        "title": "Execute Python Script",
+        "type": "python3.script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": true,
+          "display_name": "Execute Python Script",
+          "script": "'''\nSecureX orchestration workflow python script used to restore an anomalous object on Helios\nto the latest clean snapshot.\nScript usage:\npython restore_anomalous_object.py \u003cHelios API Key\u003e \u003cObject\u003e \u003cSource\u003e \u003cCluster Name\u003e\nSuported environments: VMware\n'''\n\n\nimport requests\nimport sys\n\nBASE_URL = \"https://helios.cohesity.com\"\n\n\ndef get_property_dict(property_list):\n    '''\n    get property dictionary from list of property dicts\n    with keys, values\n    :param property_list:\n    :return:\n    '''\n    property_dict = {}\n    for property in property_list:\n        property_dict[property['key']] = property['value']\n    return property_dict\n\n\ndef main(args):\n    '''\n    Get the security alerts and restore vm to the latest clean snapshot\n    Supported environments: VMware\n    :param args: commandline arguments\n    :return:\n    '''\n    try:\n        url = BASE_URL + '/mcm/alerts?alertCategoryList=kSecurity\u0026alertStateList=kOpen'\n        params = {\n            \"maxAlerts\": 1000,\n            \"alertCategoryList\": \"kSecurity\",\n            \"alertStateList\": \"kOpen\",\n            \"_includeTenantInfo\": True\n        }\n        headers = {'Content-Type': 'application/json', 'apiKey': args[1]}\n        response = requests.get(url, headers=headers, params=params, verify=False)\n        if response.status_code != 200:\n            raise Exception(\"Failed to get security alerts from helios, \" + str(response.json()))\n        restore_properties = {}\n        for alert in response.json():\n            if alert['severity'] == 'kCritical' and alert['alertState'] == 'kOpen':\n                property_dict = get_property_dict(alert['propertyList'])\n                if property_dict.get('object', \"\") == args[2] and \\\n                        property_dict.get('source', \"\") == args[3] and \\\n                        property_dict.get('cluster', \"\") == args[4]:\n                    restore_properties = property_dict\n                    break\n        if not restore_properties:\n            raise Exception(\"Failed to find the anomalous object\")\n        elif restore_properties.get('environment', \"\") != 'kVMware':\n            raise Exception(\"Workflow supports only VMware environment\")\n        elif restore_properties and restore_properties.get('environment') == 'kVMware':\n            request_payload = {\n                \"objects\": [{\"entity\": {\"id\": int(restore_properties[\"entityId\"]),\n                                         \"parentId\": int(restore_properties[\"parentId\"])},\n                              \"jobId\": int(restore_properties[\"jobId\"]),\n                              \"jobInstanceId\": int(restore_properties[\"jobInstanceId\"]),\n                              \"startTimeUsecs\": int(restore_properties[\"jobStartTimeUsecs\"]),\n\n                              }],\n                \"name\": \"Recover_object_\" + restore_properties[\"object\"],\n                \"powerStateConfig\": {\"powerOn\":True},\n                \"restoredObjectsNetworkConfig\": {\"disableNetwork\": False},\n                \"renameRestoredObjectParam\": {\"prefix\": \"Recover-\", \"suffix\": \"-VM\"},\n                \"continueRestoreOnError\": False}\n            url = BASE_URL + '/irisservices/api/v1/restore'\n            headers['clusterid'] = restore_properties['cid']\n            response = requests.post(url, headers=headers, json=request_payload, verify=False)\n            if response.status_code != 200:\n                raise Exception(\"Failed to restore \" + restore_properties['object'] +\n                                ' to latest clean snapshot. ' + str(response.json()))\n\n        print(\"Workflow succeeded\")\n    except Exception as e:\n        sys.exit(\"Workflow failed: \" + str(e))\n\n\nmain(sys.argv)",
+          "script_arguments": [
+            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01O3ME19OZGP11cpZaVetpbgD5XKTFKpvdg$",
+            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01O3ME8DULQR92X9uzL0LnkGb0A8aUVVn53$",
+            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01O3MEC60ILI76DLlFF2eTgzMZAQm4uzXL3$",
+            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01O3MEJBRHJDG5LqO6GF9MEqogjlTZCxDVm$"
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  }
+}
