@@ -11,12 +11,12 @@
         "properties": {
           "value": "",
           "scope": "input",
-          "name": "observable_type",
+          "name": "observable_value",
           "type": "datatype.string",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01OD1S4OPBM761m5Yk499Hwq2h6O5uOn0tx",
+        "unique_name": "variable_workflow_01OD1SN9NY7FN7XM9qE2366Epc9DOwkVskF",
         "object_type": "variable_workflow"
       },
       {
@@ -24,12 +24,12 @@
         "properties": {
           "value": "",
           "scope": "input",
-          "name": "observable_value",
+          "name": "observable_type",
           "type": "datatype.string",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01OD1SN9NY7FN7XM9qE2366Epc9DOwkVskF",
+        "unique_name": "variable_workflow_01OD1S4OPBM761m5Yk499Hwq2h6O5uOn0tx",
         "object_type": "variable_workflow"
       }
     ],
@@ -63,10 +63,13 @@
           "action_timeout": 180,
           "continue_on_failure": false,
           "display_name": "Ignore Anomaly on Helios",
-          "script": "'''\nSecureX orchestration workflow python script used to ignore anomalous object on Helios\nScript usage:\npython ignore_object_anomaly_alert.py \u003chelios_api_key\u003e \u003cobject\u003e\nhelios_api_key: Cohesity Helios API key\nobject: Anomalous object name\n'''\n\nimport argparse\nimport requests\nimport sys\n\n\ndef get_property_dict(property_list):\n    '''\n    get property dictionary from list of property dicts\n    with keys, values\n    :param property_list:\n    :return:\n    '''\n    property_dict = {}\n    for property in property_list:\n        property_dict[property['key']] = property['value']\n    return property_dict\n\n\ndef get_ransomware_alert_id(args):\n    '''\n    get ransomware alert id from Helios for the given\n    anomalous object\n    :param args:\n    :return:\n    '''\n    try:\n        alert_id = ''\n        url = 'https://helios.cohesity.com/mcm/alerts?' \\\n              'alertCategoryList=kSecurity\u0026alertStateList=kOpen'\n        params = {\n            \"maxAlerts\": 1000,\n            \"alertCategoryList\": \"kSecurity\",\n            \"alertStateList\": \"kOpen\",\n            \"_includeTenantInfo\": True\n        }\n        headers = {'Content-Type': 'application/json',\n                   'apiKey': args.helios_api_key}\n        response = requests.get(url, headers=headers, params=params, verify=False)\n        if response.status_code != 200:\n            raise Exception(str(response.json()))\n        for alert in response.json():\n            if alert['severity'] == 'kCritical' and alert['alertState'] == 'kOpen' and \\\n                    alert['alertCode'] == 'CE01516011':\n                property_dict = get_property_dict(alert['propertyList'])\n                if property_dict.get('object', \"\") == args.object:\n                    alert_id = alert['id']\n        return alert_id\n    except Exception as e:\n        raise Exception(\"Failed to get ransomware alert id from Helios, \" + str(e))\n\n\ndef main(args):\n    try:\n        alert_id = get_ransomware_alert_id(args)\n        if not alert_id:\n            raise Exception(\"Failed to find the anomalous object \"\n                            + args.object + \" on Helios\")\n        url = 'https://helios.cohesity.com/mcm/alerts/' + alert_id\n        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}\n        request_payload = {\n            \"status\": \"kSuppressed\"\n        }\n        response = requests.patch(url, headers=headers, json=request_payload, verify=False)\n        if response.status_code != 200:\n            raise Exception('Failed to ignore anomaly on Helios ' + str(response.json()))\n        print(\"Workflow succeeded\")\n    except Exception as e:\n        sys.exit(str(e))\n\n\nparser = argparse.ArgumentParser(\n    description=\"Arguments to ignore anomaly on Helios\")\nparser.add_argument(\"helios_api_key\", help=\"Cohesity Helios API key\")\nparser.add_argument(\"object\", help=\"Anomalous object name\")\nargs = parser.parse_args()\nmain(args)",
+          "script": "'''\nSecureX orchestration workflow python script used to ignore anomalous object on Helios\nand delete or update the sighting once ignore operation is successful\nScript usage:\npython ignore_object_anomaly_alert.py \u003cclient_id\u003e \u003cclient_password\u003e \u003chelios_api_key\u003e \u003cobject\u003e \u003cdelete\u003e\nclient_id: Threat Response API client id\nclient_password: Threat Response API client password\nhelios_api_key: Cohesity Helios API key\nobject: Anomalous object name\ndelete: Specifies where to delete or not the sighting once the anomaly is ignored.\n        Can be 'yes' or 'no'.\n'''\n\nimport argparse\nimport requests\nimport sys\n\n\ndef get_access_token(args):\n    '''\n    Get Threat Response access token\n    :param args:\n    :return:\n    '''\n    try:\n        url = \"https://visibility.amp.cisco.com/iroh/oauth2/token\"\n        headers = {\n            \"Content-Type\": \"application/x-www-form-urlencoded\",\n            \"Accept\": \"application/json\"\n        }\n        response = requests.post(url, headers=headers, auth=(args.client_id, args.client_password),\n                                 verify=False, data={'grant_type': 'client_credentials'})\n        if response.status_code != 200:\n            raise Exception(str(response.json()))\n        return response.json()['access_token']\n    except Exception as e:\n        raise Exception(\"Failed to get threat response access token, \" + str(e))\n\n\ndef get_property_dict(property_list):\n    '''\n    get property dictionary from list of property dicts\n    with keys, values\n    :param property_list:\n    :return:\n    '''\n    property_dict = {}\n    for property in property_list:\n        property_dict[property['key']] = property['value']\n    return property_dict\n\n\ndef get_ransomware_alert_id(args):\n    '''\n    get ransomware alert id from Helios for the given\n    anomalous object\n    :param args:\n    :return:\n    '''\n    try:\n        alert_id = ''\n        url = 'https://helios.cohesity.com/mcm/alerts?' \\\n              'alertCategoryList=kSecurity\u0026alertStateList=kOpen'\n        params = {\n            \"maxAlerts\": 1000,\n            \"alertCategoryList\": \"kSecurity\",\n            \"alertStateList\": \"kOpen\",\n            \"_includeTenantInfo\": True\n        }\n        headers = {'Content-Type': 'application/json',\n                   'apiKey': args.helios_api_key}\n        response = requests.get(url, headers=headers, params=params, verify=False)\n        if response.status_code != 200:\n            raise Exception(str(response.json()))\n        for alert in response.json():\n            if alert['severity'] == 'kCritical' and alert['alertState'] == 'kOpen' and \\\n                    alert['alertCode'] == 'CE01516011':\n                property_dict = get_property_dict(alert['propertyList'])\n                if property_dict.get('object', \"\") == args.object:\n                    alert_id = alert['id']\n        return alert_id\n    except Exception as e:\n        raise Exception(\"Failed to get ransomware alert id from Helios, \" + str(e))\n\n\ndef update_or_delete_sighting(tr_access_token, args):\n    '''\n    update or delete sighting once the anomaly is ignored\n    :param tr_access_token:\n    :param args:\n    :return:\n    '''\n    try:\n        headers = {\n            'Authorization': 'Bearer ' + tr_access_token,\n            'Content-Type': 'application/json'\n        }\n        url = 'https://private.intel.amp.cisco.com/ctia/sighting/search'\n        params = {\n            \"observables.value\": args.object,\n            \"observables.type\": \"hostname\",\n            \"source\": \"Cohesity Helios\"\n        }\n        response = requests.get(url, params=params, headers=headers, verify=False)\n        if response.status_code != 200 or not response.json():\n            raise Exception(\"Failed to find the sighting, \" + str(response.json()))\n        sighting = response.json()[0]\n        url = 'https://private.intel.amp.cisco.com/ctia/sighting/' + sighting['id'].split('/')[-1]\n        if args.delete == 'yes':\n            response = requests.delete(url, headers=headers, verify=False)\n            if response.status_code != 204:\n                raise Exception(\"Failed to delete sighting, \" + str(response.json()))\n        else:\n\n            sighting['resolution'] = 'Anomaly is ignored'\n            response = requests.put(url, headers=headers,\n                                    verify=False, json=sighting)\n            if response.status_code != 200:\n                raise Exception('Failed to update the sighting, ' + str(response.json()))\n    except Exception as e:\n        raise Exception(str(e))\n\n\ndef main(args):\n    try:\n        alert_id = get_ransomware_alert_id(args)\n        if not alert_id:\n            raise Exception(\"Failed to find the anomalous object \"\n                            + args.object + \" on Helios\")\n        url = 'https://helios.cohesity.com/mcm/alerts/' + alert_id\n        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}\n        request_payload = {\n            \"status\": \"kSuppressed\"\n        }\n        response = requests.patch(url, headers=headers, json=request_payload, verify=False)\n        if response.status_code != 200:\n            raise Exception('Failed to ignore anomaly on Helios ' + str(response.json()))\n        tr_access_token = get_access_token(args)\n        update_or_delete_sighting(tr_access_token, args)\n        print(\"Workflow succeeded\")\n    except Exception as e:\n        sys.exit(str(e))\n\n\nparser = argparse.ArgumentParser(\n    description=\"Arguments to ignore anomaly on Helios\")\nparser.add_argument(\"client_id\", help=\"Threat Response API client id\")\nparser.add_argument(\"client_password\", help=\"Threat Response API client password\")\nparser.add_argument(\"helios_api_key\", help=\"Cohesity Helios API key\")\nparser.add_argument(\"object\", help=\"Anomalous object name\")\nparser.add_argument(\"delete\", choices=['yes', 'no'],\n                    help=\"Specify if sighting has to be removed from\"\n                         \" private intelligence once anomaly is ignored\")\nargs = parser.parse_args()\nmain(args)",
           "script_arguments": [
+            "$global.variable_01OD0BGYECLGD1ckdF368ZacwRYFH5G0DP9.global.variable_01OD0BGYECLGD1ckdF368ZacwRYFH5G0DP9$",
+            "$global.variable_01OD0BYGSPB4U6PaIKM5IHOsB1E17QdNFLW.global.variable_01OD0BYGSPB4U6PaIKM5IHOsB1E17QdNFLW$",
             "$global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r.global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r$",
-            "$workflow.definition_workflow_01OD1PCL0RXV10LyYf5QU9kVYA888BhHJR6.input.variable_workflow_01OD1SN9NY7FN7XM9qE2366Epc9DOwkVskF$"
+            "$workflow.definition_workflow_01OD1PCL0RXV10LyYf5QU9kVYA888BhHJR6.input.variable_workflow_01OD1SN9NY7FN7XM9qE2366Epc9DOwkVskF$",
+            "$global.variable_01ODW5U08CZ9L6dD3IfZnxOPZgV85EGHmIu.global.variable_01ODW5U08CZ9L6dD3IfZnxOPZgV85EGHmIu$"
           ],
           "skip_execution": false
         },
@@ -96,6 +99,43 @@
         "scope": "global",
         "name": "Helios API Key",
         "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01OD0BGYECLGD1ckdF368ZacwRYFH5G0DP9": {
+      "unique_name": "variable_01OD0BGYECLGD1ckdF368ZacwRYFH5G0DP9",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Threat Response API Client Id",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01OD0BYGSPB4U6PaIKM5IHOsB1E17QdNFLW": {
+      "unique_name": "variable_01OD0BYGSPB4U6PaIKM5IHOsB1E17QdNFLW",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Threat Response API Client Password",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01ODW5U08CZ9L6dD3IfZnxOPZgV85EGHmIu": {
+      "unique_name": "variable_01ODW5U08CZ9L6dD3IfZnxOPZgV85EGHmIu",
+      "properties": {
+        "value": "yes",
+        "scope": "global",
+        "name": "Delete Sighting on Ignore Anomaly",
+        "type": "datatype.string",
+        "description": "Delete sighting in private intelligence on ignoring anomoly on Helios",
         "is_required": false,
         "is_invisible": false
       },
