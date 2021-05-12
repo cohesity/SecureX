@@ -11,12 +11,12 @@
         "properties": {
           "value": "",
           "scope": "input",
-          "name": "Cluster",
+          "name": "observable_value",
           "type": "datatype.string",
-          "is_required": true,
+          "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01O3MEJBRHJDG5LqO6GF9MEqogjlTZCxDVm",
+        "unique_name": "variable_workflow_01ODWTJSCZ96M4KhhpqDbguOo97fMvseIVQ",
         "object_type": "variable_workflow"
       },
       {
@@ -24,38 +24,12 @@
         "properties": {
           "value": "",
           "scope": "input",
-          "name": "Source",
+          "name": "observable_type",
           "type": "datatype.string",
-          "is_required": true,
+          "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01O3MEC60ILI76DLlFF2eTgzMZAQm4uzXL3",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Object",
-          "type": "datatype.string",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01O3ME8DULQR92X9uzL0LnkGb0A8aUVVn53",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "HeliosAPIKey",
-          "type": "datatype.string",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01O3ME19OZGP11cpZaVetpbgD5XKTFKpvdg",
+        "unique_name": "variable_workflow_01ODWTCB0VZK94wpcD6k3SaKO0ROElMiaeN",
         "object_type": "variable_workflow"
       }
     ],
@@ -87,12 +61,13 @@
           "action_timeout": 180,
           "continue_on_failure": false,
           "display_name": "Restore anomalous object and resolve alert",
-          "script": "'''\nSecureX orchestration workflow python script used to restore an anomalous object on Helios\nto the latest clean snapshot.\nScript usage:\npython restore_anomalous_object.py \u003cHelios API Key\u003e \u003cObject\u003e \u003cSource\u003e \u003cCluster Name\u003e\nSupported environments: VMware\n'''\n\n\nimport requests\nimport sys\n\nBASE_URL = \"https://helios.cohesity.com\"\n\n\ndef get_property_dict(property_list):\n    '''\n    get property dictionary from list of property dicts\n    with keys, values\n    :param property_list:\n    :return:\n    '''\n    property_dict = {}\n    for property in property_list:\n        property_dict[property['key']] = property['value']\n    return property_dict\n\n\ndef main(args):\n    '''\n    Get the security alerts and restore vm to the latest clean snapshot\n    Supported environments: VMware\n    :param args: commandline arguments\n    :return:\n    '''\n    try:\n        alert_id = ''\n        url = BASE_URL + '/mcm/alerts?alertCategoryList=kSecurity\u0026alertStateList=kOpen'\n        params = {\n            \"maxAlerts\": 1000,\n            \"alertCategoryList\": \"kSecurity\",\n            \"alertStateList\": \"kOpen\",\n            \"_includeTenantInfo\": True\n        }\n        headers = {'Content-Type': 'application/json', 'apiKey': args[1]}\n        # get security alerts\n        response = requests.get(url, headers=headers, params=params, verify=False)\n        if response.status_code != 200:\n            raise Exception(\"Failed to get security alerts from helios, \" + str(response.json()))\n        restore_properties = {}\n        for alert in response.json():\n            if alert['severity'] == 'kCritical' and alert['alertState'] == 'kOpen' and\\\n                    alert['alertCode'] == 'CE01516011':\n                property_dict = get_property_dict(alert['propertyList'])\n                if property_dict.get('object', \"\") == args[2] and \\\n                        property_dict.get('source', \"\") == args[3] and \\\n                        property_dict.get('cluster', \"\") == args[4]:\n                    restore_properties = property_dict\n                    alert_id = alert['id']\n                    break\n        if not restore_properties:\n            raise Exception(\"Failed to find the anomalous object\")\n        elif restore_properties.get('environment', \"\") != 'kVMware':\n            raise Exception(\"Workflow supports only VMware environment\")\n        # restore VMware anomalous object\n        elif restore_properties and restore_properties.get('environment') == 'kVMware':\n            request_payload = {\n                \"objects\": [{\"entity\": {\"id\": int(restore_properties[\"entityId\"]),\n                                         \"parentId\": int(restore_properties[\"parentId\"])},\n                              \"jobId\": int(restore_properties[\"jobId\"]),\n                              \"jobInstanceId\": int(restore_properties[\"jobInstanceId\"]),\n                               \"jobUid\": {\n                                   \"clusterId\": int(restore_properties['cid']),\n                                   \"clusterIncarnationId\": int(restore_properties['clusterIncarnationId']),\n                                   \"objectId\": int(restore_properties['jobId'])\n                               },\n                              \"startTimeUsecs\": int(restore_properties[\"jobStartTimeUsecs\"]),\n\n                              }],\n                \"name\": \"Recover_object_\" + restore_properties[\"object\"],\n                \"powerStateConfig\": {\"powerOn\":True},\n                \"restoredObjectsNetworkConfig\": {\"disableNetwork\": False},\n                \"renameRestoredObjectParam\": {\"prefix\": \"Recover-\", \"suffix\": \"-VM\"},\n                \"continueRestoreOnError\": False}\n            url = BASE_URL + '/irisservices/api/v1/restore'\n            headers['clusterid'] = restore_properties['cid']\n            response = requests.post(url, headers=headers, json=request_payload, verify=False)\n            if response.status_code != 200:\n                raise Exception(\"Failed to restore \" + restore_properties['object'] +\n                                ' to latest clean snapshot. ' + str(response.json()))\n\n            # resolve the alert\n            request_payload = {\n                \"status\": \"kResolved\"\n            }\n            url = BASE_URL + '/mcm/alerts/' + alert_id\n            response = requests.patch(url, headers=headers, json=request_payload, verify=False)\n            if response.status_code != 200:\n                raise Exception(\"Successful in restoring the anomalous object\"\n                                \" but failed to resolve the alert\")\n        print(\"Workflow succeeded\")\n    except Exception as e:\n        sys.exit(\"Workflow failed: \" + str(e))\n\n\nmain(sys.argv)",
+          "script": "'''\nSecureX orchestration workflow python script used to restore an anomalous object on Helios\nto the latest clean snapshot.\nSupported environments: VMware\nScript usage:\npython restore_to_latest_clean_snapshot.py \u003cclient_id\u003e \u003cclient_password\u003e \u003chelios_api_key\u003e \u003cobject\u003e \u003cdelete\u003e\nclient_id: Threat Response API client id\nclient_password: Threat Response API client password\nhelios_api_key: Cohesity Helios API key\nobject: Anomalous object name\ndelete: Specifies where to delete or not the sighting once the anomalous object is\n        restored to the latest clean snapshot. Can be 'yes' or 'no'.\n'''\n\nimport argparse\nimport requests\nimport sys\nimport time\n\n\ndef get_access_token(args):\n    '''\n    Get Threat Response access token\n    :param args:\n    :return:\n    '''\n    try:\n        url = \"https://visibility.amp.cisco.com/iroh/oauth2/token\"\n        headers = {\n            \"Content-Type\": \"application/x-www-form-urlencoded\",\n            \"Accept\": \"application/json\"\n        }\n        response = requests.post(url, headers=headers, auth=(args.client_id, args.client_password),\n                                 verify=False, data={'grant_type': 'client_credentials'})\n        if response.status_code != 200:\n            raise Exception(str(response.json()))\n        return response.json()['access_token']\n    except Exception as e:\n        raise Exception(\"Failed to get threat response access token, \" + str(e))\n\n\ndef update_or_delete_sighting(tr_access_token, args):\n    '''\n    update or delete sighting once anomalous object is restored\n    :param tr_access_token:\n    :param args:\n    :return:\n    '''\n    try:\n        headers = {\n            'Authorization': 'Bearer ' + tr_access_token,\n            'Content-Type': 'application/json'\n        }\n        url = 'https://private.intel.amp.cisco.com/ctia/sighting/search'\n        params = {\n            \"observables.value\": args.object,\n            \"observables.type\": \"hostname\",\n            \"source\": \"Cohesity Helios\"\n        }\n        response = requests.get(url, params=params, headers=headers, verify=False)\n        if response.status_code != 200 or not response.json():\n            raise Exception(\"Failed to find the sighting, \" + str(response.json()))\n        sighting = response.json()[0]\n        url = 'https://private.intel.amp.cisco.com/ctia/sighting/' + sighting['id'].split('/')[-1]\n        if args.delete == 'yes':\n            response = requests.delete(url, headers=headers, verify=False)\n            if response.status_code != 204:\n                raise Exception(\"Failed to delete sighting, \" + str(response.json()))\n        else:\n\n            sighting['resolution'] = 'Anomalous object is restored to latest clean snapshot'\n            response = requests.put(url, headers=headers,\n                                    verify=False, json=sighting)\n            if response.status_code != 200:\n                raise Exception('Failed to update the sighting, ' + str(response.json()))\n    except Exception as e:\n        raise Exception(str(e))\n\n\ndef get_property_dict(property_list):\n    '''\n    get property dictionary from list of property dicts\n    with keys, values\n    :param property_list:\n    :return:\n    '''\n    property_dict = {}\n    for property in property_list:\n        property_dict[property['key']] = property['value']\n    return property_dict\n\n\ndef get_restore_properties(args):\n    '''\n    Get the alert id and the properties needed for\n    restore operation\n    :param args:\n    :return:\n    '''\n    try:\n        alert_id = ''\n        url = 'https://helios.cohesity.com/mcm/alerts?alertCategoryList=kSecurity\u0026alertStateList=kOpen'\n        params = {\n            \"maxAlerts\": 1000,\n            \"alertCategoryList\": \"kSecurity\",\n            \"alertStateList\": \"kOpen\",\n            \"_includeTenantInfo\": True\n        }\n        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}\n        # get security alerts\n        response = requests.get(url, headers=headers, params=params, verify=False)\n        if response.status_code != 200:\n            raise Exception(\"Failed to get security alerts from helios, \" + str(response.json()))\n        restore_properties = {}\n        for alert in response.json():\n            if alert['severity'] == 'kCritical' and alert['alertState'] == 'kOpen' and \\\n                    alert['alertCode'] == 'CE01516011':\n                property_dict = get_property_dict(alert['propertyList'])\n                if property_dict.get('object', \"\") == args.object:\n                    restore_properties = property_dict\n                    alert_id = alert['id']\n                    break\n        return restore_properties, alert_id\n    except Exception as e:\n        raise Exception(str(e))\n\n\ndef restore_vmware_object(restore_properties, args):\n    '''\n    restore anomalous object to the latest clean snapshot\n    :param restore_properties:\n    :param args:\n    :return:\n    '''\n    try:\n        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}\n        request_payload = {\n            \"objects\": [{\"entity\": {\"id\": int(restore_properties[\"entityId\"]),\n                                    \"parentId\": int(restore_properties[\"parentId\"])},\n                         \"jobId\": int(restore_properties[\"jobId\"]),\n                         \"jobInstanceId\": int(restore_properties[\"jobInstanceId\"]),\n                         \"jobUid\": {\n                             \"clusterId\": int(restore_properties['cid']),\n                             \"clusterIncarnationId\": int(restore_properties['clusterIncarnationId']),\n                             \"objectId\": int(restore_properties['jobId'])\n                         },\n                         \"startTimeUsecs\": int(restore_properties[\"jobStartTimeUsecs\"]),\n\n                         }],\n            \"name\": \"Cisco_SecureX_triggered_restore_task_\" + restore_properties[\"object\"],\n            \"powerStateConfig\": {\"powerOn\": True},\n            \"restoredObjectsNetworkConfig\": {\"disableNetwork\": False},\n            \"renameRestoredObjectParam\": {\"prefix\": \"Recover-\", \"suffix\": \"-VM-\" + str(int(time.time()))},\n            \"continueRestoreOnError\": False}\n        url = 'https://helios.cohesity.com/irisservices/api/v1/restore'\n        headers['clusterid'] = restore_properties['cid']\n        response = requests.post(url, headers=headers, json=request_payload, verify=False)\n        if response.status_code != 200:\n            raise Exception(\"Failed to restore \" + restore_properties['object'] +\n                            ' to latest clean snapshot. ' + str(response.json()))\n    except Exception as e:\n        raise Exception(str(e))\n\n\ndef resolve_alert(alert_id, args):\n    '''\n    resolve ransomware alert on helios\n    :param alert_id:\n    :param args:\n    :return:\n    '''\n    try:\n        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}\n        request_payload = {\n            \"status\": \"kResolved\"\n        }\n        url = 'https://helios.cohesity.com/mcm/alerts/' + alert_id\n        response = requests.patch(url, headers=headers, json=request_payload, verify=False)\n        if response.status_code != 200:\n            raise Exception(\"Successful in restoring the anomalous object\"\n                            \" but failed to resolve the alert on Helios\")\n    except Exception as e:\n        raise Exception(str(e))\n\n\ndef main(args):\n    '''\n    :param args: commandline arguments\n    :return:\n    '''\n    try:\n        restore_properties, alert_id = get_restore_properties(args)\n        if not restore_properties:\n            raise Exception(\"Failed to find the anomalous object on Helios\")\n        elif restore_properties.get('environment', \"\") != 'kVMware':\n            raise Exception(\"Workflow supports only VMware environment\")\n        # restore VMware anomalous object\n        elif restore_properties and restore_properties.get('environment') == 'kVMware':\n            restore_vmware_object(restore_properties, args)\n            resolve_alert(alert_id, args)\n            tr_access_token = get_access_token(args)\n            update_or_delete_sighting(tr_access_token, args)\n        print(\"Workflow succeeded\")\n    except Exception as e:\n        sys.exit(\"Workflow failed: \" + str(e))\n\n\nparser = argparse.ArgumentParser(\n    description=\"Arguments to restore anomalous object to latest clean snapshot\")\nparser.add_argument(\"client_id\", help=\"Threat Response API client id\")\nparser.add_argument(\"client_password\", help=\"Threat Response API client password\")\nparser.add_argument(\"helios_api_key\", help=\"Cohesity Helios API key\")\nparser.add_argument(\"object\", help=\"Anomalous object name\")\nparser.add_argument(\"delete\", choices=['yes', 'no'],\n                    help=\"Specify if sighting has to be removed from\"\n                         \" private intelligence once anomalous object is\"\n                         \" restored to the latest clean snapshot\")\nargs = parser.parse_args()\nmain(args)",
           "script_arguments": [
-            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01O3ME19OZGP11cpZaVetpbgD5XKTFKpvdg$",
-            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01O3ME8DULQR92X9uzL0LnkGb0A8aUVVn53$",
-            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01O3MEC60ILI76DLlFF2eTgzMZAQm4uzXL3$",
-            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01O3MEJBRHJDG5LqO6GF9MEqogjlTZCxDVm$"
+            "$global.variable_01OD0BGYECLGD1ckdF368ZacwRYFH5G0DP9.global.variable_01OD0BGYECLGD1ckdF368ZacwRYFH5G0DP9$",
+            "$global.variable_01OD0BYGSPB4U6PaIKM5IHOsB1E17QdNFLW.global.variable_01OD0BYGSPB4U6PaIKM5IHOsB1E17QdNFLW$",
+            "$global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r.global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r$",
+            "$workflow.definition_workflow_01NUXGHVZF2AF1lCAxaaZyeVD0etETwEmjV.input.variable_workflow_01ODWTJSCZ96M4KhhpqDbguOo97fMvseIVQ$",
+            "$global.variable_01ODW5U08CZ9L6dD3IfZnxOPZgV85EGHmIu.global.variable_01ODW5U08CZ9L6dD3IfZnxOPZgV85EGHmIu$"
           ],
           "skip_execution": false
         },
@@ -100,7 +75,69 @@
       }
     ],
     "categories": [
-      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+      "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m"
     ]
+  },
+  "categories": {
+    "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m": {
+      "unique_name": "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m",
+      "name": "response",
+      "title": "response",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  },
+  "variables": {
+    "variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r": {
+      "unique_name": "variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Helios API Key",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01OD0BGYECLGD1ckdF368ZacwRYFH5G0DP9": {
+      "unique_name": "variable_01OD0BGYECLGD1ckdF368ZacwRYFH5G0DP9",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Threat Response API Client Id",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01OD0BYGSPB4U6PaIKM5IHOsB1E17QdNFLW": {
+      "unique_name": "variable_01OD0BYGSPB4U6PaIKM5IHOsB1E17QdNFLW",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Threat Response API Client Password",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01ODW5U08CZ9L6dD3IfZnxOPZgV85EGHmIu": {
+      "unique_name": "variable_01ODW5U08CZ9L6dD3IfZnxOPZgV85EGHmIu",
+      "properties": {
+        "value": "yes",
+        "scope": "global",
+        "name": "Delete Sighting on Ignore Anomaly",
+        "type": "datatype.string",
+        "description": "Delete sighting in private intelligence on ignoring anomoly on Helios",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
   }
 }
