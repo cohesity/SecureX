@@ -23,10 +23,12 @@ This integration leverages Cohesity REST API to interact and fetch information f
 
 
 ## <a name="get-started"></a> What is SecureX :question:
+[top](#Cisco-SecureX-Integration)
 
 * SecureX is a cloud-native, built-in platform that connects our Cisco Secure portfolio and your infrastructure. It allows you to radically reduce dwell time and human-powered tasks. Refer to [Cisco SecureX page](https://www.cisco.com/c/en/us/products/security/securex/index.html) to know more about it.
 
 ## <a name="atomic-actions"></a> Atomic Actions :large_blue_circle:
+[top](#Cisco-SecureX-Integration)
 
 Atomic actions are self-contained workflows that are similar to a function in traditional programming. They can consume input, perform various actions, and then return output. They’re designed to be portable, re-usable, and make building workflows more efficient. Refer to the [Atomic Actions](https://ciscosecurity.github.io/sxo-05-security-workflows/atomics/) documentation to find more. 
 
@@ -37,6 +39,7 @@ Lets go over the list of Atomic Actions that this integration supports.
 - [Cohesity Helios - Ignore Anomaly](#ignore-anomaly)
 
 ### <a name="get-anomalous-objects"></a> Cohesity Helios - Get Anomalous Objects 
+[top](#Cisco-SecureX-Integration)
 
 This atomic action executes a python script to fetch the list of anomalous objects from Cohesity Helios. 
 
@@ -55,6 +58,7 @@ This atomic action executes a python script to fetch the list of anomalous objec
 | Anomalous Objects Json | json  | The json object with holds the anomalous objects fetched from Cohesity Helios | 
 
 ### <a name="restore-anomalous-objects"></a> Cohesity Helios - Restore Anomalous VM
+[top](#Cisco-SecureX-Integration)
 
 This Atomic Action performs a restore operation for the specified anomalous VM to latest clean snapshot. Currently only VMware VMs are supported
 
@@ -73,6 +77,7 @@ This Atomic Action performs a restore operation for the specified anomalous VM t
 
 
 ### <a name="ignore-anomaly"></a> Cohesity Helios - Ignore Anomaly
+[top](#Cisco-SecureX-Integration)
 
 This Atomic Action ignores the anomaly which removes the anomalous object from the list of anomalous object. 
 
@@ -88,6 +93,7 @@ This Atomic Action ignores the anomaly which removes the anomalous object from t
 N/A
 
 ## <a name="workflows"></a> Workflows :hourglass_flowing_sand:
+[top](#Cisco-SecureX-Integration)
 
 Workflows are the larger component of orchestration and are similar to a script in traditional programming. A workflow can be simple and only have a few actions or be complex and string together many different actions for different products. Refer to the [Workflows](https://ciscosecurity.github.io/sxo-05-security-workflows/workflows/) documentation to find more. 
 
@@ -102,6 +108,7 @@ Lets go over the list of Workflows that this integration supports.
 - [Push All Helios Ransomware Alerts to Private Intelligence](#push-all-anomaly)
 
 ### <a name="get-alerts-to-securex"></a> Helios Ransomware Alerts to SecureX and ServiceNow 
+[top](#Cisco-SecureX-Integration)
 
 This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store and also creates incidents on ServiceNow at regular intervals based on the schedule you define. 
 
@@ -122,6 +129,7 @@ This workflow can also be triggered based on a schedule. The schedule that is us
 N/A
 
 ### <a name="push-alerts-to-pi"></a> Push Helios Ransomware Alerts to Private Intelligence
+[top](#Cisco-SecureX-Integration)
 
 This workflow pushes Cohesity Helios ransomware alerts detected in the last `N` hours to Threat Response private intelligence data store. 
 
@@ -143,6 +151,7 @@ N/A
 
 
 ### <a name="ignore-anomaly-workflow"></a> Ignore Anomaly on Cohesity Helios
+[top](#Cisco-SecureX-Integration)
 
 This workflow ignores anomaly on for the specified object on Helios which removes this object from the list of anomalous objects. 
 
@@ -162,6 +171,7 @@ This workflow ignores anomaly on for the specified object on Helios which remove
 N/A
 
 ### <a name="restore-anomaly"></a> Cohesity Restore Anomalous Object
+[top](#Cisco-SecureX-Integration)
 
 This workflow restores the specified anomalous object to the latest clean snapshot
 
@@ -181,6 +191,7 @@ This workflow restores the specified anomalous object to the latest clean snapsh
 N/A
 
 ### <a name="push-all-anomaly"></a> Push All Helios Ransomware Alerts to Private Intelligence
+[top](#Cisco-SecureX-Integration)
 
 This Workflow pushes all helios ransomware alerts to Threat Response private intelligence data store. This does not create ServiceNow incidents for the alerts in Cohesity Helios. 
 
@@ -197,10 +208,12 @@ This Workflow pushes all helios ransomware alerts to Threat Response private int
 N/A
 
 ## <a name="import"></a> Import Atomic Actions and Workflows :bookmark_tabs:
+[top](#Cisco-SecureX-Integration)
 
 To explore the various options available in SecureX orchestration for importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
 
 ## <a name="suggest"></a> Suggestions and Feedback :handshake:
+[top](#Cisco-SecureX-Integration)
 
 We would love to hear from you. Please send your suggestions and feedback to: [cohesity-api-sdks@cohesity.com](mailto:cohesity-api-sdks@cohesity.com)
 
