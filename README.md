@@ -1,4 +1,5 @@
 # Cisco SecureX Integration
+
 <!--
   Title: Cisco SecureX Integration
   Description: This project is to integrate Cohesity Helios with Cisco SecureX and manage Cohesity Ransomware alerts on SecureX and take appropriate actions using SecureX dashboard.
@@ -21,11 +22,11 @@ This integration leverages Cohesity REST API to interact and fetch information f
  - [Suggestions and Feedback](#suggest)
 
 
-## <a name="get-started"></a> What is SecureX :hammer_and_pick:
+## <a name="get-started"></a> What is SecureX :question:
 
 * SecureX is a cloud-native, built-in platform that connects our Cisco Secure portfolio and your infrastructure. It allows you to radically reduce dwell time and human-powered tasks. Refer to [Cisco SecureX page](https://www.cisco.com/c/en/us/products/security/securex/index.html) to know more about it.
 
-## <a name="atomic-actions"></a> Atomic Actions :bulb:
+## <a name="atomic-actions"></a> Atomic Actions :large_blue_circle:
 
 Atomic actions are self-contained workflows that are similar to a function in traditional programming. They can consume input, perform various actions, and then return output. They’re designed to be portable, re-usable, and make building workflows more efficient. Refer to the [Atomic Actions](https://ciscosecurity.github.io/sxo-05-security-workflows/atomics/) documentation to find more. 
 
@@ -86,7 +87,7 @@ This Atomic Action ignores the anomaly which removes the anomalous object from t
 
 N/A
 
-## <a name="workflows"></a> Workflows :handshake:
+## <a name="workflows"></a> Workflows :hourglass_flowing_sand:
 
 Workflows are the larger component of orchestration and are similar to a script in traditional programming. A workflow can be simple and only have a few actions or be complex and string together many different actions for different products. Refer to the [Workflows](https://ciscosecurity.github.io/sxo-05-security-workflows/workflows/) documentation to find more. 
 
@@ -195,11 +196,11 @@ This Workflow pushes all helios ransomware alerts to Threat Response private int
 
 N/A
 
-## <a name="import"></a> Import Atomic Actions and Workflows :raised_hand:
+## <a name="import"></a> Import Atomic Actions and Workflows :bookmark_tabs:
 
 To explore the various options available in SecureX orchestration for importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
 
-## <a name="suggest"></a> Suggestions and Feedback :raised_hand:
+## <a name="suggest"></a> Suggestions and Feedback :handshake:
 
 We would love to hear from you. Please send your suggestions and feedback to: [cohesity-api-sdks@cohesity.com](mailto:cohesity-api-sdks@cohesity.com)
 
