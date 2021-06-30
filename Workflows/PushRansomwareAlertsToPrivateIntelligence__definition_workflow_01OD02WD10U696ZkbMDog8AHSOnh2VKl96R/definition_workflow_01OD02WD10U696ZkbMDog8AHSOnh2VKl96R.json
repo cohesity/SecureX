@@ -1,8 +1,8 @@
 {
   "workflow": {
     "unique_name": "definition_workflow_01OD02WD10U696ZkbMDog8AHSOnh2VKl96R",
-    "name": "Push Helios Ransomware Alerts to Private Intelligence",
-    "title": "Push Helios Ransomware Alerts to Private Intelligence",
+    "name": "Periodically Push Helios Ransomware Alerts to Threat Response",
+    "title": "Periodically Push Helios Ransomware Alerts to Threat Response",
     "type": "generic.workflow",
     "base_type": "workflow",
     "variables": null,
@@ -12,7 +12,7 @@
       },
       "delete_workflow_instance": false,
       "description": "Push Cohesity Helios ransomware alerts dectected in the last n hours to Threat Response private intelligence data store",
-      "display_name": "Push Helios Ransomware Alerts to Private Intelligence",
+      "display_name": "Periodically Push Helios Ransomware Alerts to Threat Response",
       "runtime_user": {
         "override_target_runtime_user": false,
         "specify_on_workflow_start": false,
@@ -134,7 +134,7 @@
     "variable_01OD0GHYPQ8JJ3cQio7pfjoqIUwrasIA2jr": {
       "unique_name": "variable_01OD0GHYPQ8JJ3cQio7pfjoqIUwrasIA2jr",
       "properties": {
-        "value": "12",
+        "value": "500",
         "scope": "global",
         "name": "Cohesity Helios Ransomware Alerts Filter",
         "type": "datatype.string",
