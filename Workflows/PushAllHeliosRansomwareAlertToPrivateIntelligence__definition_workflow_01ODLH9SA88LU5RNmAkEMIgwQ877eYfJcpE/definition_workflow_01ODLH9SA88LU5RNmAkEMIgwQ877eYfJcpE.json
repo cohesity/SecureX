@@ -1,8 +1,8 @@
 {
   "workflow": {
     "unique_name": "definition_workflow_01ODLH9SA88LU5RNmAkEMIgwQ877eYfJcpE",
-    "name": "Push All Helios Ransomware Alerts to Private Intelligence",
-    "title": "Push All Helios Ransomware Alerts to Private Intelligence",
+    "name": "Push All Helios Ransomware Alerts to Threat Response",
+    "title": "Push All Helios Ransomware Alerts to Threat Response",
     "type": "generic.workflow",
     "base_type": "workflow",
     "variables": null,
@@ -12,7 +12,7 @@
       },
       "delete_workflow_instance": false,
       "description": "Push all helios ransomware alerts  to Threat Response private intelligence data store",
-      "display_name": "Push All Helios Ransomware Alerts to Private Intelligence",
+      "display_name": "Push All Helios Ransomware Alerts to Threat Response",
       "runtime_user": {
         "override_target_runtime_user": false,
         "specify_on_workflow_start": false,
