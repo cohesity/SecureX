@@ -55,38 +55,38 @@ This atomic perform a fetch operation which gets the list of anomalous objects f
 
 | **Argument Name** | **Type** | **Description** |
 | --- | --- | --- |
-| Anomalous Objects Json | json  | The json object with holds the anomalous objects fetched from Cohesity Helios | 
+| Anomalous Objects Json | String  | The json object (a JSON string) with holds the anomalous objects fetched from Cohesity Helios | 
 
 ### <a name="restore-anomalous-objects"></a> Cohesity Helios - Restore Anomalous VM
 [top](#Cisco-SecureX-Integration)
 
-This Atomic Action performs a restore operation for the specified anomalous VM to latest clean snapshot. Currently only VMware VMs are supported
+This Atomic Action performs a restore operation for the specified anomalous VM to latest clean snapshot. Currently only VMware VMs are supported. This atomic action also resolves the corresponding alert on Helios after restore task for that vm is triggered.
 
 ##### Input
 
 | **Argument Name** | **Type** | **Description** | **Required** |
 | --- | --- |--- | --- |
 | Cohesity Helios API Key | Secure String | API Key to access Helios | Yes | 
-| VM Object | JSON | The VM object that needs to be restored   | Yes | 
+| Object | String | The name of the VM that needs to be restored   | Yes | 
 
 ##### Output
 
 | **Argument Name** | **Type** | **Description** |
 | --- | --- | --- |
-| Restored VM Object  | JSON  | The restored VM object that was restored to the latest snapshot | 
+| Restored Object  | String  | The name of the VM that was restored to the latest snapshot | 
 
 
 ### <a name="ignore-anomaly"></a> Cohesity Helios - Ignore Anomaly
 [top](#Cisco-SecureX-Integration)
 
-This Atomic Action ignores the anomaly which removes the anomalous object from the list of anomalous object. 
+This Atomic Action ignores the anomaly which removes the anomalous object from the list of anomalous object. This suppresses the anomalous object alert on Cohesity Helios.
 
 ##### Input
 
 | **Argument Name** | **Type** | **Description** | **Required** |
 | --- | --- |--- | --- |
 | Cohesity Helios API Key | Secure String | API Key to access Helios | Yes | 
-| VM Object | JSON| The VM object that needs to be Ignored   | Yes | 
+| Object | String | The VM Object name that needs to be Ignored   | Yes | 
 
 ##### Output
 
@@ -101,18 +101,18 @@ Workflows are the larger component of orchestration and are similar to a script 
 
 Lets go over the list of Workflows that this integration supports. 
 
-- [Helios Ransomware Alerts to SecureX and ServiceNow](#get-alerts-to-securex)
+- [Helios Ransomware Alerts to Threat Response and ServiceNow](#get-alerts-to-securex)
 - [Periodically Push Helios Ransomware Alerts to Threat Response](#push-alerts-to-pi)
 - [Ignore Anomaly on Cohesity Helios](#ignore-anomaly-workflow)
 - [Cohesity Restore Anomalous Object](#restore-anomaly)
 - [Push All Helios Ransomware Alerts to Threat Response](#push-all-anomaly)
 
-### <a name="get-alerts-to-securex"></a> Helios Ransomware Alerts to SecureX and ServiceNow 
+### <a name="get-alerts-to-securex"></a> Helios Ransomware Alerts to Threat Response and ServiceNow 
 [top](#Cisco-SecureX-Integration)
 
 This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store and also creates incidents on ServiceNow at regular intervals based on the schedule you define. 
 
-This workflow can also be triggered based on a schedule. The schedule that is used here is `Cohesity Helios Ransomware Data Push Schedule` which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
+This workflow has to be triggered on a schedule and user has to create `Cohesity Helios Ransomware Data Push Schedule` for this to work which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
 
 > Note: This workflow also needs creation of 'ServiceNow_Credentials' under Account Keys and 'Cohesity_ServiceNow_Target' under Targets. These are needed for creating incidents on service now.
 
@@ -124,7 +124,7 @@ This workflow can also be triggered based on a schedule. The schedule that is us
 | Threat Response API Client Password | Secure String | Threat Response API Client Password | Yes | 
 | Cohesity Helios API Key | Secure String | API Key to access Helios | Yes | 
 | Cohesity Helios Ransomware Alerts Filter  | String | Number of hours, used to get anomalous objects detected in the last `N` hours| Yes | 
-| Create ServiceNow Incidents | String | Set this variable to `yes` or `no` based on which ServiceNow incidents will be created | No | 
+| Create ServiceNow Incidents | String | Set this variable to `yes` or `no` based on which ServiceNow incidents will be created | Yes | 
 
 ##### Output
 
@@ -136,7 +136,7 @@ N/A
 This workflow pushes Cohesity Helios ransomware alerts detected in the last `N` hours to Threat Response private intelligence data store. 
 
 
-This workflow can also be triggered based on a schedule. The schedule that is used here is `Cohesity Helios Ransomware Data Push Schedule` which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
+This workflow has to be triggered on a schedule and user has to create `Cohesity Helios Ransomware Data Push Schedule` for this to work which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
 
 ##### Input
 
@@ -155,9 +155,9 @@ N/A
 ### <a name="ignore-anomaly-workflow"></a> Ignore Anomaly on Cohesity Helios
 [top](#Cisco-SecureX-Integration)
 
-This workflow ignores anomaly on for the specified object on Helios which removes this object from the list of anomalous objects. 
+This workflow ignores anomaly for the specified object on Helios which removes this object from the list of anomalous objects. This workflow also suppresses anomalous object alert on helios of the given object.
 
-> This is an Response workflows. 
+> This is an Response workflow. 
 
 ##### Input
 
