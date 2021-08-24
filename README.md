@@ -102,15 +102,13 @@ Workflows are the larger component of orchestration and are similar to a script 
 Lets go over the list of Workflows that this integration supports. 
 
 - [Helios Ransomware Alerts to Threat Response and ServiceNow](#get-alerts-to-securex)
-- [Periodically Push Helios Ransomware Alerts to Threat Response](#push-alerts-to-pi)
 - [Ignore Anomaly on Cohesity Helios](#ignore-anomaly-workflow)
 - [Cohesity Restore Anomalous Object](#restore-anomaly)
-- [Push All Helios Ransomware Alerts to Threat Response](#push-all-anomaly)
 
 ### <a name="get-alerts-to-securex"></a> Helios Ransomware Alerts to Threat Response and ServiceNow 
 [top](#Cisco-SecureX-Integration)
 
-This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store and also creates incidents on ServiceNow at regular intervals based on the schedule you define. 
+This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store, creates SecureX Incidents, Sightings and a Relationship between them. It also creates incidents on ServiceNow at regular intervals based on the schedule you define. 
 
 This workflow has to be triggered on a schedule and user has to create `Cohesity Helios Ransomware Data Push Schedule` for this to work which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
 
@@ -130,33 +128,11 @@ This workflow has to be triggered on a schedule and user has to create `Cohesity
 
 N/A
 
-### <a name="push-alerts-to-pi"></a> Periodically Push Helios Ransomware Alerts to Threat Response
-[top](#Cisco-SecureX-Integration)
-
-This workflow pushes Cohesity Helios ransomware alerts detected in the last `N` hours to Threat Response private intelligence data store. 
-
-
-This workflow has to be triggered on a schedule and user has to create `Cohesity Helios Ransomware Data Push Schedule` for this to work which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
-
-##### Input
-
-| **Argument Name** | **Type** | **Description** | **Required** |
-| --- | --- |--- | --- |
-| Threat Response API Client Id | Secure String | Threat Response API Client ID | Yes | 
-| Threat Response API Client Password | Secure String | Threat Response API Client Password | Yes | 
-| Cohesity Helios API Key | Secure String | API Key to access Helios | Yes | 
-| Cohesity Helios Ransomware Alerts Filter  | String | Number of hours, used to get anomalous objects detected in the last `N` hours| Yes | 
-
-##### Output
-
-N/A
-
-
 ### <a name="ignore-anomaly-workflow"></a> Ignore Anomaly on Cohesity Helios
 [top](#Cisco-SecureX-Integration)
 
-This workflow ignores anomaly for the specified object on Helios which removes this object from the list of anomalous objects. This workflow also suppresses anomalous object alert on helios of the given object.
-
+This workflow ignores anomaly for the specified object on Helios which removes this object from the list of anomalous objects. This workflow also suppresses anomalous object alert on helios of the given object. This workflows also Resolves the SecureX Incident and Sighting or deletes them, based on the `Cohesity Delete Sighting and Incident` variable. 
+ 
 > This is an Response workflow. 
 
 ##### Input
@@ -166,7 +142,7 @@ This workflow ignores anomaly for the specified object on Helios which removes t
 | Threat Response API Client Id | Secure String | Threat Response API Client ID | Yes | 
 | Threat Response API Client Password | Secure String | Threat Response API Client Password | Yes | 
 | Cohesity Helios API Key | Secure String | API Key to access Helios | Yes | 
-| Cohesity Delete Sighting | String | Specifies where to delete or not the sighting once the anomaly is ignored. Can be `yes` or `no`. | Yes | 
+| Cohesity Delete Sighting and Incident | String | Specifies where to delete or not the sighting once the anomaly is ignored. Can be `yes` or `no`. | Yes | 
 
 ##### Output
 
@@ -175,7 +151,7 @@ N/A
 ### <a name="restore-anomaly"></a> Cohesity Restore Anomalous Object
 [top](#Cisco-SecureX-Integration)
 
-This workflow restores the specified anomalous object to the latest clean snapshot. It also resolves the alert on helios once the restore task is triggered. The restored VM name will in the format Recover-{original VM name}-VM-{epoch timestamp when the vm is restored} and the restore task name on the cluster will be in format Cisco_SecureX_triggered_restore_task_{object name}
+This workflow restores the specified anomalous object to the latest clean snapshot. It also resolves the alert on helios once the restore task is triggered. The restored VM name will in the format Recover-{original VM name}-VM-{epoch timestamp when the vm is restored} and the restore task name on the cluster will be in format Cisco_SecureX_triggered_restore_task_{object name}. This workflows also Resolves the SecureX Incident and Sighting or deletes them, based on the `Cohesity Delete Sighting and Incident` variable. 
 
 > This is an Response workflow. 
 
@@ -186,24 +162,7 @@ This workflow restores the specified anomalous object to the latest clean snapsh
 | Threat Response API Client Id | Secure String | Threat Response API Client ID | Yes | 
 | Threat Response API Client Password | Secure String | Threat Response API Client Password | Yes | 
 | Cohesity Helios API Key | Secure String | API Key to access Helios | Yes | 
-| Cohesity Delete Sighting | String | Specifies where to delete or not the sighting once the anomaly is ignored. Can be `yes` or `no`. | Yes | 
-
-##### Output
-
-N/A
-
-### <a name="push-all-anomaly"></a> Push All Helios Ransomware Alerts to Threat Response
-[top](#Cisco-SecureX-Integration)
-
-This Workflow pushes all helios ransomware alerts to Threat Response private intelligence data store. This does not create ServiceNow incidents for the alerts in Cohesity Helios. 
-
-##### Input
-
-| **Argument Name** | **Type** | **Description** | **Required** |
-| --- | --- |--- | --- |
-| Threat Response API Client Id | Secure String | Threat Response API Client ID | Yes | 
-| Threat Response API Client Password | Secure String | Threat Response API Client Password | Yes | 
-| Cohesity Helios API Key | Secure String | API Key to access Helios | Yes | 
+| Cohesity Delete Sighting and Incident | String | Specifies where to delete or not the sighting once the anomaly is ignored. Can be `yes` or `no`. | Yes | 
 
 ##### Output
 
