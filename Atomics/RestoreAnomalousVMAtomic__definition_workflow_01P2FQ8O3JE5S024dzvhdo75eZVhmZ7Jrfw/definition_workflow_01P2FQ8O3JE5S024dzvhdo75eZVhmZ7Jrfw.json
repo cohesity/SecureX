@@ -24,20 +24,6 @@
         "schema_id": "datatype.string",
         "properties": {
           "value": "",
-          "scope": "output",
-          "name": "Restored Object",
-          "type": "datatype.string",
-          "description": "Name of the restored vm",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01P2GELDEKDFK7O52XhtUcCvSYAB0Wg1FfG",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
           "scope": "input",
           "name": "Object",
           "type": "datatype.string",
@@ -46,6 +32,20 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01P2FT44WXFJJ2nmc5DhQdOfSxlnONlkKWC",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "Restored Object",
+          "type": "datatype.string",
+          "description": "Name of the restored vm",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01P2GELDEKDFK7O52XhtUcCvSYAB0Wg1FfG",
         "object_type": "variable_workflow"
       }
     ],
