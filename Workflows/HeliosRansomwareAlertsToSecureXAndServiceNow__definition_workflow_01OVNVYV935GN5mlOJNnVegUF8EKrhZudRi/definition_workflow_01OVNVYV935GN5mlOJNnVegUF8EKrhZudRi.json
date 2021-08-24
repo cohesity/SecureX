@@ -9,20 +9,6 @@
       {
         "schema_id": "datatype.string",
         "properties": {
-          "value": "",
-          "scope": "local",
-          "name": "APIClientPassword",
-          "type": "datatype.string",
-          "description": "Threat Response API Client Password. Generate it from SecureX and paste it here in Value",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01QV36ZF7HDWT4OFqP5E1MZQ2MtoGpTri4Z",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
           "value": "no",
           "scope": "local",
           "name": "CreateServiceNowIncidents",
@@ -37,15 +23,29 @@
       {
         "schema_id": "datatype.string",
         "properties": {
-          "value": "no",
+          "value": "",
           "scope": "local",
-          "name": "DeleteSightingIncident",
+          "name": "APIClientID",
           "type": "datatype.string",
-          "description": "Delete Sighting and Incident? Value can be \"yes\" or \"no\".",
+          "description": "Threat Response API Client. Generate it from SecureX and paste it here in Value",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01QV378K5SSIU24EHkn9SurpG3YLkjKLnhT",
+        "unique_name": "variable_workflow_01QV36R515SM31aE9vvinNwpESyWHgAnEFw",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "APIClientPassword",
+          "type": "datatype.string",
+          "description": "Threat Response API Client Password. Generate it from SecureX and paste it here in Value",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01QV36ZF7HDWT4OFqP5E1MZQ2MtoGpTri4Z",
         "object_type": "variable_workflow"
       },
       {
@@ -60,20 +60,6 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01QV37FA6EKJ20dRYptNRewqYzVvk3pxTNz",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "local",
-          "name": "APIClientID",
-          "type": "datatype.string",
-          "description": "Threat Response API Client. Generate it from SecureX and paste it here in Value",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01QV36R515SM31aE9vvinNwpESyWHgAnEFw",
         "object_type": "variable_workflow"
       },
       {
@@ -153,8 +139,8 @@
             "properties": {
               "condition": {
                 "left_operand": "$workflow.definition_workflow_01OVNVYV935GN5mlOJNnVegUF8EKrhZudRi.local.variable_workflow_01QV39WDVAT387ZDjOPlzyYIXsscvSY3ttb$",
-                "operator": "eq",
-                "right_operand": ""
+                "operator": "eqi",
+                "right_operand": "no"
               },
               "continue_on_failure": false,
               "display_name": "no",
