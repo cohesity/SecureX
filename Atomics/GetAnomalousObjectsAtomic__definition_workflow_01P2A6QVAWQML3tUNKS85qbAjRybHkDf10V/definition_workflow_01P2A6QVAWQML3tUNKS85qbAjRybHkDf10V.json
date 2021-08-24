@@ -9,34 +9,6 @@
       {
         "schema_id": "datatype.string",
         "properties": {
-          "value": "",
-          "scope": "output",
-          "name": "Anomalous Objects Json",
-          "type": "datatype.string",
-          "description": "List of Anomalous objects data in json format",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01P2ASXFC130D4JuZqAI4ZVl9M2RuCkIP8w",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.secure_string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Cohesity Helios API Key",
-          "type": "datatype.secure_string",
-          "description": "Cohesity Helios API key used to make API calls to Helios",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01P2AHDUHRRX103GrTwWrvd4zzZ5GPEUL09",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
           "value": "0",
           "scope": "input",
           "name": "Start Time",
@@ -60,6 +32,34 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01P2B3HR6DAU70qmcA7Cs7UFPiLNTz5pZvB",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Cohesity Helios API Key",
+          "type": "datatype.secure_string",
+          "description": "Cohesity Helios API key used to make API calls to Helios",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01P2AHDUHRRX103GrTwWrvd4zzZ5GPEUL09",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "Anomalous Objects Json",
+          "type": "datatype.string",
+          "description": "List of Anomalous objects data in json format",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01P2ASXFC130D4JuZqAI4ZVl9M2RuCkIP8w",
         "object_type": "variable_workflow"
       }
     ],
