@@ -39,7 +39,7 @@ def get_ransomware_alert_id(args):
     '''
     try:
         alert_id = ''
-        url = 'https://helios.cohesity.com/mcm/alerts/'
+        url = 'https://helios.cohesity.com/mcm/alerts'
         params = {
             "maxAlerts": 1000,
             "alertCategoryList": "kSecurity",
