@@ -15,7 +15,10 @@ import argparse
 import requests
 import sys
 import time
-def get_access_token(args):
+
+##### Cisco Functions ##### 
+
+def _get_access_token(args):
     '''
     Get Threat Response access token
     :param args:
@@ -34,6 +37,8 @@ def get_access_token(args):
         return response.json()['access_token']
     except Exception as e:
         raise Exception("Failed to get threat response access token, " + str(e))
+
+
 def update_or_delete_sighting(tr_access_token, args):
     '''
     update or delete sighting once anomalous object is restored
@@ -78,17 +83,8 @@ def update_or_delete_sighting(tr_access_token, args):
                 update_or_delete_relationship(tr_access_token, relationship_id)
     except Exception as e:
         raise Exception(str(e))
-def get_property_dict(property_list):
-    '''
-    get property dictionary from list of property dicts
-    with keys, values
-    :param property_list:
-    :return:
-    '''
-    property_dict = {}
-    for property in property_list:
-        property_dict[property['key']] = property['value']
-    return property_dict
+
+
 def get_restore_properties(args):
     '''
     Get the alert id and the properties needed for
@@ -122,6 +118,84 @@ def get_restore_properties(args):
         return restore_properties, alert_id
     except Exception as e:
         raise Exception(str(e))
+
+def get_incident_and_relationship_id(tr_access_token, sightingId):
+    incident_id = ""
+    headers = {
+        'Authorization': 'Bearer ' + tr_access_token,
+        'Content-Type': 'application/json'
+    }
+    try:
+        url = 'https://private.intel.amp.cisco.com/ctia/relationship/search'
+        params = {"source_ref": str(sightingId)}
+        response = requests.get(url, params=params, headers=headers, verify=False)
+        if response.status_code != 200:
+            raise Exception('Failed to get relation, ' + str(response.json()))
+        else:
+            incident_id = response.json()[0]['target_ref']
+            relationship_id = response.json()[0]['id']
+            return incident_id, relationship_id
+    except Exception as e:
+        raise Exception(str(e))
+
+
+def update_or_delete_incident(tr_access_token, incident_id):
+    try:
+        headers = {
+            'Authorization': 'Bearer ' + tr_access_token,
+            'Content-Type': 'application/json'
+        }
+        url = 'https://private.intel.amp.cisco.com/ctia/incident/search'
+        params = {
+            "id": str(incident_id.split('/')[-1])
+        }
+        response = requests.get(url, headers=headers, params=params, verify=False)
+        if response.status_code != 200 or not response.json():
+            raise Exception("Failed to find the incident, " + str(response.json()))
+        incident = response.json()[0]
+        url = 'https://private.intel.amp.cisco.com/ctia/incident/' + str(incident_id.split('/')[-1])
+        if args.delete == 'yes':
+            response = requests.delete(url, headers=headers, verify=False)
+            if response.status_code != 204:
+                raise Exception("Failed to delete incident, " + str(response))
+        else:
+            incident['status'] = 'Closed'
+            response = requests.put(url, headers=headers,
+                                    verify=False, json=incident)
+            if response.status_code != 200:
+                raise Exception("Failed to delete incident, " + str(response))
+    except Exception as e:
+        raise Exception(str(e))
+
+
+def update_or_delete_relationship(tr_access_token, relationship_id):
+    if args.delete == 'yes':
+        try:
+            headers = {
+                'Authorization': 'Bearer ' + tr_access_token,
+                'Content-Type': 'application/json'
+            }
+            url = 'https://private.intel.amp.cisco.com/ctia/relationship/' + str(relationship_id.split('/')[-1])
+            response = requests.delete(url, headers=headers, verify=False)
+            if response.status_code != 204:
+                raise Exception("Failed to delete relationship, " + str(response))
+        except Exception as e:
+            raise Exception(str(e))
+
+##### Cohesity Functions #####
+
+def get_property_dict(property_list):
+    '''
+    get property dictionary from list of property dicts
+    with keys, values
+    :param property_list:
+    :return:
+    '''
+    property_dict = {}
+    for property in property_list:
+        property_dict[property['key']] = property['value']
+    return property_dict
+
 def restore_vmware_object(restore_properties, args):
     '''
     restore anomalous object to the latest clean snapshot
@@ -156,7 +230,7 @@ def restore_vmware_object(restore_properties, args):
                             ' to latest clean snapshot. ' + str(response.json()))
     except Exception as e:
         raise Exception(str(e))
-        
+
 def resolve_alert(alert_id, args):
     '''
     resolve ransomware alert on helios
@@ -176,64 +250,8 @@ def resolve_alert(alert_id, args):
                             " but failed to resolve the alert on Helios")
     except Exception as e:
         raise Exception(str(e))
-def get_incident_and_relationship_id(tr_access_token, sightingId):
-    incident_id = ""
-    headers = {
-        'Authorization': 'Bearer ' + tr_access_token,
-        'Content-Type': 'application/json'
-    }
-    try:
-        url = 'https://private.intel.amp.cisco.com/ctia/relationship/search'
-        params = {"source_ref": str(sightingId)}
-        response = requests.get(url, params=params, headers=headers, verify=False)
-        if response.status_code != 200:
-            raise Exception('Failed to get relation, ' + str(response.json()))
-        else:
-            incident_id = response.json()[0]['target_ref']
-            relationship_id = response.json()[0]['id']
-            return incident_id, relationship_id
-    except Exception as e:
-        raise Exception(str(e))
-def update_or_delete_incident(tr_access_token, incident_id):
-    try:
-        headers = {
-            'Authorization': 'Bearer ' + tr_access_token,
-            'Content-Type': 'application/json'
-        }
-        url = 'https://private.intel.amp.cisco.com/ctia/incident/search'
-        params = {
-            "id": str(incident_id.split('/')[-1])
-        }
-        response = requests.get(url, headers=headers, params=params, verify=False)
-        if response.status_code != 200 or not response.json():
-            raise Exception("Failed to find the incident, " + str(response.json()))
-        incident = response.json()[0]
-        url = 'https://private.intel.amp.cisco.com/ctia/incident/' + str(incident_id.split('/')[-1])
-        if args.delete == 'yes':
-            response = requests.delete(url, headers=headers, verify=False)
-            if response.status_code != 204:
-                raise Exception("Failed to delete incident, " + str(response))
-        else:
-            incident['status'] = 'Closed'
-            response = requests.put(url, headers=headers,
-                                    verify=False, json=incident)
-            if response.status_code != 200:
-                raise Exception("Failed to delete incident, " + str(response))
-    except Exception as e:
-        raise Exception(str(e))
-def update_or_delete_relationship(tr_access_token, relationship_id):
-    if args.delete == 'yes':
-        try:
-            headers = {
-                'Authorization': 'Bearer ' + tr_access_token,
-                'Content-Type': 'application/json'
-            }
-            url = 'https://private.intel.amp.cisco.com/ctia/relationship/' + str(relationship_id.split('/')[-1])
-            response = requests.delete(url, headers=headers, verify=False)
-            if response.status_code != 204:
-                raise Exception("Failed to delete relationship, " + str(response))
-        except Exception as e:
-            raise Exception(str(e))
+
+
 def main(args):
     '''
     :param args: commandline arguments
@@ -254,6 +272,8 @@ def main(args):
         print("Workflow succeeded")
     except Exception as e:
         sys.exit("Workflow failed: " + str(e))
+
+
 parser = argparse.ArgumentParser(
     description="Arguments to restore anomalous object to latest clean snapshot")
 parser.add_argument("client_id", help="Threat Response API client id")
