@@ -226,7 +226,7 @@ def restore_vmware_object(restore_properties, args):
         url = 'https://helios.cohesity.com/irisservices/api/v1/public/restore/recover'
         headers['clusterid'] = restore_properties['cid']
         response = requests.post(url, headers=headers, json=request_payload, verify=False)
-        if response.status_code != 200:
+        if response.status_code != 201:
             raise Exception("Failed to restore " + restore_properties['object'] +
                             ' to latest clean snapshot. ' + str(response.json()))
     except Exception as e:
