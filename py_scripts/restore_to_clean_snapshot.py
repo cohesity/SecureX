@@ -206,23 +206,24 @@ def restore_vmware_object(restore_properties, args):
     try:
         headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}
         request_payload = {
-            "objects": [{"entity": {"id": int(restore_properties["entityId"]),
-                                    "parentId": int(restore_properties["parentId"])},
-                         "jobId": int(restore_properties["jobId"]),
-                         "jobInstanceId": int(restore_properties["jobInstanceId"]),
-                         "jobUid": {
-                             "clusterId": int(restore_properties['cid']),
-                             "clusterIncarnationId": int(restore_properties['clusterIncarnationId']),
-                             "objectId": int(restore_properties['jobId'])
-                         },
-                         "startTimeUsecs": int(restore_properties["jobStartTimeUsecs"]),
-                         }],
             "name": "Cisco_SecureX_triggered_restore_task_" + restore_properties["object"],
-            "powerStateConfig": {"powerOn": True},
-            "restoredObjectsNetworkConfig": {"disableNetwork": False},
-            "renameRestoredObjectParam": {"prefix": "Recover-", "suffix": "-VM-" + str(int(time.time()))},
-            "continueRestoreOnError": False}
-        url = 'https://helios.cohesity.com/irisservices/api/v1/restore'
+            "type": "kRecoverVMs",
+            "vmwareParameters": {
+                "poweredOn": True,
+                "prefix" : "Recover-",
+                "suffix" : "-VM-" + str(int(time.time()))
+            },
+            "objects": [
+                {
+                    "jobId": int(restore_properties["jobId"]),
+                    "jobRunId": int(restore_properties["jobInstanceId"]),
+                    "startedTimeUsecs": int(restore_properties["jobStartTimeUsecs"]),
+                    "sourceName": restore_properties["object"],
+                    "protectionSourceId": int(restore_properties["entityId"])
+                }
+            ]
+        }
+        url = 'https://helios.cohesity.com/irisservices/api/v1/public/restore/recover'
         headers['clusterid'] = restore_properties['cid']
         response = requests.post(url, headers=headers, json=request_payload, verify=False)
         if response.status_code != 200:
