@@ -19,6 +19,7 @@ This integration leverages Cohesity REST API to interact and fetch information f
  - Supported [Atomic Actions](#atomic-actions) you can take
  - Supported [Workflows](#workflows) you can perform
  - How to [Import Workflows and Atomic Actions](#import)
+ - [Minimum Permission for Helios User to generate APIKEY](#minimum-permission)
  - [Suggestions and Feedback](#suggest)
 
 
@@ -172,6 +173,17 @@ N/A
 [top](#Cisco-SecureX-Integration)
 
 To explore the various options available in SecureX orchestration for importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
+
+## <a name="minimum-permission"></a> Minimum Permission for Helios API user to generate APIKey :handshake:
+[top](#Cisco-SecureX-Integration)
+
+In order to run the workflow on SecureX, you need to pass Helios APIKey. The user that creates this APIKey must have the following privileges. 
+
+* *Viewer Role*: This role is needed for the user to be able to login to Cohesty Helios and [create the APIKey.](https://developer.cohesity.com/docs/helios-getting-started)
+
+* *Manage Protection Groups and Manage Recovery*: This role is needed to get a clean snapshot and recoever the VM to latest know safe state. 
+
+To know more about Cohesity Roles, please visit [Cohesity Product Documentation](https://docs.cohesity.com/6_5_1/Web/UserGuide/Content/Dashboard/Admin/RoleManage.htm?tocpath=Administration%7CAccess%20Management%7CRoles%7C_____0#ManageRoles). 
 
 ## <a name="suggest"></a> Suggestions and Feedback :handshake:
 [top](#Cisco-SecureX-Integration)
