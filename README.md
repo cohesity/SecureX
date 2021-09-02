@@ -174,7 +174,7 @@ N/A
 
 To explore the various options available in SecureX orchestration for importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
 
-## <a name="minimum-permission"></a> Minimum Permission for Helios API user to generate APIKey :handshake:
+## <a name="minimum-permission"></a> Minimum Permission for Helios API user to generate APIKey :cop:
 [top](#Cisco-SecureX-Integration)
 
 In order to run the workflow on SecureX, you need to pass Helios APIKey. The user that creates this APIKey must have the following privileges. 
