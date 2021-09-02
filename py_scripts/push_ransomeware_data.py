@@ -14,7 +14,11 @@ import json
 import requests
 import sys
 import time
-def get_access_token(args):
+import datetime
+
+##### Cisco Functions #####
+
+def _get_access_token(args):
     '''
     Get Threat Response access token
     :param args:
@@ -33,18 +37,8 @@ def get_access_token(args):
         return response.json()['access_token']
     except Exception as e:
         raise Exception("Failed to get threat response access token, " + str(e))
-def get_property_dict(property_list):
-    '''
-    get property dictionary from list of property dicts
-    with keys, values
-    :param property_list:
-    :return:
-    '''
-    property_dict = {}
-    for property in property_list:
-        property_dict[property['key']] = property['value']
-    return property_dict
-def get_sightings_from_external_id(external_id, tr_access_token):
+
+def _get_sightings_from_external_id(external_id, tr_access_token):
     try:
         url = 'https://private.intel.amp.cisco.com/ctia/sighting/external_id/' + external_id
         headers = {
@@ -57,7 +51,8 @@ def get_sightings_from_external_id(external_id, tr_access_token):
         return response.json()
     except Exception as e:
         raise Exception(str(e))
-def get_incidents_from_external_id(external_id, tr_access_token):
+
+def _get_incidents_from_external_id(external_id, tr_access_token):
     try:
         url = 'https://private.intel.amp.cisco.com/ctia/incident/external_id/' + external_id
         headers = {
@@ -70,6 +65,8 @@ def get_incidents_from_external_id(external_id, tr_access_token):
         return response.json()
     except Exception as e:
         raise Exception(str(e))
+
+
 def create_sightings(tr_access_token, alert):
     try:
         service_now_description = {}
@@ -77,8 +74,8 @@ def create_sightings(tr_access_token, alert):
             'Authorization': 'Bearer ' + tr_access_token,
             'Content-Type': 'application/json'
         }
-        
-        property_dict = get_property_dict(alert['propertyList'])
+
+        property_dict = _get_property_dict(alert['propertyList'])
         external_id = property_dict.get('object', '') + '___' +\
                         property_dict.get('entityId', '') + '___' +\
                         property_dict.get('source', '') + '___' +\
@@ -94,7 +91,7 @@ def create_sightings(tr_access_token, alert):
                             alert.get('alertDocument')['alertCause'] + ". \n" +
                             alert.get('alertDocument')['alertHelpText']
         }
-        sightings = get_sightings_from_external_id(external_id, tr_access_token)
+        sightings = _get_sightings_from_external_id(external_id, tr_access_token)
         if sightings:
             sighting = sightings[0]
             url = 'https://private.intel.amp.cisco.com/ctia/sighting/' + sighting['id'].split('/')[-1]
@@ -148,24 +145,26 @@ def create_sightings(tr_access_token, alert):
                 return json.loads(response.content), service_now_description
     except Exception as e:
         raise Exception(str(e))
+
+
 def create_incidents(tr_access_token, alert):
     try:
         headers = {
             'Authorization': 'Bearer ' + tr_access_token,
             'Content-Type': 'application/json'
         }
-        
-        property_dict = get_property_dict(alert['propertyList'])
+
+        property_dict = _get_property_dict(alert['propertyList'])
         external_id = property_dict.get('object', '') + '___' +\
                         property_dict.get('entityId', '') + '___' +\
                         property_dict.get('source', '') + '___' +\
                         property_dict.get('cluster', '') + '___' +\
                         property_dict.get('cid', '')
-        incidents = get_incidents_from_external_id(external_id, tr_access_token)
+        incidents = _get_incidents_from_external_id(external_id, tr_access_token)
         if incidents:
             incident = incidents[0]
             url = 'https://private.intel.amp.cisco.com/ctia/incident/' + incident['id'].split('/')[-1]
-            
+
             incident['incident_time']['opened'] = datetime.datetime.utcfromtimestamp(
                     float(alert['firstTimestampUsecs']) / 1000000).isoformat()
             incident['incident_time']['discovered'] = datetime.datetime.utcfromtimestamp(
@@ -208,7 +207,7 @@ def create_incidents(tr_access_token, alert):
                         "description": "The source in which the anomalous object is present"
                     }
                 ]
-                
+
             }
             response = requests.post(url, headers=headers,
                                         verify=False, json=incident)
@@ -218,6 +217,8 @@ def create_incidents(tr_access_token, alert):
                 return json.loads(response.content)
     except Exception as e:
         raise Exception(str(e))
+
+
 def create_relationship(tr_access_token, source, destination):
     try:
         headers = {
@@ -233,7 +234,7 @@ def create_relationship(tr_access_token, source, destination):
             "type": "relationship",
             "source_ref": source,
             "target_ref": destination
-            
+
         }
         response = requests.post(url, headers=headers,
                                     verify=False, json=relation)
@@ -241,6 +242,23 @@ def create_relationship(tr_access_token, source, destination):
             raise Exception('Failed to create relation, ' + str(response.json()))
     except Exception as e:
         raise Exception(str(e))
+
+
+###### Cohesity Functions ###### 
+
+def _get_property_dict(property_list):
+    '''
+    get property dictionary from list of property dicts
+    with keys, values
+    :param property_list:
+    :return:
+    '''
+    property_dict = {}
+    for property in property_list:
+        property_dict[property['key']] = property['value']
+    return property_dict
+
+
 def get_ransomware_alerts(args):
     '''
     get ransomware alerts from Cohesity Helios
@@ -264,16 +282,17 @@ def get_ransomware_alerts(args):
         if response.status_code != 200:
             raise Exception(str(response.json()))
         for alert in response.json():
-            if alert['severity'] == 'kCritical' and alert['alertState'] == 'kOpen' and \
-                    alert['alertCode'] == 'CE01516011':
+            if alert['alertCode'] == 'CE01516011':
                 ransomware_alerts.append(alert)
         return ransomware_alerts
     except Exception as e:
         raise Exception("Failed to get ransomware alerts from Helios, " + str(e))
+
+
 def main(args):
     service_now_descriptions = []
     try:
-        tr_access_token = get_access_token(args)
+        tr_access_token = _get_access_token(args)
         ransomware_alerts = get_ransomware_alerts(args)
         for alert in ransomware_alerts:
             sighting, service_now_description = create_sightings(tr_access_token, alert)

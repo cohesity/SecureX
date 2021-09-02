@@ -14,26 +14,10 @@ delete: Specifies where to delete or not the sighting once the anomaly is ignore
 import argparse
 import requests
 import sys
-def get_access_token(args):
-    '''
-    Get Threat Response access token
-    :param args:
-    :return:
-    '''
-    try:
-        url = "https://visibility.amp.cisco.com/iroh/oauth2/token"
-        headers = {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "application/json"
-        }
-        response = requests.post(url, headers=headers, auth=(args.client_id, args.client_password),
-                                 verify=False, data={'grant_type': 'client_credentials'})
-        if response.status_code != 200:
-            raise Exception(str(response.json()))
-        return response.json()['access_token']
-    except Exception as e:
-        raise Exception("Failed to get threat response access token, " + str(e))
-def get_property_dict(property_list):
+
+##### Cohesity Functions #######
+
+def _get_property_dict(property_list):
     '''
     get property dictionary from list of property dicts
     with keys, values
@@ -44,6 +28,8 @@ def get_property_dict(property_list):
     for property in property_list:
         property_dict[property['key']] = property['value']
     return property_dict
+
+
 def get_ransomware_alert_id(args):
     '''
     get ransomware alert id from Helios for the given
@@ -66,14 +52,38 @@ def get_ransomware_alert_id(args):
         if response.status_code != 200:
             raise Exception(str(response.json()))
         for alert in response.json():
-            if alert['severity'] == 'kCritical' and alert['alertState'] == 'kOpen' and \
-                    alert['alertCode'] == 'CE01516011':
-                property_dict = get_property_dict(alert['propertyList'])
+            if alert['alertCode'] == 'CE01516011':
+                property_dict = _get_property_dict(alert['propertyList'])
                 if property_dict.get('object', "") == args.object:
                     alert_id = alert['id']
         return alert_id
     except Exception as e:
         raise Exception("Failed to get ransomware alert id from Helios, " + str(e))
+
+
+##### CISCO Functions #######
+
+def _get_access_token(args):
+    '''
+    Get Threat Response access token
+    :param args:
+    :return:
+    '''
+    try:
+        url = "https://visibility.amp.cisco.com/iroh/oauth2/token"
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/json"
+        }
+        response = requests.post(url, headers=headers, auth=(args.client_id, args.client_password),
+                                 verify=False, data={'grant_type': 'client_credentials'})
+        if response.status_code != 200:
+            raise Exception(str(response.json()))
+        return response.json()['access_token']
+    except Exception as e:
+        raise Exception("Failed to get threat response access token, " + str(e))
+
+
 def update_or_delete_sighting(tr_access_token, args):
     '''
     update or delete sighting once the anomaly is ignored
@@ -118,6 +128,8 @@ def update_or_delete_sighting(tr_access_token, args):
                 update_or_delete_relationship(tr_access_token, relationship_id)
     except Exception as e:
         raise Exception(str(e))
+
+
 def get_incident_and_relationship_id(tr_access_token, sightingId):
     incident_id = ""
     headers = {
@@ -136,6 +148,7 @@ def get_incident_and_relationship_id(tr_access_token, sightingId):
             return incident_id, relationship_id
     except Exception as e:
         raise Exception(str(e))
+
 
 def update_or_delete_incident(tr_access_token, incident_id):
     try:
@@ -164,6 +177,8 @@ def update_or_delete_incident(tr_access_token, incident_id):
                 raise Exception("Failed to delete incident, " + str(response))
     except Exception as e:
         raise Exception(str(e))
+
+
 def update_or_delete_relationship(tr_access_token, relationship_id):
     if args.delete == 'yes':
         try:
@@ -177,6 +192,8 @@ def update_or_delete_relationship(tr_access_token, relationship_id):
                 raise Exception("Failed to delete relationship, " + str(response))
         except Exception as e:
             raise Exception(str(e))
+
+
 def main(args):
     try:
         alert_id = get_ransomware_alert_id(args)
@@ -191,7 +208,7 @@ def main(args):
         response = requests.patch(url, headers=headers, json=request_payload, verify=False)
         if response.status_code != 200:
             raise Exception('Failed to ignore anomaly on Helios ' + str(response.json()))
-        tr_access_token = get_access_token(args)
+        tr_access_token = _get_access_token(args)
         update_or_delete_sighting(tr_access_token, args)
         print("Workflow succeeded")
     except Exception as e:

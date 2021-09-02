@@ -15,7 +15,10 @@ import argparse
 import requests
 import sys
 import time
-def get_access_token(args):
+
+##### Cisco Functions ##### 
+
+def _get_access_token(args):
     '''
     Get Threat Response access token
     :param args:
@@ -34,6 +37,8 @@ def get_access_token(args):
         return response.json()['access_token']
     except Exception as e:
         raise Exception("Failed to get threat response access token, " + str(e))
+
+
 def update_or_delete_sighting(tr_access_token, args):
     '''
     update or delete sighting once anomalous object is restored
@@ -78,17 +83,8 @@ def update_or_delete_sighting(tr_access_token, args):
                 update_or_delete_relationship(tr_access_token, relationship_id)
     except Exception as e:
         raise Exception(str(e))
-def get_property_dict(property_list):
-    '''
-    get property dictionary from list of property dicts
-    with keys, values
-    :param property_list:
-    :return:
-    '''
-    property_dict = {}
-    for property in property_list:
-        property_dict[property['key']] = property['value']
-    return property_dict
+
+
 def get_restore_properties(args):
     '''
     Get the alert id and the properties needed for
@@ -122,60 +118,7 @@ def get_restore_properties(args):
         return restore_properties, alert_id
     except Exception as e:
         raise Exception(str(e))
-def restore_vmware_object(restore_properties, args):
-    '''
-    restore anomalous object to the latest clean snapshot
-    :param restore_properties:
-    :param args:
-    :return:
-    '''
-    try:
-        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}
-        request_payload = {
-            "objects": [{"entity": {"id": int(restore_properties["entityId"]),
-                                    "parentId": int(restore_properties["parentId"])},
-                         "jobId": int(restore_properties["jobId"]),
-                         "jobInstanceId": int(restore_properties["jobInstanceId"]),
-                         "jobUid": {
-                             "clusterId": int(restore_properties['cid']),
-                             "clusterIncarnationId": int(restore_properties['clusterIncarnationId']),
-                             "objectId": int(restore_properties['jobId'])
-                         },
-                         "startTimeUsecs": int(restore_properties["jobStartTimeUsecs"]),
-                         }],
-            "name": "Cisco_SecureX_triggered_restore_task_" + restore_properties["object"],
-            "powerStateConfig": {"powerOn": True},
-            "restoredObjectsNetworkConfig": {"disableNetwork": False},
-            "renameRestoredObjectParam": {"prefix": "Recover-", "suffix": "-VM-" + str(int(time.time()))},
-            "continueRestoreOnError": False}
-        url = 'https://helios.cohesity.com/irisservices/api/v1/restore'
-        headers['clusterid'] = restore_properties['cid']
-        response = requests.post(url, headers=headers, json=request_payload, verify=False)
-        if response.status_code != 200:
-            raise Exception("Failed to restore " + restore_properties['object'] +
-                            ' to latest clean snapshot. ' + str(response.json()))
-    except Exception as e:
-        raise Exception(str(e))
-        
-def resolve_alert(alert_id, args):
-    '''
-    resolve ransomware alert on helios
-    :param alert_id:
-    :param args:
-    :return:
-    '''
-    try:
-        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}
-        request_payload = {
-            "status": "kResolved"
-        }
-        url = 'https://helios.cohesity.com/mcm/alerts/' + alert_id
-        response = requests.patch(url, headers=headers, json=request_payload, verify=False)
-        if response.status_code != 200:
-            raise Exception("Successful in restoring the anomalous object"
-                            " but failed to resolve the alert on Helios")
-    except Exception as e:
-        raise Exception(str(e))
+
 def get_incident_and_relationship_id(tr_access_token, sightingId):
     incident_id = ""
     headers = {
@@ -194,6 +137,8 @@ def get_incident_and_relationship_id(tr_access_token, sightingId):
             return incident_id, relationship_id
     except Exception as e:
         raise Exception(str(e))
+
+
 def update_or_delete_incident(tr_access_token, incident_id):
     try:
         headers = {
@@ -221,6 +166,8 @@ def update_or_delete_incident(tr_access_token, incident_id):
                 raise Exception("Failed to delete incident, " + str(response))
     except Exception as e:
         raise Exception(str(e))
+
+
 def update_or_delete_relationship(tr_access_token, relationship_id):
     if args.delete == 'yes':
         try:
@@ -234,6 +181,78 @@ def update_or_delete_relationship(tr_access_token, relationship_id):
                 raise Exception("Failed to delete relationship, " + str(response))
         except Exception as e:
             raise Exception(str(e))
+
+##### Cohesity Functions #####
+
+def get_property_dict(property_list):
+    '''
+    get property dictionary from list of property dicts
+    with keys, values
+    :param property_list:
+    :return:
+    '''
+    property_dict = {}
+    for property in property_list:
+        property_dict[property['key']] = property['value']
+    return property_dict
+
+def restore_vmware_object(restore_properties, args):
+    '''
+    restore anomalous object to the latest clean snapshot
+    :param restore_properties:
+    :param args:
+    :return:
+    '''
+    try:
+        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}
+        request_payload = {
+            "name": "Cisco_SecureX_triggered_restore_task_" + restore_properties["object"],
+            "type": "kRecoverVMs",
+            "vmwareParameters": {
+                "poweredOn": True,
+                "prefix" : "Recover-",
+                "suffix" : "-VM-" + str(int(time.time()))
+            },
+            "objects": [
+                {
+                    "jobId": int(restore_properties["jobId"]),
+                    "jobRunId": int(restore_properties["jobInstanceId"]),
+                    "startedTimeUsecs": int(restore_properties["jobStartTimeUsecs"]),
+                    "sourceName": restore_properties["object"],
+                    "protectionSourceId": int(restore_properties["entityId"])
+                }
+            ]
+        }
+        url = 'https://helios.cohesity.com/irisservices/api/v1/public/restore/recover'
+        headers['clusterid'] = restore_properties['cid']
+        response = requests.post(url, headers=headers, json=request_payload, verify=False)
+        if response.status_code != 201:
+            raise Exception("Failed to restore " + restore_properties['object'] +
+                            ' to latest clean snapshot. ' + str(response.json()))
+    except Exception as e:
+        raise Exception(str(e))
+
+def resolve_alert(alert_id, args):
+    '''
+    resolve ransomware alert on helios
+    :param alert_id:
+    :param args:
+    :return:
+    '''
+    try:
+        headers = {'Content-Type': 'application/json', 'apiKey': args.helios_api_key}
+        request_payload = {
+            "status": "kResolved"
+        }
+        url = 'https://helios.cohesity.com/mcm/alerts/' + alert_id
+        response = requests.patch(url, headers=headers, json=request_payload, verify=False)
+        if response.status_code != 200:
+            raise Exception("Successful in restoring the anomalous object"
+                            " but failed to resolve the alert on Helios")
+    except Exception as e:
+        raise Exception(str(e))
+
+
 def main(args):
     '''
     :param args: commandline arguments
@@ -249,11 +268,13 @@ def main(args):
         elif restore_properties and restore_properties.get('environment') == 'kVMware':
             restore_vmware_object(restore_properties, args)
             resolve_alert(alert_id, args)
-            tr_access_token = get_access_token(args)
+            tr_access_token = _get_access_token(args)
             update_or_delete_sighting(tr_access_token, args)
         print("Workflow succeeded")
     except Exception as e:
         sys.exit("Workflow failed: " + str(e))
+
+
 parser = argparse.ArgumentParser(
     description="Arguments to restore anomalous object to latest clean snapshot")
 parser.add_argument("client_id", help="Threat Response API client id")
