@@ -268,7 +268,7 @@ def main(args):
         elif restore_properties and restore_properties.get('environment') == 'kVMware':
             restore_vmware_object(restore_properties, args)
             resolve_alert(alert_id, args)
-            tr_access_token = get_access_token(args)
+            tr_access_token = _get_access_token(args)
             update_or_delete_sighting(tr_access_token, args)
         print("Workflow succeeded")
     except Exception as e:

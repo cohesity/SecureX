@@ -13,6 +13,7 @@ import datetime
 import json
 import requests
 import sys
+import time
 import datetime
 
 ##### Cisco Functions #####
