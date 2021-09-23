@@ -48,6 +48,7 @@ Workflows are the larger component of orchestration and are similar to a script 
 Lets go over the list of Workflows that this integration supports. 
 
 - [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md)
+- [Helios Ransomware Alerts to Threat Response Only](./docs/workflows/HeliosRansomwareAlertsToThreatResponse.md)
 - [Ignore Anomaly on Cohesity Helios](./docs/workflows/IgnoreAnomalyOnCohesity.md)
 - [Cohesity Restore Anomalous Object](./docs/workflows/CohesityRestoreAnomalousObject.md)
 
