@@ -45,8 +45,6 @@ Lets go over the list of Atomic Actions that this integration supports.
 
 Workflows are the larger component of orchestration and are similar to a script in traditional programming. A workflow can be simple and only have a few actions or be complex and string together many different actions for different products. Refer to the [Workflows](https://ciscosecurity.github.io/sxo-05-security-workflows/workflows/) documentation to find more. 
 
-> All the input to the workflows are passed as Global Variables.
-
 Lets go over the list of Workflows that this integration supports. 
 
 - [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md)
