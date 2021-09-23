@@ -35,7 +35,7 @@ Atomic actions are self-contained workflows that are similar to a function in tr
 
 Lets go over the list of Atomic Actions that this integration supports. 
 
-- [Cohesity Helios - Get Anomalous Objects](#get-anomalous-objects)
+- [Cohesity Helios - Get Anomalous Objects](docs/CohesityGetAnomalousObjects.md)
 - [Cohesity Helios - Restore Anomalous VM](#restore-anomalous-objects)
 - [Cohesity Helios - Ignore Anomaly](#ignore-anomaly)
 
