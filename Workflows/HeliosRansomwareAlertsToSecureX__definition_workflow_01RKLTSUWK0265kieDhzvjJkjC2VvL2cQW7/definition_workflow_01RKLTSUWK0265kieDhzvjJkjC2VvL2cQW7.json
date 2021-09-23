@@ -21,6 +21,20 @@
         "object_type": "variable_workflow"
       },
       {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "10000",
+          "scope": "local",
+          "name": "HeliosRansomwareAlertsFilter",
+          "type": "datatype.string",
+          "description": "Cohesity Helios Ransomware Alerts Filter. Specifies the time in hours. This value is used to decide that anomalies created in the last X hours will be fetched. Example All Anomalies from last 1000 hours will be pulled. ",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01RKLTSUO1U2K4sBtYOlSpRYzSb1N2Kr9PN",
+        "object_type": "variable_workflow"
+      },
+      {
         "schema_id": "datatype.secure_string",
         "properties": {
           "value": "",
@@ -46,20 +60,6 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01RKLTSUO1OD33Zj2sywDFff4cura7aOSvH",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "10000",
-          "scope": "local",
-          "name": "HeliosRansomwareAlertsFilter",
-          "type": "datatype.string",
-          "description": "Cohesity Helios Ransomware Alerts Filter. Specifies the time in hours. This value is used to decide that anomalies created in the last X hours will be fetched. Example All Anomalies from last 1000 hours will be pulled. ",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01RKLTSUO1U2K4sBtYOlSpRYzSb1N2Kr9PN",
         "object_type": "variable_workflow"
       },
       {
@@ -115,10 +115,6 @@
             },
             {
               "variable_to_update": "$workflow.definition_workflow_01RKLTSUWK0265kieDhzvjJkjC2VvL2cQW7.local.variable_workflow_01RKLTSUO1JZU2zjPbBZgD9RR7pgMN6TX42$",
-              "variable_value_new": ""
-            },
-            {
-              "variable_to_update": "$workflow.definition_workflow_01RKLTSUWK0265kieDhzvjJkjC2VvL2cQW7.local.variable_workflow_01RKLTSUO1PP41nCZlDbHCbtMJ0Cf2fwA8W$",
               "variable_value_new": ""
             },
             {
