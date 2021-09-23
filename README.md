@@ -35,9 +35,9 @@ Atomic actions are self-contained workflows that are similar to a function in tr
 
 Lets go over the list of Atomic Actions that this integration supports. 
 
-- [Cohesity Helios - Get Anomalous Objects](docs/CohesityGetAnomalousObjects.md)
-- [Cohesity Helios - Restore Anomalous VM](#restore-anomalous-objects)
-- [Cohesity Helios - Ignore Anomaly](#ignore-anomaly)
+- [Cohesity Helios - Get Anomalous Objects](./docs/atomics/CohesityGetAnomalousObjects.md)
+- [Cohesity Helios - Restore Anomalous VM](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Helios - Ignore Anomaly](./docs/atomics/CohesityIgnoreAnomaly.md)
 
 ### <a name="get-anomalous-objects"></a> Cohesity Helios - Get Anomalous Objects 
 [top](#Cisco-SecureX-Integration)
@@ -102,9 +102,9 @@ Workflows are the larger component of orchestration and are similar to a script 
 
 Lets go over the list of Workflows that this integration supports. 
 
-- [Helios Ransomware Alerts to Threat Response and ServiceNow](#get-alerts-to-securex)
-- [Ignore Anomaly on Cohesity Helios](#ignore-anomaly-workflow)
-- [Cohesity Restore Anomalous Object](#restore-anomaly)
+- [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md)
+- [Ignore Anomaly on Cohesity Helios](./docs/workflows/IgnoreAnomalyOnCohesity.md)
+- [Cohesity Restore Anomalous Object](./docs/workflows/CohesityRestoreAnomalousObject.md)
 
 ### <a name="get-alerts-to-securex"></a> Helios Ransomware Alerts to Threat Response and ServiceNow 
 [top](#Cisco-SecureX-Integration)
