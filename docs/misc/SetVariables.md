@@ -46,7 +46,7 @@ Now that you have created these global variables, you can now go back to the Wor
 
 2. Click on the Set Variable Activity on the workflow canvas. On the right side, you can reference the global variables as shown in the screen
 
-    ![Set Variable](../assets/setVariable03.png)
+    ![Set Variable](../assets/setVariable05.png)
 
     ![Set Variable](../assets/setVariable04.png)
 

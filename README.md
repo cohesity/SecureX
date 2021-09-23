@@ -19,7 +19,7 @@ This integration leverages Cohesity REST API to interact and fetch information f
  - Supported [Atomic Actions](#atomic-actions) you can take
  - Supported [Workflows](#workflows) you can perform
  - How to [Import Workflows and Atomic Actions](#import)
- - [Minimum Permission for Helios User to generate APIKEY](#minimum-permission)
+ - [Minimum Permission for Helios User to generate Helios API KEY](#minimum-permission)
  - [Suggestions and Feedback](#suggest)
 
 
