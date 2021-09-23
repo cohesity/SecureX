@@ -37,8 +37,8 @@ Atomic actions are self-contained workflows that are similar to a function in tr
 Lets go over the list of Atomic Actions that this integration supports. 
 
 - [Cohesity Helios - Get Anomalous Objects](./docs/atomics/CohesityGetAnomalousObjects.md)
-- [Cohesity Helios - Restore Anomalous VM](./docs/atomics/CohesityRestoreAnomalousVM.md)
 - [Cohesity Helios - Ignore Anomaly](./docs/atomics/CohesityIgnoreAnomaly.md)
+- [Cohesity Helios - Restore Anomalous VM](./docs/atomics/CohesityRestoreAnomalousVM.md)
 
 
 ## <a name="workflows"></a> Workflows :hourglass_flowing_sand:
@@ -51,6 +51,9 @@ Lets go over the list of Workflows that this integration supports.
 - [Helios Ransomware Alerts to Threat Response Only](./docs/workflows/HeliosRansomwareAlertsToThreatResponse.md)
 - [Ignore Anomaly on Cohesity Helios](./docs/workflows/IgnoreAnomalyOnCohesity.md)
 - [Cohesity Restore Anomalous Object](./docs/workflows/CohesityRestoreAnomalousObject.md)
+
+If you want to get the Helios Ransomware Alerts to Threat Response and ServiceNow, refer this workflow. 
+
 - [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md)
 
 
@@ -71,7 +74,7 @@ In order to run the workflow on SecureX, you need to pass Helios APIKey. The use
 
 To know more about Cohesity Roles, please visit [Cohesity Product Documentation](https://docs.cohesity.com/6_5_1/Web/UserGuide/Content/Dashboard/Admin/RoleManage.htm?tocpath=Administration%7CAccess%20Management%7CRoles%7C_____0#ManageRoles). 
 
-## <a name="suggest"></a> Supported Objects :book
+## <a name="suggest"></a> Supported Objects :green_book:
 [top](#Cisco-SecureX-Integration)
 
 For this release of the Integration, only Anomalous VMs are supported as Objects. More Objects from Cohesity Helios will be supported in the future. Please reach out to use for more info. 
