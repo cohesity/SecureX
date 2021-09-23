@@ -21,6 +21,7 @@ This integration leverages Cohesity REST API to interact and fetch information f
  - How to [Import Workflows and Atomic Actions](#import)
  - [Minimum Permission for Helios User to generate Helios API KEY](#minimum-permission)
  - [Suggestions and Feedback](#suggest)
+ - [Supported Objects](#supported)
 
 
 ## <a name="get-started"></a> What is SecureX :question:
@@ -47,10 +48,11 @@ Workflows are the larger component of orchestration and are similar to a script 
 
 Lets go over the list of Workflows that this integration supports. 
 
-- [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md)
 - [Helios Ransomware Alerts to Threat Response Only](./docs/workflows/HeliosRansomwareAlertsToThreatResponse.md)
 - [Ignore Anomaly on Cohesity Helios](./docs/workflows/IgnoreAnomalyOnCohesity.md)
 - [Cohesity Restore Anomalous Object](./docs/workflows/CohesityRestoreAnomalousObject.md)
+- [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md)
+
 
 
 ## <a name="import"></a> Import Atomic Actions and Workflows :bookmark_tabs:
@@ -68,6 +70,12 @@ In order to run the workflow on SecureX, you need to pass Helios APIKey. The use
 * *Manage Protection Groups and Manage Recovery*: This role is needed to get a clean snapshot and recoever the VM to latest know safe state. 
 
 To know more about Cohesity Roles, please visit [Cohesity Product Documentation](https://docs.cohesity.com/6_5_1/Web/UserGuide/Content/Dashboard/Admin/RoleManage.htm?tocpath=Administration%7CAccess%20Management%7CRoles%7C_____0#ManageRoles). 
+
+## <a name="suggest"></a> Supported Objects :book
+[top](#Cisco-SecureX-Integration)
+
+For this release of the Integration, only Anomalous VMs are supported as Objects. More Objects from Cohesity Helios will be supported in the future. Please reach out to use for more info. 
+
 
 ## <a name="suggest"></a> Suggestions and Feedback :handshake:
 [top](#Cisco-SecureX-Integration)

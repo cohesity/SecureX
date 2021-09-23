@@ -8,7 +8,7 @@
  - [How to Run](#run)
  - [Input to this workflow](#input)
  - [Output for workflow](#output)
- - [What's Next!](#next)
+ - [Conclusion](#next)
 
 ### <a name="intro"></a> Cohesity Restore Anomalous Object
 [home](../../README.md)
@@ -51,7 +51,7 @@ In order to set this variables, check the [Set Variables document](../misc/SetVa
 
 Once you have performed all the [pre-req](#pre-req) for this workflow, this workflow can be executed from Threat Response for the Incident there shown below. 
 
-> NOTE: You will need to run the [Cohesity Helios Ransomware Alerts to Threat Response and ServiceNow](./HeliosRansomwareAlertsToThreatResponseAndServiceNow.md) workflow to see the SecureX incident for Cohesity Helios Anomalous object alert.
+> NOTE: You will need to run the [Cohesity Helios Ransomware Alerts to Threat Response](./HeliosRansomwareAlertsToThreatResponse.md) workflow to see the SecureX incident for Cohesity Helios Anomalous object alert.
 
 1. Login to SecureX and navigate to Threat Response
 
@@ -78,9 +78,11 @@ Input to these workflows can be referred to under [Set Variables](#set-variables
 
 N/A
 
-### <a name="next"></a> What's Next!
+### <a name="next"></a> Conclusion
 [home](../../README.md)
 
-After you have executed this workflow, the anomalous objects reported by Cohesity Helios will be pushed into SecureX Threat Response as Incidents and you can perform 2 operations on these Incidents. They are,
+After you have executed this workflow, the anomalous objects reported by Cohesity Helios will be restored to the VM’s latest clean Snapshot. 
 
-1. [Restore to Object to latest known safe snapshot](./CohesityRestoreAnomalousObject.md)
+Another workflow that you can run on the Anomalous object is
+
+1. [Ignore Anomaly on Cohesity Helios](./IgnoreAnomalyOnCohesity.md)
