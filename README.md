@@ -26,7 +26,7 @@ This integration leverages Cohesity REST API to interact and fetch information f
 ## <a name="get-started"></a> What is SecureX :question:
 [top](#Cisco-SecureX-Integration)
 
-* SecureX is a cloud-native, built-in platform that connects Cisco Secure portfolio and your infrastructure. It allows you to radically reduce dwell time and human-powered tasks. Refer to [Cisco SecureX page](https://www.cisco.com/c/en/us/products/security/securex/index.html) to know more about it.
+SecureX is a cloud-native, built-in platform that connects Cisco Secure portfolio and your infrastructure. It allows you to radically reduce dwell time and human-powered tasks. Refer to [Cisco SecureX page](https://www.cisco.com/c/en/us/products/security/securex/index.html) to know more about it.
 
 ## <a name="atomic-actions"></a> Atomic Actions :large_blue_circle:
 [top](#Cisco-SecureX-Integration)
