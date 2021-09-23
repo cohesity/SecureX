@@ -28,12 +28,10 @@ This workflow has to be triggered on a schedule and user has to create `Cohesity
 Before you can run this workflow, there are a certain pre-req that you need to configure. Lets go over all of them and make sure they are set to get started. Most of the steps are common between all the workflows, so once you set configure these, you will be able to easily configure and run other workflows :)
 
 #### <a name="securex-client"></a> Create SecureX API Client
-[top](#Cisco-SecureX-Integration)
 
 You will need to create SecureX API Client and get the Client ID and Client Password to run all the workflows. Refer to the [Create SecureX API Client document](../misc/CreateSecureXAPIClient.md) to generate it. 
 
 #### <a name="helios-client"></a> Create Cohesity Helios API Key
-[top](#Cisco-SecureX-Integration)
 
 In order to run the workflow on SecureX, you need to pass Helios APIKey. To create it, login to Cohesty Helios and [create the APIKey.](https://developer.cohesity.com/docs/helios-getting-started)
 
