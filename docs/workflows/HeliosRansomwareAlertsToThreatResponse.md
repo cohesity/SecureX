@@ -6,24 +6,19 @@
     * [Create Cohesity Helios API Key](#helios-client)
     * [Set Variables](#set-variables)
     * [Create Schedule](#create-schedule)
-    * [Create ServiceNow Credentials](#create-snow-cred)
-    * [Create ServiceNow Target](#create-snow-target)
  - [How to Run](#run)
  - [Input to this workflow](#input)
  - [Output for workflow](#output)
  - [What's Next!](#next)
 
-### <a name="intro"></a> Helios Ransomware Alerts to Threat Response and ServiceNow 
+### <a name="intro"></a> Helios Ransomware Alerts to Threat Response
 [home](../../README.md)
 
-This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store, creates SecureX Incidents, Sightings and a Relationship between them. It also creates incidents on ServiceNow at regular intervals based on the schedule you define. 
+This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store, creates SecureX Incidents, Sightings and a Relationship between them. 
 
->NOTE: This workflow will creates incidents on ServiceNow. If you DON'T want to create that, please check the [Cohesity Helios Ransomware Alerts to Threat Response](../workflows/HeliosRansomwareAlertsToThreatResponse.md) workflow  
-
+>NOTE: This workflow will NOT creates incidents on ServiceNow. If you want to create that, please check the [Cohesity Helios Ransomware Alerts to Threat Response and ServiceNow](../workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md) workflow  
 
 This workflow has to be triggered on a schedule and user has to create `Cohesity Helios Ransomware Data Push Schedule` for this to work which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
-
-> Note: This workflow also needs creation of 'ServiceNow_Credentials' under Account Keys and 'Cohesity_ServiceNow_Target' under Targets. These are needed for creating incidents on service now.
 
 ### <a name="pre-req"></a> Pre-requisites
 [home](../../README.md)
@@ -48,7 +43,6 @@ This workflow expects a bunch of variables that are needed to make a bunch of AP
 | APIClientPassword | Secure String | Threat Response API Client Password | Yes | 
 | HeliosAPIKey | Secure String | API Key to access Helios | Yes | 
 | HeliosRansomwareAlertsFilter  | String | Number of hours, used to get anomalous objects detected in the last `N` hours| No. Default is `1000` | 
-| CreateServiceNowIncidents | String | Set this variable to `yes` or `no` based on which ServiceNow incidents will be created | No. Default is `Yes` | 
 
 In order to set this variables, check the [Set Variables document](../misc/SetVariables.md). Now let's move the next pre-req.
 
@@ -57,18 +51,6 @@ In order to set this variables, check the [Set Variables document](../misc/SetVa
 Once the variables are set, you need to create a Schedule on SecureX. This schedule will define the cadence of this workflow. For example you would want to run this workflow everyday at 9 PM PST. In that case, you can create a Schedule for that and that will run periodically and get the list of Anomalous objects everyday so that you can take action on it. 
 
 This workflow looks for a Schedule named `Cohesity Helios Ransomware Data Push Schedule`. Please check the [Create Schedule Document](../misc/CreateSchedule.md) to see how to create this Schedule. 
-
-#### <a name="create-snow-cred"></a> Create ServiceNow Credentials
-
-One of the other pre-req for this workflow is to Create ServiceNow credentials. This is needed if you want to create ServiceNow ticket for any anomalous object that is reported by Cohesity. 
-
-Check the Create [ServiceNow Credentials document](../misc/CreateServiceNowCredentials.md) to know how to do that. 
-
-#### <a name="create-snow-target"></a> Create ServiceNow Target
-
-The last pre-req to run this workflow is to Create ServiceNow Target. Here is where you define your ServiceNow instance details where the ServiceNow tickets will be created. 
-
-Check the Create [ServiceNow Target document](../misc/CreateServiceNowTarget.md) to know how to do that. 
 
 ### <a name="run"></a> How to Run
 [home](../../README.md)
