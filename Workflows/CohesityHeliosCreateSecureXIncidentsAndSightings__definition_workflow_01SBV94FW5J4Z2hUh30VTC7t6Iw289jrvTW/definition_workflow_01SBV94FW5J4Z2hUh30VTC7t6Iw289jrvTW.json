@@ -1,0 +1,412 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01SBV94FW5J4Z2hUh30VTC7t6Iw289jrvTW",
+    "name": "Cohesity Helios: Create SecureX Incidents and Sightings",
+    "title": "Cohesity Helios: Create SecureX Incidents and Sightings",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": null,
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "This workflow gets Cohesity Helios Anomalous Objects and creates corresponding SecureX Incidents and Sightings. ",
+      "display_name": "Cohesity Helios: Create SecureX Incidents and Sightings",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "execute_on_target_group": true,
+        "target_group": {
+          "target_group_id": "target_group_01SBTJK9YMQE64c3fOFvp9wEv1JM2zytAMb",
+          "run_on_all_targets": true,
+          "selected_target_types": [
+            "web-service.endpoint"
+          ]
+        }
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01SCNPOGR2RUB4HJiGz8Q1iz3bosNNExLz0",
+        "name": "Cohesity Helios: Get Anomalous Objects v1.2",
+        "title": "Cohesity Helios: Get Anomalous Objects v1.2",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Cohesity Helios: Get Anomalous Objects v1.2",
+          "input": {
+            "variable_workflow_01SCMAS4B0WO21tFjuMmjG0OXYDqro8mWfm": "$global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r.global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r$"
+          },
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SBV94K3V1Q83HZMHaWz25pENBHenjkZkE",
+        "name": "Read Table from JSON",
+        "title": "Read Table from JSON",
+        "type": "corejava.read_table_from_json",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "description": "Convert Helios Alerts JSON object to array",
+          "display_name": "Read Table from JSON",
+          "input_json": "$activity.definition_activity_01SCNPOGR2RUB4HJiGz8Q1iz3bosNNExLz0.output.variable_workflow_01SBS2EY211125J8Qt68lXInk8rdsrjoTF1$",
+          "jsonpath_query": "$.",
+          "persist_output": false,
+          "populate_columns": false,
+          "skip_execution": false,
+          "table_columns": [
+            {
+              "column_name": "object",
+              "column_type": "string"
+            },
+            {
+              "column_name": "start_time",
+              "column_type": "string"
+            },
+            {
+              "column_name": "end_time",
+              "column_type": "string"
+            },
+            {
+              "column_name": "incident_description",
+              "column_type": "string"
+            },
+            {
+              "column_name": "source_name",
+              "column_type": "string"
+            },
+            {
+              "column_name": "sighting_description",
+              "column_type": "string"
+            },
+            {
+              "column_name": "observables",
+              "column_type": "string"
+            },
+            {
+              "column_name": "external_id",
+              "column_type": "string"
+            },
+            {
+              "column_name": "title",
+              "column_type": "string"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SBV94LN1KUX4oz06LsVji5P0Ji0LfyqRV",
+        "name": "Threat Response - Generate Access Token",
+        "title": "Threat Response - Generate Access Token",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Threat Response - Generate Access Token",
+          "runtime_user": {
+            "override_target_runtime_user": true,
+            "runtime_user_id": "definition_runtime_user_01NE18EFDCB5T05aifGXQ2VmC7b2tCJPiNF",
+            "runtime_user_type": "runtime_user.web-service_basic_credentials"
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01NE18FL2J3KK75rkkWDdeakiarzHy0SyDv",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SBV94MLWG3Z4dLBdDjqX9f1q1D5uRYwQK",
+        "name": "For Each",
+        "title": "For Each",
+        "type": "logic.for_each",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "For Each",
+          "skip_execution": false,
+          "source_array": "$activity.definition_activity_01SBV94K3V1Q83HZMHaWz25pENBHenjkZkE.output.read_table_from_json$"
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01SCQE87E9OER0cHP5wFw5sN31Gdz95CpXA",
+            "name": "Cohesity Threat Response: Create Incidents",
+            "title": "Cohesity Threat Response: Create Incidents",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Cohesity Threat Response: Create Incidents",
+              "input": {
+                "variable_workflow_01SCLPSOLO03G7glCWucHVyq8wp6cWMNJkc": "$activity.definition_activity_01SBV94LN1KUX4oz06LsVji5P0Ji0LfyqRV.output.variable_workflow_01PP75S3G7CJY6WAQr2IJC7qga2SIoE09gQ$",
+                "variable_workflow_01SCLQ4WZTQEU0Q0txB1NYY1CuVasi69Fq2": "High",
+                "variable_workflow_01SCLQHP4Y0TQ545nnq4VDJHsMMtSRAUO3E": "$activity.definition_activity_01SBV94MLWG3Z4dLBdDjqX9f1q1D5uRYwQK.input.source_array[@].incident_description$",
+                "variable_workflow_01SCLQZKG28FT64EWwbgXcB9d80vYOh10zq": "New",
+                "variable_workflow_01SCLR8DF1K705mJUpiA8LiQU5I6TjOV1V5": "$activity.definition_activity_01SBV94MLWG3Z4dLBdDjqX9f1q1D5uRYwQK.input.source_array[@].title$",
+                "variable_workflow_01SCLRPXGQ4HZ1PkxK4I6FG7b7BPknmalZK": "amber",
+                "variable_workflow_01SCLSC1X898J3uTjDcWJdTd6QNIPhfWxUf": "$activity.definition_activity_01SBV94MLWG3Z4dLBdDjqX9f1q1D5uRYwQK.input.source_array[@].external_id$",
+                "variable_workflow_01SCLTDPUEYSD4yJyMlYDsyPtYjK1HXS5eg": "Cohesity Helios"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target": true,
+                "target_id": "definition_target_01NE18FWL8DVR72McrSompNLCb0N9lkgBcP",
+                "target_type": "web-service.endpoint"
+              },
+              "workflow_id": "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01SCOZRFUWY1A6Pm1gvPORbdQ5kb9pKCmCo",
+            "name": "Cohesity Threat Response: Create Sightings",
+            "title": "Cohesity Threat Response: Create Sightings",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Cohesity Threat Response: Create Sightings",
+              "input": {
+                "variable_workflow_01SCN4EEFSW7811e7XZnD7XxfCnw7Cad0xi": "$activity.definition_activity_01SBV94MLWG3Z4dLBdDjqX9f1q1D5uRYwQK.input.source_array[@].external_id$",
+                "variable_workflow_01SCN4EEFTD3N6yKu1jEHY0UQmYlYB8eDAq": "$activity.definition_activity_01SBV94MLWG3Z4dLBdDjqX9f1q1D5uRYwQK.input.source_array[@].title$",
+                "variable_workflow_01SCN4EEFTKE377oklnaZNqW75ujOulvHhJ": "High",
+                "variable_workflow_01SCN4EEFU0J23QFd1IhHOtTApi10U0sM0f": "$activity.definition_activity_01SBV94LN1KUX4oz06LsVji5P0Ji0LfyqRV.output.variable_workflow_01PP75S3G7CJY6WAQr2IJC7qga2SIoE09gQ$",
+                "variable_workflow_01SCN4EEFUFN97lbOIH35RTRvibr1FG00XG": "$activity.definition_activity_01SBV94MLWG3Z4dLBdDjqX9f1q1D5uRYwQK.input.source_array[@].sighting_description$",
+                "variable_workflow_01SCN8JZLOI5W3V8Ze2TpZvFd3d4c1Tf5cj": "$activity.definition_activity_01SBV94MLWG3Z4dLBdDjqX9f1q1D5uRYwQK.input.source_array[@].observables$",
+                "variable_workflow_01SCN906EOOPM2Fr3NtvwrUQ5EejyMDXENH": "Medium",
+                "variable_workflow_01SCNEBZ7LU7D4JTVmcek77tLk2Owz4DNAX": "Cohesity Helios"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target": true,
+                "target_id": "definition_target_01NE18FWL8DVR72McrSompNLCb0N9lkgBcP",
+                "target_type": "web-service.endpoint"
+              },
+              "workflow_id": "definition_workflow_01SCN4EE93SG32dgZWXTdsy3Y12UQnRajmb"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01SCQXRZZ4P7C3hFVaU8ZA8BndcFKx84n2j",
+            "name": "Condition Block",
+            "title": "Check if Incident and Sighting got created",
+            "type": "logic.if_else",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "description": "If Incident and Sighting got created, then create a relationship",
+              "display_name": "Check if Incident and Sighting got created",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "blocks": [
+              {
+                "unique_name": "definition_activity_01SCQXS05P9IS5ZZ4lOrjFypdxzIwmo5mZc",
+                "name": "Condition Branch",
+                "title": "If Incident and Sighting got created",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": {
+                      "left_operand": "$activity.definition_activity_01SCQE87E9OER0cHP5wFw5sN31Gdz95CpXA.output.variable_workflow_01SCLQRBF8WU363UmfqWttkZFBGD1WUYiXQ$",
+                      "operator": "ne",
+                      "right_operand": ""
+                    },
+                    "operator": "and",
+                    "right_operand": {
+                      "left_operand": "$activity.definition_activity_01SCOZRFUWY1A6Pm1gvPORbdQ5kb9pKCmCo.output.variable_workflow_01SCN4EEFT3VR76QJ6FqD7jbtmBU8M3Y2m8$",
+                      "operator": "ne",
+                      "right_operand": ""
+                    }
+                  },
+                  "continue_on_failure": false,
+                  "display_name": "If Incident and Sighting got created",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_01SCQTVB44IHB5JgjlWi4lDejLCCuj0JD60",
+                    "name": "Threat Response - Create Relationship",
+                    "title": "Threat Response - Create Relationship",
+                    "type": "workflow.atomic_workflow",
+                    "base_type": "subworkflow",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Threat Response - Create Relationship",
+                      "input": {
+                        "variable_workflow_01PP78LVV8JKR6NKKuym8RA2VYFgUJrR4qU": "$activity.definition_activity_01SCOZRFUWY1A6Pm1gvPORbdQ5kb9pKCmCo.output.variable_workflow_01SCN4EEFT3VR76QJ6FqD7jbtmBU8M3Y2m8$",
+                        "variable_workflow_01PP78LVV8NS94TRyx07G3ajwZ5eE5oWZ36": "",
+                        "variable_workflow_01PP78LVV8P3X5wkMhrcIXTnToxb6HxuLpk": "$activity.definition_activity_01SBV94LN1KUX4oz06LsVji5P0Ji0LfyqRV.output.variable_workflow_01PP75S3G7CJY6WAQr2IJC7qga2SIoE09gQ$",
+                        "variable_workflow_01PP78LVV8QB314gJIqe5PQHoWnRTMtwhK4": "amber",
+                        "variable_workflow_01PP78LVV8RLZ02Yzy68Uz59X8kInnUomdU": "",
+                        "variable_workflow_01PP78LVV8SVF31gxGXEVhu26vewW98cJxO": "$activity.definition_activity_01SCQE87E9OER0cHP5wFw5sN31Gdz95CpXA.output.variable_workflow_01SCLQRBF8WU363UmfqWttkZFBGD1WUYiXQ$",
+                        "variable_workflow_01PP78LVV8V4B28e1wJKo9WReVhIZ3bvM6f": "related-to"
+                      },
+                      "runtime_user": {
+                        "target_default": true
+                      },
+                      "skip_execution": false,
+                      "target": {
+                        "override_workflow_target": true,
+                        "target_id": "definition_target_01NE18FWL8DVR72McrSompNLCb0N9lkgBcP",
+                        "target_type": "web-service.endpoint"
+                      },
+                      "workflow_id": "definition_workflow_01PP78LW2WNY80aDM6OHNiRu2VPG4BrR8bq"
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_01NE18FL2J3KK75rkkWDdeakiarzHy0SyDv": {
+      "unique_name": "definition_target_01NE18FL2J3KK75rkkWDdeakiarzHy0SyDv",
+      "name": "CTR_For_Access_Token",
+      "title": "CTR Target for access token",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01NE18EFDCB5T05aifGXQ2VmC7b2tCJPiNF",
+        "description": "CTR_For_Access_Token",
+        "disable_certificate_validation": false,
+        "display_name": "CTR_For_Access_Token",
+        "host": "visibility.amp.cisco.com",
+        "no_runtime_user": false,
+        "path": "/iroh",
+        "protocol": "https"
+      }
+    },
+    "definition_target_01NE18FWL8DVR72McrSompNLCb0N9lkgBcP": {
+      "unique_name": "definition_target_01NE18FWL8DVR72McrSompNLCb0N9lkgBcP",
+      "name": "Private_CTIA_Target",
+      "title": "Private_CTIA_Target",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "description": "Private_CTIA_Target",
+        "disable_certificate_validation": false,
+        "display_name": "Private_CTIA_Target",
+        "host": "private.intel.amp.cisco.com",
+        "no_runtime_user": true,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft": {
+      "unique_name": "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft",
+      "name": "Cohesity Helios",
+      "title": "Cohesity Helios",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": true,
+        "display_name": "Cohesity Helios",
+        "host": "helios.cohesity.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "path": "/",
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01NE18EFDCB5T05aifGXQ2VmC7b2tCJPiNF": {
+      "unique_name": "definition_runtime_user_01NE18EFDCB5T05aifGXQ2VmC7b2tCJPiNF",
+      "name": "CTR_Credentials",
+      "title": "CTR_Credentials",
+      "description": "Account Key for CTR",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "*****",
+        "basic_password": "*****",
+        "basic_username": "*****",
+        "display_name": "CTR_Credentials"
+      }
+    }
+  },
+  "target_groups": {
+    "target_group_01SBTJK9YMQE64c3fOFvp9wEv1JM2zytAMb": {
+      "unique_name": "target_group_01SBTJK9YMQE64c3fOFvp9wEv1JM2zytAMb",
+      "name": "HeliosTargetGroup",
+      "title": "HeliosTargetGroup",
+      "type": "generic.target_group",
+      "base_type": "target_group",
+      "version": "1.0.0",
+      "targets": [
+        {
+          "data_target_type": "web-service.endpoint",
+          "view_target_type": "web-service.endpoint",
+          "include_all_targets": false,
+          "selected_target_ids": [
+            "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft"
+          ]
+        }
+      ],
+      "object_type": "target_group"
+    }
+  },
+  "variables": {
+    "variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r": {
+      "unique_name": "variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Cohesity Helios API Key",
+        "type": "datatype.secure_string",
+        "description": "Cohesity Helios API key used for authentication while making API calls",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+    "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE",
+    "definition_workflow_01SCN4EE93SG32dgZWXTdsy3Y12UQnRajmb",
+    "definition_workflow_01PP78LW2WNY80aDM6OHNiRu2VPG4BrR8bq"
+  ]
+}
