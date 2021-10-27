@@ -1,0 +1,446 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE",
+    "name": "Cohesity Threat Response: Create Incidents",
+    "title": "Cohesity Threat Response: Create Incidents",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "External ID",
+          "type": "datatype.string",
+          "description": "External ID can be used to uniquely identify the SecureX Incident",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLSC1X898J3uTjDcWJdTd6QNIPhfWxUf",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "Incident ID",
+          "type": "datatype.string",
+          "description": "The ID of the new incident. This can be used when creating relationships to other objects or providing a user a link to view the incident",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLQRBF8WU363UmfqWttkZFBGD1WUYiXQ",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "Short Incident ID",
+          "type": "datatype.string",
+          "description": "The plain incident ID without the CTIA URL",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLRI0TD8IO5bzBpHLAb7BjWti7xpzSMH",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident Description",
+          "type": "datatype.string",
+          "description": "This can be a string of plain text or can be formatted with Markdown",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLQHP4Y0TQ545nnq4VDJHsMMtSRAUO3E",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident Confidence",
+          "type": "datatype.string",
+          "description": "Must be one of the following: Medium, Info, Unknown, None, High, or Low",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLQ4WZTQEU0Q0txB1NYY1CuVasi69Fq2",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident Title",
+          "type": "datatype.string",
+          "description": "A short title for the incident",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLR8DF1K705mJUpiA8LiQU5I6TjOV1V5",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident Status",
+          "type": "datatype.string",
+          "description": "Must be one of the following: New, Closed, Rejected, Open, Restoration Achieved, Incident Reported, Stalled, or Containment Achieved",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLQZKG28FT64EWwbgXcB9d80vYOh10zq",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "Cohesity Helios",
+          "scope": "input",
+          "name": "Incident Source",
+          "type": "datatype.string",
+          "description": "Source from where this incident was created",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLTDPUEYSD4yJyMlYDsyPtYjK1HXS5eg",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Access Token",
+          "type": "datatype.secure_string",
+          "description": "An access token for the Threat Response API. This is often obtained using the \"Threat Response - Generate Access Token\" atomic",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLPSOLO03G7glCWucHVyq8wp6cWMNJkc",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "TLP Value",
+          "type": "datatype.string",
+          "description": "The traffic light protocol value to give this incident. Valid values include: red, amber, green, and white. See: https://www.cisa.gov/tlp",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLRPXGQ4HZ1PkxK4I6FG7b7BPknmalZK",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Cohesity Helios",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": false,
+      "description": "This atomic will be used to create Securex Incident. The different between this and the existing one is that this one supports passing more incident payload object like external_ids and others. Check the input variables to know more. ",
+      "display_name": "Cohesity Threat Response: Create Incidents",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "specify_on_workflow_start": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01SCLP2RWOEFY1OpGPUANWt5f82fVLogxux",
+        "name": "Execute Python Script",
+        "title": "Generate incident JSON",
+        "type": "python3.script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Generate incident JSON",
+          "script": "import json, sys\nfrom datetime import datetime, date, timedelta\n\n# Get the current date/time\ndateTime = datetime.now()\n\n# Build the incident objects\nincident_object = {}\nincident_object['external_ids'] = [sys.argv[1]]\nincident_object[\"description\"] = sys.argv[3]\nincident_object[\"schema_version\"] = \"1.0.11\"\nincident_object[\"type\"] = \"incident\"\nincident_object[\"source\"] = sys.argv[4]\nincident_object[\"title\"] = sys.argv[6]\nincident_object[\"incident_time\"] = { \"discovered\": dateTime.strftime(\"%Y-%m-%dT%H:%M:%SZ\"), \"opened\": dateTime.strftime(\"%Y-%m-%dT%H:%M:%SZ\") }\nincident_object[\"status\"] = sys.argv[5]\nincident_object[\"tlp\"] = sys.argv[7]\nincident_object[\"confidence\"] = sys.argv[2]\n\nincident_json = json.dumps(incident_object)",
+          "script_arguments": [
+            "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLSC1X898J3uTjDcWJdTd6QNIPhfWxUf$",
+            "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLQ4WZTQEU0Q0txB1NYY1CuVasi69Fq2$",
+            "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLQHP4Y0TQ545nnq4VDJHsMMtSRAUO3E$",
+            "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLTDPUEYSD4yJyMlYDsyPtYjK1HXS5eg$",
+            "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLQZKG28FT64EWwbgXcB9d80vYOh10zq$",
+            "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLR8DF1K705mJUpiA8LiQU5I6TjOV1V5$",
+            "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLRPXGQ4HZ1PkxK4I6FG7b7BPknmalZK$"
+          ],
+          "script_queries": [
+            {
+              "script_query": "incident_json",
+              "script_query_name": "incident_json",
+              "script_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SCOG3X8BTGO756URQDLulJFzcNSNLsxXV",
+        "name": "HTTP Request",
+        "title": "API call to get Incident by External ID",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLPSOLO03G7glCWucHVyq8wp6cWMNJkc$"
+            }
+          ],
+          "display_name": "API call to get Incident by External ID",
+          "method": "GET",
+          "relative_url": "/ctia/incident/external_id/$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLSC1X898J3uTjDcWJdTd6QNIPhfWxUf$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SCOMZHOZFR744MUJxFyXicRfuf7rrPrUv",
+        "name": "Condition Block",
+        "title": "Check if Incident Exists",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "Check if Incident Exists",
+          "display_name": "Check if Incident Exists",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01SCOMZHXOEEI1q2Qzezt3TeVR1oDfo0hd6",
+            "name": "Condition Branch",
+            "title": "if Incident Exists",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01SCOG3X8BTGO756URQDLulJFzcNSNLsxXV.output.response_body$",
+                "operator": "eq",
+                "right_operand": "[]"
+              },
+              "continue_on_failure": false,
+              "description": "if Incident Exists",
+              "display_name": "if Incident Exists",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01SCLP64TOBBS5Rt1adlLVA78bRLQN3fYgo",
+                "name": "HTTP Request",
+                "title": "Request incident creation",
+                "type": "web-service.http_request",
+                "base_type": "activity",
+                "properties": {
+                  "accept": "application/json",
+                  "action_timeout": 180,
+                  "allow_auto_redirect": true,
+                  "body": "$activity.definition_activity_01SCLP2RWOEFY1OpGPUANWt5f82fVLogxux.output.script_queries.incident_json$",
+                  "content_type": "application/json",
+                  "continue_on_error_status_code": true,
+                  "continue_on_failure": false,
+                  "custom_headers": [
+                    {
+                      "name": "Authorization",
+                      "value": "Bearer $workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.input.variable_workflow_01SCLPSOLO03G7glCWucHVyq8wp6cWMNJkc$"
+                    }
+                  ],
+                  "display_name": "Request incident creation",
+                  "method": "POST",
+                  "relative_url": "/ctia/incident",
+                  "runtime_user": {
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "use_workflow_target": true
+                  }
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01SCLP95O1MAJ2hro0O3FG852Upw8E7zi0D",
+                "name": "Condition Block",
+                "title": "Was the request successful?",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Was the request successful?",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_01SCLP95TVURF7Yf6y1ea0T5luMpNKYFJON",
+                    "name": "Condition Branch",
+                    "title": "201/Created",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01SCLP64TOBBS5Rt1adlLVA78bRLQN3fYgo.output.status_code$",
+                        "operator": "eq",
+                        "right_operand": 201
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "201/Created",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01SCM1C8Z5HDN0c4sqHmVSCcOgMJ1isuAya",
+                        "name": "JSONPath Query",
+                        "title": "Extract incident ID",
+                        "type": "corejava.jsonpathquery",
+                        "base_type": "activity",
+                        "properties": {
+                          "action_timeout": 180,
+                          "continue_on_failure": true,
+                          "display_name": "Extract incident ID",
+                          "input_json": "$activity.definition_activity_01SCLP64TOBBS5Rt1adlLVA78bRLQN3fYgo.output.response_body$",
+                          "jsonpath_queries": [
+                            {
+                              "jsonpath_query": "$.id",
+                              "jsonpath_query_name": "id",
+                              "jsonpath_query_type": "string"
+                            }
+                          ],
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      },
+                      {
+                        "unique_name": "definition_activity_01SCM39UKO5R20KsRQDcsNfP7hlhVSHsbXi",
+                        "name": "Match Regex",
+                        "title": "Strip the incident ID",
+                        "type": "core.matchregex",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Strip the incident ID",
+                          "input_regex": "(incident-[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$",
+                          "input_string": "$activity.definition_activity_01SCM1C8Z5HDN0c4sqHmVSCcOgMJ1isuAya.output.jsonpath_queries.id$",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      },
+                      {
+                        "unique_name": "definition_activity_01SCM3VXIVJMG6THlXrIvs5Nw255rcogX6r",
+                        "name": "Set Variables",
+                        "title": "Set output variable",
+                        "type": "core.set_multiple_variables",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Set output variable",
+                          "skip_execution": false,
+                          "variables_to_update": [
+                            {
+                              "variable_to_update": "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.output.variable_workflow_01SCLQRBF8WU363UmfqWttkZFBGD1WUYiXQ$",
+                              "variable_value_new": "$activity.definition_activity_01SCM1C8Z5HDN0c4sqHmVSCcOgMJ1isuAya.output.jsonpath_queries.id$"
+                            },
+                            {
+                              "variable_to_update": "$workflow.definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE.output.variable_workflow_01SCLRI0TD8IO5bzBpHLAb7BjWti7xpzSMH$",
+                              "variable_value_new": "$activity.definition_activity_01SCM39UKO5R20KsRQDcsNfP7hlhVSHsbXi.output.matching_strings[0]$"
+                            }
+                          ]
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  },
+                  {
+                    "unique_name": "definition_activity_01SCLP9610IGM1mpjxuzzqAEcqy1bw0sptU",
+                    "name": "Condition Branch",
+                    "title": "Anything else",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01SCLP64TOBBS5Rt1adlLVA78bRLQN3fYgo.output.status_code$",
+                        "operator": "ne",
+                        "right_operand": 201
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Anything else",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01SCM5FRLHH4Y5p4sioceHJrX2qCGISR9Sj",
+                        "name": "Completed",
+                        "title": "Failed",
+                        "type": "logic.completed",
+                        "base_type": "activity",
+                        "properties": {
+                          "completion_type": "failed-completed",
+                          "continue_on_failure": false,
+                          "display_name": "Failed",
+                          "result_message": "Failed to create new incident\n\nStatus code: $activity.definition_activity_01SCLP64TOBBS5Rt1adlLVA78bRLQN3fYgo.output.status_code$\nResponse body: $activity.definition_activity_01SCLP64TOBBS5Rt1adlLVA78bRLQN3fYgo.output.response_body$",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r"
+    ]
+  },
+  "categories": {
+    "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r": {
+      "unique_name": "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r",
+      "name": "SecureX",
+      "title": "SecureX",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  }
+}
