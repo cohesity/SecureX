@@ -1,25 +1,11 @@
 {
   "workflow": {
     "unique_name": "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
-    "name": "Cohesity Helios: Get Anomalous Objects v1.2",
-    "title": "Cohesity Helios: Get Anomalous Objects v1.2",
+    "name": "[Atomic] Cohesity Helios: Get Anomalous Objects v1.2",
+    "title": "[Atomic] Cohesity Helios: Get Anomalous Objects v1.2",
     "type": "generic.workflow",
     "base_type": "workflow",
     "variables": [
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "output",
-          "name": "HeliosAlertsArray",
-          "type": "datatype.string",
-          "description": "This variable wills store all the Helios anomalous object in a JSON object",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SBS2EY211125J8Qt68lXInk8rdsrjoTF1",
-        "object_type": "variable_workflow"
-      },
       {
         "schema_id": "datatype.secure_string",
         "properties": {
@@ -33,6 +19,20 @@
         },
         "unique_name": "variable_workflow_01SCMAS4B0WO21tFjuMmjG0OXYDqro8mWfm",
         "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "HeliosAlertsArray",
+          "type": "datatype.string",
+          "description": "This variable wills store all the Helios anomalous object in a JSON object",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SBS2EY211125J8Qt68lXInk8rdsrjoTF1",
+        "object_type": "variable_workflow"
       }
     ],
     "properties": {
@@ -42,7 +42,7 @@
       },
       "delete_workflow_instance": false,
       "description": "This atomic gets list of all anomalous objects identified by Cohesity Helios",
-      "display_name": "Cohesity Helios: Get Anomalous Objects v1.2",
+      "display_name": "[Atomic] Cohesity Helios: Get Anomalous Objects v1.2",
       "runtime_user": {
         "target_default": true
       },
@@ -128,7 +128,7 @@
                   "continue_on_failure": false,
                   "description": "This python block extracts the needed information from Cohesity Helios alerts object to create SecureX Indient and passes it at a JSON object",
                   "display_name": "Massage Cohesity Alert Object",
-                  "script": "'''\nSecureX orchestration workflow python script used to get anomalous objects detected\nin the last n hours from Cohesity Helios and push to SecureX private intelligence\nScript usage:\npython push_ransonware_data.py \u003cclient_id\u003e \u003cclient_password\u003e \u003chelios_api_key\u003e \u003cn\u003e\nclient_id: Threat Response API client id\nclient_password: Threat Response API client password\nhelios_api_key: Cohesity Helios API key\nn: number of hours, used to get anomalous objects detected in the last n hours\n'''\nimport argparse\nimport datetime\nimport time\nimport json\nimport requests\nimport ast\nimport sys\nimport datetime\n##### Cisco Functions #####\n\n\ndef get_property_dict(property_list):\n    '''\n    get property dictionary from list of property dicts\n    with keys, values\n    :param property_list:\n    :return:\n    '''\n    property_dict = {}\n    for property in property_list:\n        property_dict[property['key']] = property['value']\n    return property_dict\n\n\ndef main(args):\n    global massaged_alerts_array\n    alerts = ast.literal_eval(args.alerts)\n    for alert in alerts:\n        if(alert['alertCode'] == 'CE01516011'):\n            property_dict = get_property_dict(alert['propertyList'])\n            external_id = property_dict.get('object', '') + '___' +\\\n                property_dict.get('entityId', '') + '___' +\\\n                property_dict.get('source', '') + '___' +\\\n                property_dict.get('cluster', '') + '___' +\\\n                property_dict.get('cid', '')\n            temp_alert = {\n                \"external_id\": external_id,\n                \"title\": \"Cohesity Helios: \" + property_dict.get(\"object\", \"\"),\n                \"object\": property_dict.get('object', ''),\n                \"start_time\": datetime.datetime.utcfromtimestamp(float(alert['firstTimestampUsecs']) / 1000000).isoformat(),\n                \"end_time\": datetime.datetime.utcfromtimestamp(float(alert['latestTimestampUsecs']) / 1000000).isoformat(),\n                \"incident_description\": \"Anomalous object from Cohesity\"\n                \" Helios. The object is under source \\'\" +\n                property_dict.get(\"source\", \"\") +\n                \"\\' on cluster \\'\" + property_dict.get(\"cluster\", \"\") + \"\\'\" + \"\\n\" +\n                \"# Alert Info \\n\\n\" +\n                \"*Alert Name* : \" + alert['alertDocument']['alertName'] + \"\\n\\n\" +\n                \"*Alert Description* : \" + alert['alertDocument']['alertDescription'] + \"\\n\\n\" +\n                \"*Alert Cause* : \" + alert['alertDocument']['alertCause'] + \"\\n\\n\" +\n                \"*Alert Help Text* : \" +\n                alert['alertDocument']['alertHelpText'],\n                \"source_name\": property_dict.get('source', ''),\n                \"sighting_description\": \"Anomalous object from Cohesity\"\n                \" Helios. The object is under source \\'\" +\n                property_dict.get(\"source\", \"\") +\n                \"\\' on cluster \\'\" +\n                property_dict.get(\"cluster\", \"\") + \"\\'\",\n                \"observables\": [\n                    {\n                        \"type\": \"hostname\",\n                        \"value\": property_dict.get(\"object\", \"\")\n                    }\n                ],\n            }\n            massaged_alerts_array.append(temp_alert)\n\n\nparser = argparse.ArgumentParser(\n    description=\"Arguments to get anomalous objects from Helios\"\n                \" and push to private intelligence\")\nparser.add_argument(\"alerts\", help=\"All Alerts Array\")\nargs = parser.parse_args()\n\n\nmassaged_alerts_array = []\n\nmain(args)\nalerts_array = json.dumps(massaged_alerts_array)\n\nprint(alerts_array)",
+                  "script": "'''\nSecureX orchestration workflow python script used to get anomalous objects detected\nin the last n hours from Cohesity Helios and push to SecureX private intelligence\nScript usage:\npython push_ransonware_data.py \u003cclient_id\u003e \u003cclient_password\u003e \u003chelios_api_key\u003e \u003cn\u003e\nclient_id: Threat Response API client id\nclient_password: Threat Response API client password\nhelios_api_key: Cohesity Helios API key\nn: number of hours, used to get anomalous objects detected in the last n hours\n'''\nimport argparse\nimport datetime\nimport time\nimport json\nimport requests\nimport ast\nimport sys\nimport datetime\n##### Cisco Functions #####\n\n\ndef get_property_dict(property_list):\n    '''\n    get property dictionary from list of property dicts\n    with keys, values\n    :param property_list:\n    :return:\n    '''\n    property_dict = {}\n    for property in property_list:\n        property_dict[property['key']] = property['value']\n    return property_dict\n\n\ndef main(args):\n    global massaged_alerts_array\n    alerts = ast.literal_eval(args.alerts)\n    for alert in alerts:\n        if(alert['alertCode'] == 'CE01516011'):\n            property_dict = get_property_dict(alert['propertyList'])\n            external_id = property_dict.get('object', '') + '___' +\\\n                property_dict.get('entityId', '') + '___' +\\\n                property_dict.get('source', '') + '___' +\\\n                property_dict.get('cluster', '') + '___' +\\\n                property_dict.get('cid', '')\n            temp_alert = {\n                \"alert_id\": alert['id'],\n                \"entity_id\": property_dict.get(\"entityId\", \"\"),\n                \"job_id\": property_dict.get(\"jobId\", \"\"),\n                \"parent_id\": property_dict.get(\"parentId\", \"\"),\n                \"job_instance_id\": property_dict.get(\"jobInstanceId\", \"\"),\n                \"cluster_incarnation_id\": property_dict.get(\"clusterIncarnationId\", \"\"),\n                \"object_id\": property_dict.get(\"objectId\", \"\"),\n                \"job_start_time_usecs\": property_dict.get(\"jobStartTimeUsecs\", \"\"),\n                \"cluster_id\": property_dict.get(\"cid\", \"\"),\n                \"external_id\": external_id,\n                \"title\": \"Cohesity Helios: \" + property_dict.get(\"object\", \"\"),\n                \"object\": property_dict.get('object', ''),\n                \"start_time\": datetime.datetime.utcfromtimestamp(float(alert['firstTimestampUsecs']) / 1000000).isoformat(),\n                \"end_time\": datetime.datetime.utcfromtimestamp(float(alert['latestTimestampUsecs']) / 1000000).isoformat(),\n                \"incident_description\": \"Anomalous object from Cohesity\"\n                \" Helios. The object is under source \\'\" +\n                property_dict.get(\"source\", \"\") +\n                \"\\' on cluster \\'\" + property_dict.get(\"cluster\", \"\") + \"\\'\" + \"\\n\" +\n                \"# Alert Info \\n\\n\" +\n                \"*Alert Name* : \" + alert['alertDocument']['alertName'] + \"\\n\\n\" +\n                \"*Alert Description* : \" + alert['alertDocument']['alertDescription'] + \"\\n\\n\" +\n                \"*Alert Cause* : \" + alert['alertDocument']['alertCause'] + \"\\n\\n\" +\n                \"*Alert Help Text* : \" +\n                alert['alertDocument']['alertHelpText'],\n                \"source_name\": property_dict.get('source', ''),\n                \"sighting_description\": \"Anomalous object from Cohesity\"\n                \" Helios. The object is under source \\'\" +\n                property_dict.get(\"source\", \"\") +\n                \"\\' on cluster \\'\" +\n                property_dict.get(\"cluster\", \"\") + \"\\'\",\n                \"observables\": [\n                    {\n                        \"type\": \"hostname\",\n                        \"value\": property_dict.get(\"object\", \"\")\n                    }\n                ],\n            }\n            massaged_alerts_array.append(temp_alert)\n\n\nparser = argparse.ArgumentParser(\n    description=\"Arguments to get anomalous objects from Helios\"\n                \" and push to private intelligence\")\nparser.add_argument(\"alerts\", help=\"All Alerts Array\")\nargs = parser.parse_args()\n\n\nmassaged_alerts_array = []\n\nmain(args)\nalerts_array = json.dumps(massaged_alerts_array)\n\nprint(alerts_array)",
                   "script_arguments": [
                     "$activity.definition_activity_01SBR0JM6TTLJ37iN25QmNLGiHg3f6hxryH.output.response_body$"
                   ],
