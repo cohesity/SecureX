@@ -1,0 +1,189 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE",
+    "name": "[Atomic] Cohesity Helios:Ignore Anomaly v1.2",
+    "title": "[Atomic] Cohesity Helios:Ignore Anomaly v1.2",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "HeliosAPIKey",
+          "type": "datatype.secure_string",
+          "description": "Helios API Key make API calls on Helios",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDF214V11OI0CYTGbsvzGF8NQJOYpMp30",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Alert ID",
+          "type": "datatype.string",
+          "description": "ID of the Anomalous object on Cohesity Helios",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDEYMZTNTGX1svZHA7z8IEtghcKzI9NRr",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Cohesity Helios",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": false,
+      "description": "Atomic to Ignore Cohesity Anomalous Object",
+      "display_name": "[Atomic] Cohesity Helios:Ignore Anomaly v1.2",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "specify_on_workflow_start": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01SDEXJEWSDKS2jPlXusGdPAZEft5HTURhr",
+        "name": "HTTP Request",
+        "title": "Ignore Anomaly API Call",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "body": "{\n\"status\": \"kSuppressed\"\n}",
+          "content_type": "application/json",
+          "continue_on_error_status_code": true,
+          "continue_on_failure": true,
+          "custom_headers": [
+            {
+              "name": "apiKey",
+              "value": "$workflow.definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE.input.variable_workflow_01SDF214V11OI0CYTGbsvzGF8NQJOYpMp30$"
+            }
+          ],
+          "display_name": "Ignore Anomaly API Call",
+          "method": "PATCH",
+          "relative_url": "mcm/alerts/$workflow.definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE.input.variable_workflow_01SDEYMZTNTGX1svZHA7z8IEtghcKzI9NRr$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDF2ADZ8AJ16mtIleg5TV9udZ4gKJlDgu",
+        "name": "Condition Block",
+        "title": "Condition Block",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Condition Block",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01SDF2AE6NUCH6s3CamkGuVN7vrD2yx3kdJ",
+            "name": "Condition Branch",
+            "title": "200/Ok",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01SDEXJEWSDKS2jPlXusGdPAZEft5HTURhr.output.status_code$",
+                "operator": "eq",
+                "right_operand": 200
+              },
+              "continue_on_failure": false,
+              "display_name": "200/Ok",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01SDF2J0ZUHV44zDWgRn0u0NW89AJs7olHU",
+                "name": "Completed",
+                "title": "Completed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "succeeded",
+                  "continue_on_failure": false,
+                  "display_name": "Completed",
+                  "result_message": "Successfull",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01SDF2AEDO9JG5pVfpa1l7RSOD6x9dNBFeJ",
+            "name": "Condition Branch",
+            "title": "Anything Else",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01SDEXJEWSDKS2jPlXusGdPAZEft5HTURhr.output.status_code$",
+                "operator": "ne",
+                "right_operand": 200
+              },
+              "continue_on_failure": false,
+              "display_name": "Anything Else",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01SDF2KOAZ7FI4MwrECyg206D2FIhgA9BIv",
+                "name": "Completed",
+                "title": "Failed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "continue_on_failure": false,
+                  "display_name": "Failed",
+                  "result_message": "Status Code: $activity.definition_activity_01SDEXJEWSDKS2jPlXusGdPAZEft5HTURhr.output.status_code$\nError Message: $activity.definition_activity_01SDEXJEWSDKS2jPlXusGdPAZEft5HTURhr.output.response_body$",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r"
+    ]
+  },
+  "categories": {
+    "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r": {
+      "unique_name": "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r",
+      "name": "SecureX",
+      "title": "SecureX",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  }
+}
