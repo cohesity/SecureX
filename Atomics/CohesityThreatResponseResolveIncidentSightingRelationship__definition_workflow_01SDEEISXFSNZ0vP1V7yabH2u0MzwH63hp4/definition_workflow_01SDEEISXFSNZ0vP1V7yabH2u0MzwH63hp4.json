@@ -1,0 +1,262 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4",
+    "name": "[Atomic] Cohesity Threat Response: Resolve Incident/Sighting/Rel",
+    "title": "[Atomic] Cohesity Threat Response: Resolve Incident/Sighting/Rel",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident ID",
+          "type": "datatype.string",
+          "description": "SecureX Incident ID to Delete/Resolve",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDEEIT5GZZ63Pxfi5SnUrtPJbC4LfcZ4N",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Sighting ID",
+          "type": "datatype.string",
+          "description": "SecureX Sighting ID to Delete/Resolve",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDEEIT5GF4W0Vvo91NdodwE0ueG8PEZrY",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "SecureX API Token",
+          "type": "datatype.secure_string",
+          "description": "SecureX API Token",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDEEIT5GRV20LwHkl5I7bD2JwOUYWkYOB",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Cohesity Helios",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": false,
+      "description": "Resolve SecureX Incident, Sighting and Relationship by their IDs",
+      "display_name": "[Atomic] Cohesity Threat Response: Resolve Incident/Sighting/Rel",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "specify_on_workflow_start": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01SDEEIVC2I4T4mNcIIWKuq1CwVr5ultcID",
+        "name": "HTTP Request",
+        "title": "Get Incident",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4.input.variable_workflow_01SDEEIT5GRV20LwHkl5I7bD2JwOUYWkYOB$"
+            }
+          ],
+          "display_name": "Get Incident",
+          "method": "GET",
+          "relative_url": "/ctia/incident/$workflow.definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4.input.variable_workflow_01SDEEIT5GZZ63Pxfi5SnUrtPJbC4LfcZ4N$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDEEZ0ASPRN0OViJ8u8z0nqXNrD7Hkeup",
+        "name": "Execute Python Script",
+        "title": "Resolve Incident body",
+        "type": "python3.script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Resolve Incident body",
+          "script": "import sys\nimport json\nincident = json.loads(sys.argv[1])\nincident['status'] = \"Closed\"\nincident = json.dumps(incident)",
+          "script_arguments": [
+            "$activity.definition_activity_01SDEEIVC2I4T4mNcIIWKuq1CwVr5ultcID.output.response_body$"
+          ],
+          "script_queries": [
+            {
+              "script_query": "incident",
+              "script_query_name": "incident",
+              "script_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDEGJYYDTYQ4sDDnqa569sgN5wq1UWSnj",
+        "name": "HTTP Request",
+        "title": "Resolve Incident",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "body": "$activity.definition_activity_01SDEEZ0ASPRN0OViJ8u8z0nqXNrD7Hkeup.output.script_queries.incident$",
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4.input.variable_workflow_01SDEEIT5GRV20LwHkl5I7bD2JwOUYWkYOB$"
+            }
+          ],
+          "display_name": "Resolve Incident",
+          "method": "PUT",
+          "relative_url": "/ctia/incident/$workflow.definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4.input.variable_workflow_01SDEEIT5GZZ63Pxfi5SnUrtPJbC4LfcZ4N$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDEEIXCFAWX43iS192llkfRlZ4aRh2AkG",
+        "name": "HTTP Request",
+        "title": "Get Sighting",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4.input.variable_workflow_01SDEEIT5GRV20LwHkl5I7bD2JwOUYWkYOB$"
+            }
+          ],
+          "display_name": "Get Sighting",
+          "method": "GET",
+          "relative_url": "/ctia/sighting/$workflow.definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4.input.variable_workflow_01SDEEIT5GF4W0Vvo91NdodwE0ueG8PEZrY$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDEG6XG6DVS3rgQDEA1Fi5NT9Yy9qTuit",
+        "name": "Execute Python Script",
+        "title": "Resolve Sighting body",
+        "type": "python3.script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Resolve Sighting body",
+          "script": "import sys\nimport json\nsighting = json.loads(sys.argv[1])\nsighting['resolution'] = 'Anomaly is ignored'\nsighting = json.dumps(sighting)",
+          "script_arguments": [
+            "$activity.definition_activity_01SDEEIXCFAWX43iS192llkfRlZ4aRh2AkG.output.response_body$"
+          ],
+          "script_queries": [
+            {
+              "script_query": "sighting",
+              "script_query_name": " sighting",
+              "script_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDEGP5D5YV46ZNrIVAm3X8l2y1iHAhdL1",
+        "name": "HTTP Request",
+        "title": "Resolve Sighting",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "body": "$activity.definition_activity_01SDEG6XG6DVS3rgQDEA1Fi5NT9Yy9qTuit.output.script_queries. sighting$",
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4.input.variable_workflow_01SDEEIT5GRV20LwHkl5I7bD2JwOUYWkYOB$"
+            }
+          ],
+          "display_name": "Resolve Sighting",
+          "method": "PUT",
+          "relative_url": "/ctia/sighting/$workflow.definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4.input.variable_workflow_01SDEEIT5GF4W0Vvo91NdodwE0ueG8PEZrY$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r"
+    ]
+  },
+  "categories": {
+    "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r": {
+      "unique_name": "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r",
+      "name": "SecureX",
+      "title": "SecureX",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  }
+}
