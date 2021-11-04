@@ -1,0 +1,193 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw",
+    "name": "[Atomic] Cohesity Threat Response: Delete Incident/Sighting/Rel",
+    "title": "[Atomic] Cohesity Threat Response: Delete Incident/Sighting/Rel",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "SecureX API Token",
+          "type": "datatype.secure_string",
+          "description": "SecureX API Token",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDDNK929JJX6b88DZWOdTUpxMZ8spdjfl",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Sighting ID",
+          "type": "datatype.string",
+          "description": "SecureX Sighting ID to Delete/Resolve",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDDMHKODB526bDHI6oeEoqFowPIEX686m",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident ID",
+          "type": "datatype.string",
+          "description": "SecureX Incident ID to Delete/Resolve",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDDMC42N9UD307mZj8ZzQb9ckENe1oHQr",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Relationship ID",
+          "type": "datatype.string",
+          "description": "Relationship ID to Delete/Resolve",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDDMPNPSQGP73nFjWbmOde5A1b2mO0opw",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Cohesity Helios",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": false,
+      "description": "Delete SecureX Incident, Sighting and Relationship by their IDs",
+      "display_name": "[Atomic] Cohesity Threat Response: Delete Incident/Sighting/Rel",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "specify_on_workflow_start": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01SDDMU5Q4RWT1V5OiVlPoMbuwzzkUwfqsN",
+        "name": "HTTP Request",
+        "title": "Delete Incident",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw.input.variable_workflow_01SDDNK929JJX6b88DZWOdTUpxMZ8spdjfl$"
+            }
+          ],
+          "display_name": "Delete Incident",
+          "method": "DELETE",
+          "relative_url": "/ctia/incident/$workflow.definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw.input.variable_workflow_01SDDMC42N9UD307mZj8ZzQb9ckENe1oHQr$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDDP4178N8Z0ycDzYwUlBSf7gH9gaAmLP",
+        "name": "HTTP Request",
+        "title": "Delete Sighting",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw.input.variable_workflow_01SDDNK929JJX6b88DZWOdTUpxMZ8spdjfl$"
+            }
+          ],
+          "display_name": "Delete Sighting",
+          "method": "DELETE",
+          "relative_url": "/ctia/sighting/$workflow.definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw.input.variable_workflow_01SDDMHKODB526bDHI6oeEoqFowPIEX686m$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDDP2YM16YS5FKYRiNWMYFERq4cYS0GE2",
+        "name": "HTTP Request",
+        "title": "Delete Relationship",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw.input.variable_workflow_01SDDNK929JJX6b88DZWOdTUpxMZ8spdjfl$"
+            }
+          ],
+          "display_name": "Delete Relationship",
+          "method": "DELETE",
+          "relative_url": "/ctia/relationship/$workflow.definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw.input.variable_workflow_01SDDMPNPSQGP73nFjWbmOde5A1b2mO0opw$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r"
+    ]
+  },
+  "categories": {
+    "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r": {
+      "unique_name": "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r",
+      "name": "SecureX",
+      "title": "SecureX",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  }
+}
