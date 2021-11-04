@@ -1,11 +1,39 @@
 {
   "workflow": {
     "unique_name": "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE",
-    "name": "Cohesity Threat Response: Create Incidents",
-    "title": "Cohesity Threat Response: Create Incidents",
+    "name": "[Atomic] Cohesity Threat Response: Create Incidents",
+    "title": "[Atomic] Cohesity Threat Response: Create Incidents",
     "type": "generic.workflow",
     "base_type": "workflow",
     "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Access Token",
+          "type": "datatype.secure_string",
+          "description": "An access token for the Threat Response API. This is often obtained using the \"Threat Response - Generate Access Token\" atomic",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLPSOLO03G7glCWucHVyq8wp6cWMNJkc",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident Title",
+          "type": "datatype.string",
+          "description": "A short title for the incident",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLR8DF1K705mJUpiA8LiQU5I6TjOV1V5",
+        "object_type": "variable_workflow"
+      },
       {
         "schema_id": "datatype.string",
         "properties": {
@@ -18,20 +46,6 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01SCLSC1X898J3uTjDcWJdTd6QNIPhfWxUf",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "output",
-          "name": "Incident ID",
-          "type": "datatype.string",
-          "description": "The ID of the new incident. This can be used when creating relationships to other objects or providing a user a link to view the incident",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCLQRBF8WU363UmfqWttkZFBGD1WUYiXQ",
         "object_type": "variable_workflow"
       },
       {
@@ -65,29 +79,15 @@
       {
         "schema_id": "datatype.string",
         "properties": {
-          "value": "",
+          "value": "Cohesity Helios",
           "scope": "input",
-          "name": "Incident Confidence",
+          "name": "Incident Source",
           "type": "datatype.string",
-          "description": "Must be one of the following: Medium, Info, Unknown, None, High, or Low",
-          "is_required": true,
+          "description": "Source from where this incident was created",
+          "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01SCLQ4WZTQEU0Q0txB1NYY1CuVasi69Fq2",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Incident Title",
-          "type": "datatype.string",
-          "description": "A short title for the incident",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCLR8DF1K705mJUpiA8LiQU5I6TjOV1V5",
+        "unique_name": "variable_workflow_01SCLTDPUEYSD4yJyMlYDsyPtYjK1HXS5eg",
         "object_type": "variable_workflow"
       },
       {
@@ -107,29 +107,29 @@
       {
         "schema_id": "datatype.string",
         "properties": {
-          "value": "Cohesity Helios",
-          "scope": "input",
-          "name": "Incident Source",
+          "value": "",
+          "scope": "output",
+          "name": "Incident ID",
           "type": "datatype.string",
-          "description": "Source from where this incident was created",
+          "description": "The ID of the new incident. This can be used when creating relationships to other objects or providing a user a link to view the incident",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01SCLTDPUEYSD4yJyMlYDsyPtYjK1HXS5eg",
+        "unique_name": "variable_workflow_01SCLQRBF8WU363UmfqWttkZFBGD1WUYiXQ",
         "object_type": "variable_workflow"
       },
       {
-        "schema_id": "datatype.secure_string",
+        "schema_id": "datatype.string",
         "properties": {
           "value": "",
           "scope": "input",
-          "name": "Access Token",
-          "type": "datatype.secure_string",
-          "description": "An access token for the Threat Response API. This is often obtained using the \"Threat Response - Generate Access Token\" atomic",
+          "name": "Incident Confidence",
+          "type": "datatype.string",
+          "description": "Must be one of the following: Medium, Info, Unknown, None, High, or Low",
           "is_required": true,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01SCLPSOLO03G7glCWucHVyq8wp6cWMNJkc",
+        "unique_name": "variable_workflow_01SCLQ4WZTQEU0Q0txB1NYY1CuVasi69Fq2",
         "object_type": "variable_workflow"
       },
       {
@@ -154,7 +154,7 @@
       },
       "delete_workflow_instance": false,
       "description": "This atomic will be used to create Securex Incident. The different between this and the existing one is that this one supports passing more incident payload object like external_ids and others. Check the input variables to know more. ",
-      "display_name": "Cohesity Threat Response: Create Incidents",
+      "display_name": "[Atomic] Cohesity Threat Response: Create Incidents",
       "runtime_user": {
         "target_default": true
       },
