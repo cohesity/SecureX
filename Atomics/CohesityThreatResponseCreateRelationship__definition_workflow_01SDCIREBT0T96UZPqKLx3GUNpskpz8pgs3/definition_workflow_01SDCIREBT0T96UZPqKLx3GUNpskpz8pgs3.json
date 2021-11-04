@@ -1,0 +1,314 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3",
+    "name": "[Atomic] Cohesity Threat Response: Create Relationship",
+    "title": "[Atomic] Cohesity Threat Response: Create Relationship",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Access Token",
+          "type": "datatype.secure_string",
+          "description": "An access token for the Threat Response API. This is often obtained using the \"Threat Response - Generate Access Token\" atomic",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDCIREJJYJP3I9c8E7R6tpNkvdgLp0iTX",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident ID",
+          "type": "datatype.string",
+          "description": "Incident ID that needs to be linked in this relationship",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDCIREJKI2Q1uOUe7wAGG6UwV9BNeWlRp",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "External ID",
+          "type": "datatype.string",
+          "description": "External ID can be used to uniquely identify the SecureX Incident",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDCIREJK87M2wgdGMA2PInT62mq2qHvR8",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Sighting ID",
+          "type": "datatype.string",
+          "description": "Sighting ID that needs to be linked in this relationship",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SDCIREJJKY239LIRzcGdX3hhXWkOVG8un",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Cohesity Helios",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": false,
+      "description": "This atomic will be used to create Securex Relationship between SecureX Sighting and Incident. The different between this and the existing one is that this one supports passing more incident payload object like external_ids and others. Check the input variables to know more. ",
+      "display_name": "[Atomic] Cohesity Threat Response: Create Relationship",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "specify_on_workflow_start": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01SDCIRHBZ38Y78HF5Sba7NbVIl8MMlveeN",
+        "name": "Execute Python Script",
+        "title": "Generate incident JSON",
+        "type": "python3.script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Generate incident JSON",
+          "script": "import json, sys\nfrom datetime import datetime, date, timedelta\n\n# Get the current date/time\ndateTime = datetime.now()\n\n# Build the relationship object\nrelationship_object = {}\nrelationship_object[\"description\"] = \"Cohesity Anomalous Object Sighting to Incident Relation\"\nrelationship_object[\"title\"] = \"Cohesity Anomalous Object Sighting to Incident Relation\"\nrelationship_object[\"relationship_type\"] = \"related-to\"\nrelationship_object[\"schema_version\"] = \"1.0.11\"\nrelationship_object[\"type\"] = \"relationship\"\nrelationship_object[\"target_ref\"] = sys.argv[2]\nrelationship_object[\"source_ref\"] = sys.argv[3]\nrelationship_object[\"external_ids\"] = [sys.argv[1]]\nrelationship_object[\"source\"] = \"Cohesity Helios\"\nrelationship_object[\"timestamp\"] = dateTime.strftime(\"%Y-%m-%dT%H:%M:%SZ\")\n\nrelationship_json = json.dumps(relationship_object)",
+          "script_arguments": [
+            "$workflow.definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3.input.variable_workflow_01SDCIREJK87M2wgdGMA2PInT62mq2qHvR8$",
+            "$workflow.definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3.input.variable_workflow_01SDCIREJKI2Q1uOUe7wAGG6UwV9BNeWlRp$",
+            "$workflow.definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3.input.variable_workflow_01SDCIREJJKY239LIRzcGdX3hhXWkOVG8un$"
+          ],
+          "script_queries": [
+            {
+              "script_query": "relationship_json",
+              "script_query_name": "relationship_json",
+              "script_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDCIRJB7Z8S70zxs0k4fVCm3g3RrVRNJc",
+        "name": "HTTP Request",
+        "title": "API call to get Relationship by External ID",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $workflow.definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3.input.variable_workflow_01SDCIREJJYJP3I9c8E7R6tpNkvdgLp0iTX$"
+            }
+          ],
+          "display_name": "API call to get Relationship by External ID",
+          "method": "GET",
+          "relative_url": "/ctia/relationship/external_id/$workflow.definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3.input.variable_workflow_01SDCIREJK87M2wgdGMA2PInT62mq2qHvR8$",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SDCIRJZGJ0X5H3Gtzwqa47AdNSmeWaXXj",
+        "name": "Condition Block",
+        "title": "Check if Relationship Exists",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "Check if Relationship Exists",
+          "display_name": "Check if Relationship Exists",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01SDCIRKO1W7705W7O66JGcEYPvgqy2ScKp",
+            "name": "Condition Branch",
+            "title": "If relationship exists",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01SDCIRJB7Z8S70zxs0k4fVCm3g3RrVRNJc.output.response_body$",
+                "operator": "eq",
+                "right_operand": "[]"
+              },
+              "continue_on_failure": false,
+              "description": "If relationship exists",
+              "display_name": "If relationship exists",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01SDCIRLNFR4M2CKaY4OCeVQGsFBnE4q23x",
+                "name": "HTTP Request",
+                "title": "Request relationship creation",
+                "type": "web-service.http_request",
+                "base_type": "activity",
+                "properties": {
+                  "accept": "application/json",
+                  "action_timeout": 180,
+                  "allow_auto_redirect": true,
+                  "body": "$activity.definition_activity_01SDCIRHBZ38Y78HF5Sba7NbVIl8MMlveeN.output.script_queries.relationship_json$  ",
+                  "content_type": "application/json",
+                  "continue_on_error_status_code": true,
+                  "continue_on_failure": false,
+                  "custom_headers": [
+                    {
+                      "name": "Authorization",
+                      "value": "Bearer $workflow.definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3.input.variable_workflow_01SDCIREJJYJP3I9c8E7R6tpNkvdgLp0iTX$"
+                    }
+                  ],
+                  "description": "Request relationship creation",
+                  "display_name": "Request relationship creation",
+                  "method": "POST",
+                  "relative_url": "/ctia/relationship",
+                  "runtime_user": {
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "use_workflow_target": true
+                  }
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01SDCIRME21K53Q1G0DrPdR2T6Foz03nnCL",
+                "name": "Condition Block",
+                "title": "Was the request successful?",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Was the request successful?",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_01SDCIROBY1ZE4nj0ES83QDggDhAFASxfTM",
+                    "name": "Condition Branch",
+                    "title": "201/Created",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01SDCIRLNFR4M2CKaY4OCeVQGsFBnE4q23x.output.status_code$",
+                        "operator": "eq",
+                        "right_operand": 201
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "201/Created",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01SDCSRTKOQO90olBO0d4d5BninSyPJlcwg",
+                        "name": "Completed",
+                        "title": "Passed",
+                        "type": "logic.completed",
+                        "base_type": "activity",
+                        "properties": {
+                          "completion_type": "succeeded",
+                          "continue_on_failure": false,
+                          "display_name": "Passed",
+                          "result_message": "Created new Relationship\n\nStatus code: $activity.definition_activity_01SDCIRLNFR4M2CKaY4OCeVQGsFBnE4q23x.output.status_code$\nResponse body: $activity.definition_activity_01SDCIRLNFR4M2CKaY4OCeVQGsFBnE4q23x.output.response_body$",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  },
+                  {
+                    "unique_name": "definition_activity_01SDCIRQVIBV00tDYaEBW7C3enMLxw5zCHz",
+                    "name": "Condition Branch",
+                    "title": "Anything else",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01SDCIRLNFR4M2CKaY4OCeVQGsFBnE4q23x.output.status_code$",
+                        "operator": "ne",
+                        "right_operand": 201
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Anything else",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01SDCIRSRG3S06Kj1gcRdMhZrhyyOPiWQ3U",
+                        "name": "Completed",
+                        "title": "Failed",
+                        "type": "logic.completed",
+                        "base_type": "activity",
+                        "properties": {
+                          "completion_type": "failed-completed",
+                          "continue_on_failure": false,
+                          "display_name": "Failed",
+                          "result_message": "Failed to create new Relationship\n\nStatus code: $activity.definition_activity_01SDCIRLNFR4M2CKaY4OCeVQGsFBnE4q23x.output.status_code$\nResponse body: $activity.definition_activity_01SDCIRLNFR4M2CKaY4OCeVQGsFBnE4q23x.output.response_body$",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r"
+    ]
+  },
+  "categories": {
+    "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r": {
+      "unique_name": "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r",
+      "name": "SecureX",
+      "title": "SecureX",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  }
+}
