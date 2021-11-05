@@ -38,7 +38,15 @@ Lets go over the list of Atomic Actions that this integration supports.
 
 - [Cohesity Helios - Get Anomalous Objects](./docs/atomics/CohesityGetAnomalousObjects.md)
 - [Cohesity Helios - Ignore Anomaly](./docs/atomics/CohesityIgnoreAnomaly.md)
+- [Cohesity Helios - Resolve Anomalous VM](./docs/atomics/CohesityRestoreAnomalousVM.md)
 - [Cohesity Helios - Restore Anomalous VM](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Threat Response - Create SecureX Incidents](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Threat Response - Create SecureX Sightings](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Threat Response - Create SecureX Relationship](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Threat Response - Resolve SecureX Incident/Sighting](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Threat Response - Delete SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Threat Response - Get SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityRestoreAnomalousVM.md)
+
 
 
 ## <a name="workflows"></a> Workflows :hourglass_flowing_sand:

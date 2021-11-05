@@ -21,11 +21,6 @@ This workflow restores the specified anomalous object to the latest clean snapsh
 
 Before you can run this workflow, there are a certain pre-req that you need to configure. Lets go over all of them and make sure they are set to get started. Most of the steps are common between all the workflows, so once you set configure these, you will be able to easily configure and run other workflows :)
 
-#### <a name="securex-client"></a> Create SecureX API Client
-[top](#Cisco-SecureX-Integration)
-
-You will need to create SecureX API Client and get the Client ID and Client Password to run all the workflows. Refer to the [Create SecureX API Client document](../misc/CreateSecureXAPIClient.md) to generate it. 
-
 #### <a name="helios-client"></a> Create Cohesity Helios API Key
 [top](#Cisco-SecureX-Integration)
 
@@ -37,10 +32,9 @@ This workflow expects a bunch of variables that are needed to make a bunch of AP
 
 | **Argument Name** | **Type** | **Description** | **Required** |
 | --- | --- |--- | --- |
-| APIClientID | Secure String | Threat Response API Client ID | Yes | 
-| APIClientPassword | Secure String | Threat Response API Client Password | Yes | 
 | HeliosAPIKey | Secure String | API Key to access Helios | Yes | 
 | DeleteSightingIncident  | String | Specifies where to delete or not the sighting once the anomaly is ignored. Can be `yes` or `no`.| No. Default is `No` | 
+| observable_value  | String | Anomalous Object name that needs to be ignored| Yes | 
 
 In order to set this variables, check the [Set Variables document](../misc/SetVariables.md). 
 
@@ -65,7 +59,7 @@ Once you have performed all the [pre-req](#pre-req) for this workflow, this work
 
     ![Run Ignore](../assets/runIgnore03.png)
 
-4. This will trigger the `Cohesity Restore Anomalous Object` workflow and pass the `observable_value` and `observable_type` to the workflow as the `VM_NAME_VALUE` and `string` respectively. 
+4. This will trigger the `Cohesity Restore Anomalous Object` workflow and pass the `observable_value` to the workflow as the `VM_NAME_VALUE`. 
 
 >NOTE: You will see the `Cohesity Restore Anomalous Object` on other Incidents too but you cannot run it there as it will fail for Incidents that are not created by Cohesity workflows. 
 
