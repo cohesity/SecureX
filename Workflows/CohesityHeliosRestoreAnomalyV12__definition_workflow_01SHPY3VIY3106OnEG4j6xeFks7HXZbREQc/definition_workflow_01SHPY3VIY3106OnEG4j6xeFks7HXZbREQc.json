@@ -7,20 +7,6 @@
     "base_type": "workflow",
     "variables": [
       {
-        "schema_id": "datatype.secure_string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "HeliosAPIKey",
-          "type": "datatype.secure_string",
-          "description": "Cohesity Helios API Key. Generate it from Cohesity Helios and paste it in Value",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SHPY3VORY4F5M9ri6O5m1PAi8WJRdCQBC",
-        "object_type": "variable_workflow"
-      },
-      {
         "schema_id": "datatype.string",
         "properties": {
           "value": "",
@@ -32,6 +18,20 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01SHPY3VORP6E5EB1pcyhludxqFqWxBDv8v",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "observable_type",
+          "type": "datatype.string",
+          "description": "Specifies the Observable Type. Here it is the \"hostname\"",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SHPY3VORE1U6uJdWMmLHi82NQ3i4stwMm",
         "object_type": "variable_workflow"
       },
       {
@@ -49,17 +49,17 @@
         "object_type": "variable_workflow"
       },
       {
-        "schema_id": "datatype.string",
+        "schema_id": "datatype.secure_string",
         "properties": {
           "value": "",
           "scope": "input",
-          "name": "observable_type",
-          "type": "datatype.string",
-          "description": "Specifies the Observable Type. Here it is the \"hostname\"",
-          "is_required": false,
+          "name": "HeliosAPIKey",
+          "type": "datatype.secure_string",
+          "description": "Cohesity Helios API Key. Generate it from Cohesity Helios and paste it in Value",
+          "is_required": true,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01SHPY3VORE1U6uJdWMmLHi82NQ3i4stwMm",
+        "unique_name": "variable_workflow_01SHPY3VORY4F5M9ri6O5m1PAi8WJRdCQBC",
         "object_type": "variable_workflow"
       }
     ],
@@ -97,6 +97,29 @@
     "object_type": "definition_workflow",
     "actions": [
       {
+        "unique_name": "definition_activity_01SL2RICWLA3W41bR9tucyHXCN9TohXIq1l",
+        "name": "Set Variables",
+        "title": "Set Workflow Variables",
+        "type": "core.set_multiple_variables",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Set Workflow Variables",
+          "skip_execution": false,
+          "variables_to_update": [
+            {
+              "variable_to_update": "$workflow.definition_workflow_01SHPY3VIY3106OnEG4j6xeFks7HXZbREQc.input.variable_workflow_01SHPY3VORY4F5M9ri6O5m1PAi8WJRdCQBC$",
+              "variable_value_new": "$global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r.global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r$"
+            },
+            {
+              "variable_to_update": "$workflow.definition_workflow_01SHPY3VIY3106OnEG4j6xeFks7HXZbREQc.input.variable_workflow_01SHPY3VOS7G41J3zX14O8vbpEpu1fEyeQq$",
+              "variable_value_new": "no"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
         "unique_name": "definition_activity_01SHPY3YE14SN7lNEy3jtKOgGJs3QtdG5eg",
         "name": "Cohesity Helios: Get Anomalous Objects v1.2",
         "title": "Cohesity Helios: Get Anomalous Objects v1.2",
@@ -106,7 +129,8 @@
           "continue_on_failure": false,
           "display_name": "Cohesity Helios: Get Anomalous Objects v1.2",
           "input": {
-            "variable_workflow_01SCMAS4B0WO21tFjuMmjG0OXYDqro8mWfm": "$workflow.definition_workflow_01SHPY3VIY3106OnEG4j6xeFks7HXZbREQc.input.variable_workflow_01SHPY3VORY4F5M9ri6O5m1PAi8WJRdCQBC$"
+            "variable_workflow_01SCMAS4B0WO21tFjuMmjG0OXYDqro8mWfm": "$workflow.definition_workflow_01SHPY3VIY3106OnEG4j6xeFks7HXZbREQc.input.variable_workflow_01SHPY3VORY4F5M9ri6O5m1PAi8WJRdCQBC$",
+            "variable_workflow_01SL46I3SN6AB1MLXbzT2U2MiTNu5tvSTqP": "10000"
           },
           "runtime_user": {
             "target_default": true
@@ -452,13 +476,28 @@
       "object_type": "target_group"
     }
   },
+  "variables": {
+    "variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r": {
+      "unique_name": "variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Cohesity Helios API Key",
+        "type": "datatype.secure_string",
+        "description": "Cohesity Helios API key used for authentication while making API calls",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  },
   "atomic_workflows": [
-    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
-    "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5",
-    "definition_workflow_01SDFK9YZ7HU51Frks07IdHl5rVvFsWnWjV",
-    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+    "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw",
     "definition_workflow_01SHREJYCP7VW6OSNZE7rBRpppsci2yzVGR",
-    "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4",
-    "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw"
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+    "definition_workflow_01SDFK9YZ7HU51Frks07IdHl5rVvFsWnWjV",
+    "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5",
+    "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4"
   ]
 }
