@@ -16,9 +16,9 @@ This integration leverages Cohesity REST API to interact and fetch information f
 ## Table of contents :scroll:
 
  - What is [Cisco SecureX](#get-started)
+ - [Getting Started](#getting-started)
  - Supported [Atomic Actions](#atomic-actions) you can take
  - Supported [Workflows](#workflows) you can perform
- - How to [Import Workflows and Atomic Actions](#import)
  - [Minimum Permission for Helios User to generate Helios API KEY](#minimum-permission)
  - [Suggestions and Feedback](#suggest)
  - [Supported Objects](#supported)
@@ -28,6 +28,18 @@ This integration leverages Cohesity REST API to interact and fetch information f
 [top](#Cisco-SecureX-Integration)
 
 SecureX is a cloud-native, built-in platform that connects Cisco Secure portfolio and your infrastructure. It allows you to radically reduce dwell time and human-powered tasks. Refer to [Cisco SecureX page](https://www.cisco.com/c/en/us/products/security/securex/index.html) to know more about it.
+
+## <a name="import"></a> Getting Started :bookmark_tabs:
+[top](#Cisco-SecureX-Integration)
+
+In order to start using the Cohesity SecureX Integration, you need to do the following.
+
+1. [Register this Git Repo on SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/configuration/)
+
+2. [Import the Workflow using this Git Repo in SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/importing)
+3. Set the Required variables in the workflow which is documented in the [Workflows](#workflows) section. 
+
+To know more about importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
 
 ## <a name="atomic-actions"></a> Atomic Actions :large_blue_circle:
 [top](#Cisco-SecureX-Integration)
@@ -47,8 +59,6 @@ Lets go over the list of Atomic Actions that this integration supports.
 - [Cohesity Threat Response - Delete SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityRestoreAnomalousVM.md)
 - [Cohesity Threat Response - Get SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityRestoreAnomalousVM.md)
 
-
-
 ## <a name="workflows"></a> Workflows :hourglass_flowing_sand:
 [top](#Cisco-SecureX-Integration)
 
@@ -59,17 +69,6 @@ Lets go over the list of Workflows that this integration supports.
 - [Helios Ransomware Alerts to Threat Response Only](./docs/workflows/HeliosRansomwareAlertsToThreatResponse.md)
 - [Ignore Anomaly on Cohesity Helios](./docs/workflows/IgnoreAnomalyOnCohesity.md)
 - [Cohesity Restore Anomalous Object](./docs/workflows/CohesityRestoreAnomalousObject.md)
-
-If you want to get the Helios Ransomware Alerts to Threat Response and ServiceNow, refer this workflow. 
-
-- [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md)
-
-
-
-## <a name="import"></a> Import Atomic Actions and Workflows :bookmark_tabs:
-[top](#Cisco-SecureX-Integration)
-
-To explore the various options available in SecureX orchestration for importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
 
 ## <a name="minimum-permission"></a> Minimum Permission for Helios API user to generate APIKey :cop:
 [top](#Cisco-SecureX-Integration)

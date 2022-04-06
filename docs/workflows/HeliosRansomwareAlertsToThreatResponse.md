@@ -13,14 +13,14 @@
  - [Output for workflow](#output)
  - [What's Next!](#next)
 
-### <a name="intro"></a> Helios Ransomware Alerts to Threat Response and ServiceNow 
+### <a name="intro"></a> Helios Ransomware Alerts to Threat Response and ServiceNow (Optional)
 [home](../../README.md)
 
-This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store, creates SecureX Incidents, Sightings and a Relationship between them. It also creates incidents on ServiceNow.
+This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store, creates SecureX Incidents, Sightings and a Relationship between them. It optionally also creates incidents on ServiceNow.
 
 This workflow can be triggered on a schedule and user can create `Cohesity Helios Ransomware Data Push Schedule` for this to work which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
 
-> Note: This workflow also needs creation of 'ServiceNow_Credentials' under Account Keys and 'Cohesity_ServiceNow_Target' under Targets. These are needed for creating incidents on service now.
+> Note: If you choose to create ServiceNow Incidents, then this workflow also needs creation of 'ServiceNow_Credentials' under Account Keys and 'Cohesity_ServiceNow_Target' under Targets. These are needed for creating incidents on service now.
 
 ### <a name="pre-req"></a> Pre-requisites
 [home](../../README.md)
@@ -49,9 +49,9 @@ Once the variables are set, you need to create a Schedule on SecureX. This sched
 
 This workflow looks for a Schedule named `Cohesity Helios Ransomware Data Push Schedule`. Please check the [Create Schedule Document](../misc/CreateSchedule.md) to see how to create this Schedule. 
 
-#### <a name="create-snow-cred"></a> Create ServiceNow Credentials
+#### <a name="create-snow-cred"></a> Create ServiceNow Credentials 
 
-One of the other pre-req for this workflow is to Create ServiceNow credentials. This is needed if you want to create ServiceNow ticket for any anomalous object that is reported by Cohesity. 
+If you set the `Create ServiceNow Ticket` variable to `Yes`, then one more pre-req for this workflow is to Create ServiceNow credentials. This is needed if you want to create ServiceNow ticket for any anomalous object that is reported by Cohesity. 
 
 Check the Create [ServiceNow Credentials document](../misc/CreateServiceNowCredentials.md) to know how to do that. 
 
