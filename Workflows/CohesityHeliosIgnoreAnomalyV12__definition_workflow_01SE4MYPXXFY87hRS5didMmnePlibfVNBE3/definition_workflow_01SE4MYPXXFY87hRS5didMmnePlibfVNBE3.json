@@ -9,20 +9,6 @@
       {
         "schema_id": "datatype.string",
         "properties": {
-          "value": "no",
-          "scope": "input",
-          "name": "DeleteSightingIncident",
-          "type": "datatype.string",
-          "description": "Delete Sighting and Incident? Value can be \"yes\" or \"no\". Defaults to No, which means incident will be resolved by default",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SE4MYQ6SCSZ5u6VhryNvV9EMlbvM6pLtS",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
           "value": "",
           "scope": "input",
           "name": "observable_value",
@@ -32,6 +18,20 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01SE4MYQ6TOA07f5ic3OHC3f50gNVMgc8Qk",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "observable_type",
+          "type": "datatype.string",
+          "description": "Specifies the Observable Type. Here it is the \"hostname\"",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01WBHSJU9OUVE0Cc3QPMW0KzRZcvt8VzYy3",
         "object_type": "variable_workflow"
       },
       {
@@ -51,15 +51,15 @@
       {
         "schema_id": "datatype.string",
         "properties": {
-          "value": "",
+          "value": "no",
           "scope": "input",
-          "name": "observable_type",
+          "name": "DeleteSightingIncident",
           "type": "datatype.string",
-          "description": "Specifies the Observable Type. Here it is the \"hostname\"",
+          "description": "Delete Sighting and Incident? Value can be \"yes\" or \"no\". Defaults to No, which means incident will be resolved by default",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01WBHSJU9OUVE0Cc3QPMW0KzRZcvt8VzYy3",
+        "unique_name": "variable_workflow_01SE4MYQ6SCSZ5u6VhryNvV9EMlbvM6pLtS",
         "object_type": "variable_workflow"
       }
     ],
@@ -409,8 +409,19 @@
       }
     ],
     "categories": [
-      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+      "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m"
     ]
+  },
+  "categories": {
+    "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m": {
+      "unique_name": "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m",
+      "name": "response",
+      "title": "response",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
   },
   "target_groups": {
     "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH": {
@@ -451,12 +462,12 @@
     }
   },
   "atomic_workflows": [
-    "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE",
-    "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw",
-    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
-    "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5",
     "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4",
-    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw"
+    "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw",
+    "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE",
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+    "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5"
   ],
   "dependent_workflows": [
     "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
