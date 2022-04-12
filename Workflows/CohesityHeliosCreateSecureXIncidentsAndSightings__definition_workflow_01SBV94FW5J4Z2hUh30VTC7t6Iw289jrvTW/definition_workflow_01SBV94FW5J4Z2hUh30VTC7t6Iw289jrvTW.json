@@ -7,45 +7,45 @@
     "base_type": "workflow",
     "variables": [
       {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "10000",
-          "scope": "input",
-          "name": "HeliosRansomwareAlertsFilter",
-          "type": "datatype.string",
-          "description": "Cohesity Helios Ransomware Alerts Filter. Specifies the time in hours. This value is used to decide that anomalies created in the last X hours will be fetched. Example All Anomalies from last 1000 hours will be pulled. ",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SL49OI8HQ6D1UQWCqift5jqO34sEUkOjU",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "yes",
-          "scope": "input",
-          "name": "Create ServiceNow Ticket",
-          "type": "datatype.string",
-          "description": "Variable to decide whether to create servicenow ticket",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SKA0WVNR9AW6iY6RQPbaPwVwbRlWk9fjx",
-        "object_type": "variable_workflow"
-      },
-      {
         "schema_id": "datatype.secure_string",
         "properties": {
           "value": "",
           "scope": "input",
           "name": "Helios API Key",
           "type": "datatype.secure_string",
-          "description": "Helios API Key to make API calls to Cohesity Helios",
-          "is_required": true,
+          "description": "Helios API Key to make API calls to Cohesity Helios. This is set in Set Input Variable Activity",
+          "is_required": false,
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01SL11ENL3XSN2MEDLqNQ785EEh3XfCo4lT",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Create ServiceNow Ticket",
+          "type": "datatype.string",
+          "description": "Variable to decide whether to create servicenow ticket. This is set in Set Input Variable Activity",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SKA0WVNR9AW6iY6RQPbaPwVwbRlWk9fjx",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "HeliosRansomwareAlertsFilter",
+          "type": "datatype.string",
+          "description": "Cohesity Helios Ransomware Alerts Filter. Specifies the time in hours. This value is used to decide that anomalies created in the last X hours will be fetched. Example All Anomalies from last 1000 hours will be pulled. \n\nThis is set in Set Input Variable Activity",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SL49OI8HQ6D1UQWCqift5jqO34sEUkOjU",
         "object_type": "variable_workflow"
       }
     ],
@@ -99,11 +99,11 @@
             },
             {
               "variable_to_update": "$workflow.definition_workflow_01SBV94FW5J4Z2hUh30VTC7t6Iw289jrvTW.input.variable_workflow_01SKA0WVNR9AW6iY6RQPbaPwVwbRlWk9fjx$",
-              "variable_value_new": "yes"
+              "variable_value_new": "no"
             },
             {
               "variable_to_update": "$workflow.definition_workflow_01SBV94FW5J4Z2hUh30VTC7t6Iw289jrvTW.input.variable_workflow_01SL49OI8HQ6D1UQWCqift5jqO34sEUkOjU$",
-              "variable_value_new": "10000"
+              "variable_value_new": "250"
             }
           ]
         },
@@ -129,7 +129,8 @@
           "target": {
             "use_workflow_target_group": true
           },
-          "workflow_id": "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw"
+          "workflow_id": "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+          "workflow_name": "[Atomic] Cohesity Helios: Get Anomalous Objects v1.2"
         },
         "object_type": "definition_activity"
       },
@@ -219,7 +220,8 @@
               }
             }
           },
-          "workflow_id": "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH"
+          "workflow_id": "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+          "workflow_name": "Threat Response - Generate Access Token"
         },
         "object_type": "definition_activity"
       },
@@ -276,7 +278,8 @@
                   }
                 }
               },
-              "workflow_id": "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE"
+              "workflow_id": "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE",
+              "workflow_name": "[Atomic] Cohesity Threat Response: Create Incidents"
             },
             "object_type": "definition_activity"
           },
@@ -319,7 +322,8 @@
                   }
                 }
               },
-              "workflow_id": "definition_workflow_01SCN4EE93SG32dgZWXTdsy3Y12UQnRajmb"
+              "workflow_id": "definition_workflow_01SCN4EE93SG32dgZWXTdsy3Y12UQnRajmb",
+              "workflow_name": "[Atomic] Cohesity Threat Response: Create Sightings"
             },
             "object_type": "definition_activity"
           },
@@ -398,7 +402,8 @@
                           }
                         }
                       },
-                      "workflow_id": "definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3"
+                      "workflow_id": "definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3",
+                      "workflow_name": "[Atomic] Cohesity Threat Response: Create Relationship"
                     },
                     "object_type": "definition_activity"
                   }
@@ -519,7 +524,8 @@
                           }
                         }
                       },
-                      "workflow_id": "definition_workflow_01C0BYD0GI1KZ0mxScCSxVrfX70zrUdqLlW"
+                      "workflow_id": "definition_workflow_01C0BYD0GI1KZ0mxScCSxVrfX70zrUdqLlW",
+                      "workflow_name": "Service Now - Create Incident"
                     },
                     "object_type": "definition_activity"
                   }
@@ -607,6 +613,14 @@
     }
   },
   "atomic_workflows": [
+    "definition_workflow_01SCN4EE93SG32dgZWXTdsy3Y12UQnRajmb",
+    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+    "definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3",
+    "definition_workflow_01C0BYD0GI1KZ0mxScCSxVrfX70zrUdqLlW",
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+    "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE"
+  ],
+  "dependent_workflows": [
     "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
     "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
     "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE",
