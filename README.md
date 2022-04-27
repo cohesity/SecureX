@@ -36,7 +36,7 @@ In order to start using the Cohesity SecureX Integration, you need to do the fol
 
 1. [Register this Git Repo on SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/configuration/)
 
-2. [Import the Workflow using this Git Repo in SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/importing)
+2. [Import the Atomics and Workflow using this Git Repo in SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/importing)
 3. Set the Required variables in the workflow which is documented in the [Workflows](#workflows) section. 
 
 To know more about importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
