@@ -31,15 +31,17 @@ Before you can run this workflow, there are a certain pre-req that you need to c
 
 In order to run the workflow on SecureX, you need to pass Helios APIKey. To create it, login to Cohesity Helios and [create the APIKey.](https://developer.cohesity.com/docs/helios-getting-started)
 
-#### <a name="set-variables"></a> Set Variables
+#### <a name="set-variables"></a> Create Global Helios API Key Variable
 
-This workflow expects a bunch of variables that are needed to make a bunch of API calls like getting anomalous objects from Cohesity Helios and creating Incidents on SecureX. These variables should be set for before you try and run this workflow. Below is the list of variables that you need to set with their description.  
+Create a [Global variable to set Cohesity Helios API Key](../misc/CreateHeliosAPIKey.md). 
+
+This workflow also use some local variables. These variables should be set to default but can be changed before you try and run this workflow. Below is the list of variables that you can edit.  
 
 | **Argument Name** | **Type** | **Description** | **Required** |
 | --- | --- |--- | --- |
-| Helios API Key | Secure String | API Key to access Helios | Yes | 
-| HeliosRansomwareAlertsFilter  | String | Number of hours, used to get anomalous objects detected in the last `N` hours| No. Default is `1000` | 
-| Create ServiceNow Ticket | String | Set this variable to `yes` or `no` based on which ServiceNow incidents will be created | No. Default is `yes` | 
+| Helios API Key | Secure String | API Key to access Helios. This is set globally | Yes | 
+| HeliosRansomwareAlertsFilter  | String | Number of hours, used to get anomalous objects detected in the last `N` hours| No. Default is `250` | 
+| Create ServiceNow Ticket | String | Set this variable to `yes` or `no` based on which ServiceNow incidents will be created | No. Default is `no` | 
 
 In order to set this variables, check the [Set Variables document](../misc/SetVariables.md). Now let's move the next pre-req.
 

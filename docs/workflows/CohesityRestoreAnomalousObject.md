@@ -26,17 +26,17 @@ Before you can run this workflow, there are a certain pre-req that you need to c
 
 In order to run the workflow on SecureX, you need to pass Helios APIKey. To create it, login to Cohesty Helios and [create the APIKey.](https://developer.cohesity.com/docs/helios-getting-started)
 
-#### <a name="set-variables"></a> Set Variables
+#### <a name="set-variables"></a> Create Global Helios API Key Variable
 
-This workflow expects a bunch of variables that are needed to make a bunch of API calls like restoring anomalous objects on Cohesity Helios and resolve the Incident on SecureX. These variables should be set for before you try and run this workflow. Below is the list of variables that you need to set with their description.  
+Create a [Global variable to set Cohesity Helios API Key](../misc/CreateHeliosAPIKey.md). 
+
+This workflow also use some local variables. These variables should be set to default but can be changed before you try and run this workflow. Below is the list of variables that you can edit.    
 
 | **Argument Name** | **Type** | **Description** | **Required** |
 | --- | --- |--- | --- |
-| HeliosAPIKey | Secure String | API Key to access Helios | Yes | 
+| HeliosAPIKey | Secure String | API Key to access Helios. This is set globally | Yes | 
 | DeleteSightingIncident  | String | Specifies where to delete or not the sighting once the anomaly is ignored. Can be `yes` or `no`.| No. Default is `No` | 
 | observable_value  | String | Anomalous Object name that needs to be ignored| Yes | 
-
-In order to set this variables, check the [Set Variables document](../misc/SetVariables.md). 
 
 >NOTE: There are other 2 variable that this workflow uses named `observable_value` and `observable_type` but that is set directly when you [run](#run) the workflow.  
 

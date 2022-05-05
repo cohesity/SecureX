@@ -34,10 +34,13 @@ SecureX is a cloud-native, built-in platform that connects Cisco Secure portfoli
 
 In order to start using the Cohesity SecureX Integration, you need to do the following.
 
-1. [Register this Git Repo on SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/configuration/)
+1. [Register this Git Repo on SecureX](./docs/misc/registerGitRepo.md)
 
 2. [Import the Atomics and Workflow using this Git Repo in SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/importing)
-3. Set the Required variables in the workflow which is documented in the [Workflows](#workflows) section. 
+
+> *Note that you will need to import Atomics and then Workflows since the Workflows depend on the Atomics.*
+
+3. Create a [Global variable to set Cohesity Helios API Key](./docs/misc/CreateHeliosAPIKey.md). 
 
 To know more about importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
 
