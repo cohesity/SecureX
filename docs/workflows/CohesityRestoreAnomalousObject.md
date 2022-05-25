@@ -57,7 +57,7 @@ Once you have performed all the [pre-req](#pre-req) for this workflow, this work
 
 3. Under Observable, click the dropdown for the hostname and select `Cohesity Restore Anomalous Object`
 
-    ![Run Ignore](../assets/runIgnore03.png)
+    ![Run Ignore](../assets/runWorkflow03.png)
 
 4. This will trigger the `Cohesity Restore Anomalous Object` workflow and pass the `observable_value` to the workflow as the `VM_NAME_VALUE`. 
 
