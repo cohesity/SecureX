@@ -36,11 +36,10 @@ In order to start using the Cohesity SecureX Integration, you need to do the fol
 
 1. [Register this Git Repo on SecureX](./docs/misc/registerGitRepo.md)
 
-2. [Import the Atomics and Workflow using this Git Repo in SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/importing)
+2. [Import the Atomics and Workflow using this Git Repo in SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/importing). While importing Workflows, it will automatically create a global variable for Helios API Key. Enter the Helios API Key there and you can then start using the Workflows
 
-> *Note that you will need to import Atomics and then Workflows since the Workflows depend on the Atomics.*
 
-3. Create a [Global variable to set Cohesity Helios API Key](./docs/misc/CreateHeliosAPIKey.md). 
+> *Note that you will need to import Atomics and then Workflows since the Workflows depend on the Atomics.* 
 
 To know more about importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
 
