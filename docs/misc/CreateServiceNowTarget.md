@@ -1,6 +1,6 @@
 ### Create ServiceNow Target
 
-In this document, we will go over the steps to create ServiceNow Target that will be used by [Cohesity Helios Ransomware Alerts to Threat Response and ServiceNow](../workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md) workflow.
+In this document, we will go over the steps to create ServiceNow Target that will be used by [Cohesity Helios Ransomware Alerts to Threat Response and ServiceNow](../workflows/HeliosRansomwareAlertsToThreatResponse.md) workflow.
 
 1. Login to your SecureX account and go to Orchestration
 
@@ -12,7 +12,7 @@ In this document, we will go over the steps to create ServiceNow Target that wil
 
 3. Under `Target Type` select `HTTP ENDPOINT`. 
 
-4. Under `General` section, The `DISPLAY NAME` MUST be `Cohesity_ServiceNow_Target` as the [Cohesity Helios Ransomware Alerts to Threat Response and ServiceNow](../workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md) workflow uses this. Give it a meaningful description. 
+4. Under `General` section, The `DISPLAY NAME` MUST be `Cohesity_ServiceNow_Target` as the [Cohesity Helios Ransomware Alerts to Threat Response and ServiceNow](../workflows/HeliosRansomwareAlertsToThreatResponse.md) workflow uses this. Give it a meaningful description. 
 
     ![Create Target](../assets/createTargets02.png)
 

@@ -1,7 +1,7 @@
 ## <a name="get-anomalous-objects"></a> Cohesity Helios - Get Anomalous Objects 
 [home](../../README.md)
 
-This atomic perform a fetch operation which gets the list of anomalous objects from Cohesity Helios. This Atomic action gets all the alerts and creates an array of alerts that can be used to create other workflows. This is used in the [Cohesity Helios: Get Anomalous Objects v1.2 workflow](). 
+This atomic perform a fetch operation which gets the list of anomalous objects from Cohesity Helios. This Atomic action gets all the alerts and creates an array of alerts that can be used to create other workflows. This is used in the [Cohesity Helios: Get Anomalous Objects v1.2 workflow](../workflows/HeliosRansomwareAlertsToThreatResponse.md). 
 
 ### Input
 
@@ -10,8 +10,7 @@ When you run this Atomic action, it will ask for the following input.
 | **Argument Name** | **Type** | **Description** | **Required** |
 | --- | --- |--- | --- |
 | HeliosAPIKey | Secure String | API Key to access Cohesity Helios | Yes | 
-| Start Time | String | Anomalous Object Alerts created after this time will be fetched. This time is an EPOCH timestamp in microseconds   | No | 
-| End Time | String | Anomalous Object Alerts created before this time will be fetched. This time is an EPOCH timestamp in microseconds | No | 
+| HeliosRansomwareAlertsFilter | String | Cohesity Helios Ransomware Alerts Filter. Specifies the time in hours. This value is used to decide that anomalies created in the last X hours will be fetched. Example All Anomalies from last 1000 hours will be pulled.    | Yes. Default is 10000 | 
 
 ### Output
 

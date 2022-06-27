@@ -1,7 +1,7 @@
 ## <a name="create-securex-incident"></a> Cohesity Threat Response - Create SecureX Incidents
 [home](../../README.md)
 
-This atomic action creates a Cisco Threat Response Incident object. This is used in the [Cohesity Helios: Get Anomalous Objects v1.2 workflow](). Refer [Cisco Github](https://github.com/threatgrid/ctim/tree/master/doc) to find more about it. 
+This atomic action creates a Cisco Threat Response Incident object. This is used in the [Cohesity Helios: Get Anomalous Objects v1.2 workflow](../workflows/HeliosRansomwareAlertsToThreatResponse.md). Refer [Cisco Github](https://github.com/threatgrid/ctim/tree/master/doc) to find more about it. 
 
 ### Input
 
@@ -20,7 +20,7 @@ When you run this Atomic action, it will ask for the following input.
 
 ### Output
 
-This Atomic actions gives out the following output that you can use to perform operations like resolving these objects, restoring the anomalous objects etc. 
+This Atomic actions gives out the following output that you can use to perform operations like resolving or deleting the Incident.
 
 | **Argument Name** | **Type** | **Description** |
 | --- | --- | --- |

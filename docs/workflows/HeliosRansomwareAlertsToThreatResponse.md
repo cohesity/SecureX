@@ -2,7 +2,7 @@
 
  - [Intro](#intro)
  - [Pre-requisites](#pre-req)
-    * [Create SecureX API Client](#securex-client)
+    * [Targets used in this Workflow](#targets-used)
     * [Create Cohesity Helios API Key](#helios-client)
     * [Set Variables](#set-variables)
     * [Create Schedule](#create-schedule)
@@ -16,7 +16,7 @@
 ### <a name="intro"></a> Helios Ransomware Alerts to Threat Response and ServiceNow 
 [home](../../README.md)
 
-This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store, creates SecureX Incidents, Sightings and a Relationship between them. It also creates incidents on ServiceNow.
+This workflow pushes Cohesity Helios ransomware alerts to Threat Response Private Intelligence data store, creates SecureX Incidents, Sightings and a Relationship between them. It can also create incidents on ServiceNow based on the `Create ServiceNow Ticket` variable set in the [Set Variable](#set-variables) section .
 
 This workflow can be triggered on a schedule and user can create `Cohesity Helios Ransomware Data Push Schedule` for this to work which is a schedule to trigger orchestration workflow to push Helios ransomware data to private intelligence.
 
@@ -26,6 +26,18 @@ This workflow can be triggered on a schedule and user can create `Cohesity Helio
 [home](../../README.md)
 
 Before you can run this workflow, there are a certain pre-req that you need to configure. Lets go over all of them and make sure they are set to get started. Most of the steps are common between all the workflows, so once you set configure these, you will be able to easily configure and run other workflows :)
+
+#### <a name="targets-used"></a> Targets Used in this Workflow
+
+This workflow executes on the `Cohesity Helios` HTTP endpoint under Default TargetGroup and. Some activities overrides the endpoint in the Default Target group. Below table specifies where these activities run. 
+
+| **Activity** | **HTTP Endpoint** | **Notes** |
+| --- | --- | --- |
+| Cohesity Helios: Get Anomalous Objects v1.2 | Cohesity Helios | This HTTP endpoint needs to be created. Refer [Create Cohesity Target](../misc/createCohesityHeliosTarget.md) doc to know more. |
+| Threat Response - Generate Access Token | CTR_For_Access_Token | This is a Default Endpoint already present. |
+| Cohesity Threat Response: Create Incidents | Private_CTIA_Target | This is a Default Endpoint already present. |
+| Cohesity Threat Response: Create Sighting | Private_CTIA_Target | This is a Default Endpoint already present. |
+| Cohesity Threat Response: Create Relationship | Private_CTIA_Target | This is a Default Endpoint already present. |
 
 #### <a name="helios-client"></a> Create Cohesity Helios API Key
 

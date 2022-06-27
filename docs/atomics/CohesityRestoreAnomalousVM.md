@@ -2,7 +2,7 @@
 ### <a name="restore-anomalous-objects"></a> Cohesity Helios - Restore Anomalous VM
 [home](../../README.md)
 
-This Atomic Action performs a restore operation for the specified anomalous VM to latest clean snapshot. Currently only VMware VMs are supported. This atomic action can be used to create your own custom workflow and the output from this Atomic action can be used to perform some action. Currently this atomic is being used by [Cohesity Helios: Restore Anomalous Object v1.2]() workflow
+This Atomic Action performs a restore operation for the specified anomalous VM to latest clean snapshot. Currently only VMware VMs are supported. This atomic action can be used to create your own custom workflow and the output from this Atomic action can be used to perform some action. Currently this atomic is being used by [Cohesity Helios: Restore Anomalous Object v1.2](../workflows/CohesityRestoreAnomalousObject.md) workflow
 
 ##### Input
 

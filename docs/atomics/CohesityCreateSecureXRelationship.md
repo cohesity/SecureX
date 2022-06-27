@@ -1,7 +1,7 @@
 ## <a name="create-securex-relationship"></a> Cohesity Threat Response - Create SecureX Relationship
 [home](../../README.md)
 
-This atomic action creates a Cisco Threat Response Relationship object. This is used in the [Cohesity Helios: Get Anomalous Objects v1.2 workflow](). Refer [Cisco Github](https://github.com/threatgrid/ctim/tree/master/doc) to find more about it. 
+This atomic action creates a Cisco Threat Response Relationship object. This is used in the [Cohesity Helios: Get Anomalous Objects v1.2 workflow](../workflows/HeliosRansomwareAlertsToThreatResponse.md). Refer [Cisco Github](https://github.com/threatgrid/ctim/tree/master/doc) to find more about it. 
 
 ### Input
 

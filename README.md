@@ -38,14 +38,14 @@ Lets go over the list of Atomic Actions that this integration supports.
 
 - [Cohesity Helios - Get Anomalous Objects](./docs/atomics/CohesityGetAnomalousObjects.md)
 - [Cohesity Helios - Ignore Anomaly](./docs/atomics/CohesityIgnoreAnomaly.md)
-- [Cohesity Helios - Resolve Anomalous VM](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Helios - Resolve Anomalous VM](./docs/atomics/CohesityResolveAnomaly.md)
 - [Cohesity Helios - Restore Anomalous VM](./docs/atomics/CohesityRestoreAnomalousVM.md)
-- [Cohesity Threat Response - Create SecureX Incidents](./docs/atomics/CohesityRestoreAnomalousVM.md)
-- [Cohesity Threat Response - Create SecureX Sightings](./docs/atomics/CohesityRestoreAnomalousVM.md)
-- [Cohesity Threat Response - Create SecureX Relationship](./docs/atomics/CohesityRestoreAnomalousVM.md)
-- [Cohesity Threat Response - Resolve SecureX Incident/Sighting](./docs/atomics/CohesityRestoreAnomalousVM.md)
-- [Cohesity Threat Response - Delete SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityRestoreAnomalousVM.md)
-- [Cohesity Threat Response - Get SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityRestoreAnomalousVM.md)
+- [Cohesity Threat Response - Create SecureX Incidents](./docs/atomics/CohesityCreateSecureXIncident.md)
+- [Cohesity Threat Response - Create SecureX Sightings](./docs/atomics/CohesityCreateSecureXSighting.md)
+- [Cohesity Threat Response - Create SecureX Relationship](./docs/atomics/CohesityCreateSecureXRelationship.md)
+- [Cohesity Threat Response - Resolve SecureX Incident/Sighting](./docs/atomics/CohesityResolveSecureXConstruct.md)
+- [Cohesity Threat Response - Delete SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityDeleteSecureXConstruct.md)
+- [Cohesity Threat Response - Get SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityGetSecureXConstruct.md)
 
 
 
@@ -56,15 +56,9 @@ Workflows are the larger component of orchestration and are similar to a script 
 
 Lets go over the list of Workflows that this integration supports. 
 
-- [Helios Ransomware Alerts to Threat Response Only](./docs/workflows/HeliosRansomwareAlertsToThreatResponse.md)
+- [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponse.md)
 - [Ignore Anomaly on Cohesity Helios](./docs/workflows/IgnoreAnomalyOnCohesity.md)
 - [Cohesity Restore Anomalous Object](./docs/workflows/CohesityRestoreAnomalousObject.md)
-
-If you want to get the Helios Ransomware Alerts to Threat Response and ServiceNow, refer this workflow. 
-
-- [Helios Ransomware Alerts to Threat Response and ServiceNow](./docs/workflows/HeliosRansomwareAlertsToThreatResponseAndServiceNow.md)
-
-
 
 ## <a name="import"></a> Import Atomic Actions and Workflows :bookmark_tabs:
 [top](#Cisco-SecureX-Integration)

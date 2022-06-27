@@ -2,7 +2,7 @@
 
  - [Intro](#intro)
  - [Pre-requisites](#pre-req)
-    * [Create SecureX API Client](#securex-client)
+    * [Targets used in this Workflow](#targets-used)
     * [Create Cohesity Helios API Key](#helios-client)
     * [Set Variables](#set-variables)
  - [How to Run](#run)
@@ -20,6 +20,19 @@ This workflow ignores anomaly for the specified object on Helios which removes t
 ### <a name="pre-req"></a> Pre-requisites
 
 Before you can run this workflow, there are a certain pre-req that you need to configure. Lets go over all of them and make sure they are set to get started. Most of the steps are common between all the workflows, so once you set configure these, you will be able to easily configure and run other workflows :)
+
+#### <a name="targets-used"></a> Targets Used in this Workflow
+
+This workflow executes on the `Cohesity Helios` HTTP endpoint under Default TargetGroup and. Some activities overrides the endpoint in the Default Target group. Below table specifies where these activities run. 
+
+| **Activity** | **HTTP Endpoint** | **Notes** |
+| --- | --- | --- |
+| Cohesity Helios: Get Anomalous Objects v1.2 | Cohesity Helios | This HTTP endpoint needs to be created. Refer [Create Cohesity Target](../misc/createCohesityHeliosTarget.md) doc to know more. |
+| Cohesity Helios: Ignore Anomaly v1.2 | Cohesity Helios | This HTTP endpoint needs to be created |
+| Threat Response - Generate Access Token | CTR_For_Access_Token | This is a Default Endpoint already present. |
+| Cohesity Helios: Get Incident, Sighting and Relationship ID | Private_CTIA_Target | This is a Default Endpoint already present. |
+| Cohesity Helios: Resolve SecureX Incident, Sighting, Relation | Private_CTIA_Target | This is a Default Endpoint already present. |
+| Cohesity Helios: Delete SecureX Incident, Sighting, Relation | Private_CTIA_Target | This is a Default Endpoint already present. |
 
 #### <a name="helios-client"></a> Create Cohesity Helios API Key
 [top](#Cisco-SecureX-Integration)
