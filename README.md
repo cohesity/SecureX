@@ -38,6 +38,7 @@ In order to start using the Cohesity SecureX Integration, you need to do the fol
 
 2. [Import the Atomics and Workflow using this Git Repo in SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/importing). While importing Workflows, it will automatically create a global variable for Helios API Key. Enter the Helios API Key there and you can then start using the Workflows
 
+3. Once you have imported all the Workflows and Atomics. Next step is to run the workflows. Check the [Workflow](#workflows) section to find all *required* pre-reqs to run these workflow. 
 
 > *Note that you will need to import Atomics and then Workflows since the Workflows depend on the Atomics.* 
 
