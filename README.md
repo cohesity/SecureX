@@ -16,9 +16,9 @@ This integration leverages Cohesity REST API to interact and fetch information f
 ## Table of contents :scroll:
 
  - What is [Cisco SecureX](#get-started)
+ - [Getting Started](#getting-started)
  - Supported [Atomic Actions](#atomic-actions) you can take
  - Supported [Workflows](#workflows) you can perform
- - How to [Import Workflows and Atomic Actions](#import)
  - [Minimum Permission for Helios User to generate Helios API KEY](#minimum-permission)
  - [Suggestions and Feedback](#suggest)
  - [Supported Objects](#supported)
@@ -28,6 +28,20 @@ This integration leverages Cohesity REST API to interact and fetch information f
 [top](#Cisco-SecureX-Integration)
 
 SecureX is a cloud-native, built-in platform that connects Cisco Secure portfolio and your infrastructure. It allows you to radically reduce dwell time and human-powered tasks. Refer to [Cisco SecureX page](https://www.cisco.com/c/en/us/products/security/securex/index.html) to know more about it.
+
+## <a name="import"></a> Getting Started :bookmark_tabs:
+[top](#Cisco-SecureX-Integration)
+
+In order to start using the Cohesity SecureX Integration, you need to do the following.
+
+1. [Register this Git Repo on SecureX](./docs/misc/registerGitRepo.md)
+
+2. [Import the Atomics and Workflow using this Git Repo in SecureX](https://ciscosecurity.github.io/sxo-05-security-workflows/importing). While importing Workflows, it will automatically create a global variable for Helios API Key. Enter the Helios API Key there and you can then start using the Workflows
+
+
+> *Note that you will need to import Atomics and then Workflows since the Workflows depend on the Atomics.* 
+
+To know more about importing and exporting your Workflows and Atomic Actions refer to [this video](https://www.youtube.com/watch?v=qmJk994qLOg&ab_channel=Cisco).
 
 ## <a name="atomic-actions"></a> Atomic Actions :large_blue_circle:
 [top](#Cisco-SecureX-Integration)
@@ -46,8 +60,6 @@ Lets go over the list of Atomic Actions that this integration supports.
 - [Cohesity Threat Response - Resolve SecureX Incident/Sighting](./docs/atomics/CohesityResolveSecureXConstruct.md)
 - [Cohesity Threat Response - Delete SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityDeleteSecureXConstruct.md)
 - [Cohesity Threat Response - Get SecureX Incident/Sighting/Relationship](./docs/atomics/CohesityGetSecureXConstruct.md)
-
-
 
 ## <a name="workflows"></a> Workflows :hourglass_flowing_sand:
 [top](#Cisco-SecureX-Integration)
@@ -70,9 +82,9 @@ To explore the various options available in SecureX orchestration for importing 
 
 In order to run the workflow on SecureX, you need to pass Helios APIKey. The user that creates this APIKey must have the following privileges. 
 
-* *Viewer Role*: This role is needed for the user to be able to login to Cohesty Helios and [create the APIKey.](https://developer.cohesity.com/docs/helios-getting-started)
+* *Viewer Role*: This role is needed for the user to be able to login to Cohesity Helios and [create the APIKey.](https://developer.cohesity.com/docs/helios-getting-started)
 
-* *Manage Protection Groups and Manage Recovery*: This role is needed to get a clean snapshot and recoever the VM to latest know safe state. 
+* *Manage Protection Groups and Manage Recovery*: This role is needed to get a clean snapshot and recover the VM to the latest known safe state.
 
 To know more about Cohesity Roles, please visit [Cohesity Product Documentation](https://docs.cohesity.com/6_5_1/Web/UserGuide/Content/Dashboard/Admin/RoleManage.htm?tocpath=Administration%7CAccess%20Management%7CRoles%7C_____0#ManageRoles). 
 

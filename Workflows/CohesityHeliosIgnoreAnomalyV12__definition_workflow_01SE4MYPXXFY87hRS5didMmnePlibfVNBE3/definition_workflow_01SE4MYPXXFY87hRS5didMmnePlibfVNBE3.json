@@ -21,6 +21,20 @@
         "object_type": "variable_workflow"
       },
       {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "observable_type",
+          "type": "datatype.string",
+          "description": "Specifies the Observable Type. Here it is the \"hostname\"",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01WBHSJU9OUVE0Cc3QPMW0KzRZcvt8VzYy3",
+        "object_type": "variable_workflow"
+      },
+      {
         "schema_id": "datatype.secure_string",
         "properties": {
           "value": "",
@@ -28,7 +42,7 @@
           "name": "HeliosAPIKey",
           "type": "datatype.secure_string",
           "description": "Cohesity Helios API Key. Generate it from Cohesity Helios and paste it in Value",
-          "is_required": true,
+          "is_required": false,
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01SE4MYQ6SV973kIxwz8Azn9ijFBLtIsohy",
@@ -46,20 +60,6 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01SE4MYQ6SCSZ5u6VhryNvV9EMlbvM6pLtS",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "observable_type",
-          "type": "datatype.string",
-          "description": "Specifies the Observable Type. Here it is the \"hostname\"",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SE4MYQ6TENP1JazmdUDT8ohLqSeqfVdDq",
         "object_type": "variable_workflow"
       }
     ],
@@ -97,6 +97,29 @@
     "object_type": "definition_workflow",
     "actions": [
       {
+        "unique_name": "definition_activity_01SL2QKI8EG6O4e0rp8o7LL5O9aOOxvRAYb",
+        "name": "Set Variables",
+        "title": "Set Workflow Variables",
+        "type": "core.set_multiple_variables",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Set Workflow Variables",
+          "skip_execution": false,
+          "variables_to_update": [
+            {
+              "variable_to_update": "$workflow.definition_workflow_01SE4MYPXXFY87hRS5didMmnePlibfVNBE3.input.variable_workflow_01SE4MYQ6SV973kIxwz8Azn9ijFBLtIsohy$",
+              "variable_value_new": "$global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r.global.variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r$"
+            },
+            {
+              "variable_to_update": "$workflow.definition_workflow_01SE4MYPXXFY87hRS5didMmnePlibfVNBE3.input.variable_workflow_01SE4MYQ6SCSZ5u6VhryNvV9EMlbvM6pLtS$",
+              "variable_value_new": "no"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
         "unique_name": "definition_activity_01SE4NO6NPNCA72joItZC3N0MhMxPIcq9Nr",
         "name": "Cohesity Helios: Get Anomalous Objects v1.2",
         "title": "Cohesity Helios: Get Anomalous Objects v1.2",
@@ -106,7 +129,8 @@
           "continue_on_failure": false,
           "display_name": "Cohesity Helios: Get Anomalous Objects v1.2",
           "input": {
-            "variable_workflow_01SCMAS4B0WO21tFjuMmjG0OXYDqro8mWfm": "$workflow.definition_workflow_01SE4MYPXXFY87hRS5didMmnePlibfVNBE3.input.variable_workflow_01SE4MYQ6SV973kIxwz8Azn9ijFBLtIsohy$"
+            "variable_workflow_01SCMAS4B0WO21tFjuMmjG0OXYDqro8mWfm": "$workflow.definition_workflow_01SE4MYPXXFY87hRS5didMmnePlibfVNBE3.input.variable_workflow_01SE4MYQ6SV973kIxwz8Azn9ijFBLtIsohy$",
+            "variable_workflow_01SL46I3SN6AB1MLXbzT2U2MiTNu5tvSTqP": "10000"
           },
           "runtime_user": {
             "target_default": true
@@ -115,7 +139,8 @@
           "target": {
             "use_workflow_target_group": true
           },
-          "workflow_id": "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw"
+          "workflow_id": "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+          "workflow_name": "[Atomic] Cohesity Helios: Get Anomalous Objects v1.2"
         },
         "object_type": "definition_activity"
       },
@@ -132,7 +157,7 @@
           "script": "'''\nSecureX orchestration workflow python script used to get anomalous objects detected\nin the last n hours from Cohesity Helios and push to SecureX private intelligence\nScript usage:\npython push_ransonware_data.py \u003cclient_id\u003e \u003cclient_password\u003e \u003chelios_api_key\u003e \u003cn\u003e\nclient_id: Threat Response API client id\nclient_password: Threat Response API client password\nhelios_api_key: Cohesity Helios API key\nn: number of hours, used to get anomalous objects detected in the last n hours\n'''\nimport argparse\nimport ast\n\ndef main(args):\n    alerts = ast.literal_eval(args.alerts)\n    for alert in alerts:\n        if(alert['object'] == args.obs_value):\n            return alert['alert_id'], alert['external_id']\n            \nparser = argparse.ArgumentParser(\n    description=\"Arguments to get anomalous objects from Helios\"\n                \" and push to private intelligence\")\nparser.add_argument(\"alerts\", help=\"All Alerts Array\")\nparser.add_argument(\"obs_type\", help=\"SecureX Observable Type\")\nparser.add_argument(\"obs_value\", help=\"SecureX Observable Value\")\nargs = parser.parse_args()\n\nalert_id, external_id = main(args)",
           "script_arguments": [
             "$activity.definition_activity_01SE4NO6NPNCA72joItZC3N0MhMxPIcq9Nr.output.variable_workflow_01SBS2EY211125J8Qt68lXInk8rdsrjoTF1$",
-            "$workflow.definition_workflow_01SE4MYPXXFY87hRS5didMmnePlibfVNBE3.input.variable_workflow_01SE4MYQ6TENP1JazmdUDT8ohLqSeqfVdDq$",
+            "$workflow.definition_workflow_01SE4MYPXXFY87hRS5didMmnePlibfVNBE3.input.variable_workflow_01WBHSJU9OUVE0Cc3QPMW0KzRZcvt8VzYy3$",
             "$workflow.definition_workflow_01SE4MYPXXFY87hRS5didMmnePlibfVNBE3.input.variable_workflow_01SE4MYQ6TOA07f5ic3OHC3f50gNVMgc8Qk$"
           ],
           "script_queries": [
@@ -171,7 +196,8 @@
           "target": {
             "use_workflow_target_group": true
           },
-          "workflow_id": "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE"
+          "workflow_id": "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE",
+          "workflow_name": "[Atomic] Cohesity Helios:Ignore Anomaly v1.2"
         },
         "object_type": "definition_activity"
       },
@@ -204,7 +230,8 @@
               }
             }
           },
-          "workflow_id": "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH"
+          "workflow_id": "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+          "workflow_name": "Threat Response - Generate Access Token"
         },
         "object_type": "definition_activity"
       },
@@ -241,7 +268,8 @@
               }
             }
           },
-          "workflow_id": "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5"
+          "workflow_id": "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5",
+          "workflow_name": "[Atomic] Cohesity Threat Response: Get Incident/Sighting/Rel"
         },
         "object_type": "definition_activity"
       },
@@ -310,7 +338,8 @@
                       }
                     }
                   },
-                  "workflow_id": "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4"
+                  "workflow_id": "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4",
+                  "workflow_name": "[Atomic] Cohesity Threat Response: Resolve Incident/Sighting/Rel"
                 },
                 "object_type": "definition_activity"
               }
@@ -369,7 +398,8 @@
                       }
                     }
                   },
-                  "workflow_id": "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw"
+                  "workflow_id": "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw",
+                  "workflow_name": "[Atomic] Cohesity Threat Response: Delete Incident/Sighting/Rel"
                 },
                 "object_type": "definition_activity"
               }
@@ -379,8 +409,19 @@
       }
     ],
     "categories": [
-      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+      "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m"
     ]
+  },
+  "categories": {
+    "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m": {
+      "unique_name": "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m",
+      "name": "response",
+      "title": "response",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
   },
   "target_groups": {
     "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH": {
@@ -405,7 +446,30 @@
       "object_type": "target_group"
     }
   },
+  "variables": {
+    "variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r": {
+      "unique_name": "variable_01NUXTVON1RN738uyknMjBaKMXOjdk9up4r",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Cohesity Helios API Key",
+        "type": "datatype.secure_string",
+        "description": "Cohesity Helios API key used for authentication while making API calls",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  },
   "atomic_workflows": [
+    "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4",
+    "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw",
+    "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE",
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+    "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5"
+  ],
+  "dependent_workflows": [
     "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
     "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE",
     "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
