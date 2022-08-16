@@ -37,7 +37,7 @@
       {
         "schema_id": "datatype.string",
         "properties": {
-          "value": "10000",
+          "value": "1000",
           "scope": "input",
           "name": "HeliosRansomwareAlertsFilter",
           "type": "datatype.string",
@@ -55,14 +55,15 @@
         "is_atomic": true
       },
       "delete_workflow_instance": false,
-      "description": "This atomic gets list of all anomalous objects identified by Cohesity Helios",
+      "description": "This atomic gets list of all anomalous objects identified by Cohesity Helios\n\nTarget: HTTP endpoint for \"Cohesity Helios\"\n\nAccount Key: HTTP API Key of Cohesity Helios User\n\nSteps:\n[] Request the Cohesity Helios to get a list of all anamolous objects from current time to \n[] Check if the API request succeeded:\n[]\u003e If it did, attempt to extract the list of anamolous objects into an array and sets the output variable HeliosAlertsArray\n[]\u003e If it didn't, output failed",
       "display_name": "[Atomic] Cohesity Helios: Get Anomalous Objects v1.2",
       "runtime_user": {
         "target_default": true
       },
       "target": {
         "target_type": "web-service.endpoint",
-        "specify_on_workflow_start": true
+        "target_id": "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft",
+        "execute_on_workflow_target": true
       }
     },
     "object_type": "definition_workflow",
@@ -102,6 +103,7 @@
         "properties": {
           "action_timeout": 180,
           "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
           "content_type": "application/json",
           "continue_on_error_status_code": true,
           "continue_on_failure": false,
@@ -114,15 +116,16 @@
           "description": "API call to get all anomalous objects identified by Cohesity Helios",
           "display_name": "Get All Cohesity Helios Anomalous Objects",
           "method": "GET",
-          "relative_url": "mcm/alerts?alertCategoryList=kSecurity\u0026alertStateList=kOpen\u0026maxAlerts=1000\u0026startDateUsecs=$activity.definition_activity_01SL45BKBLK294KnFrol2QGu500JjZMM0sD.output.script_queries.startDateUsecs$",
+          "relative_url": "mcm/alerts?alertCategoryList=kSecurity\u0026alertStateList=kOpen\u0026maxAlerts=$global.variable_01OD0GHYPQ8JJ3cQio7pfjoqIUwrasIA2jr.global.variable_01OD0GHYPQ8JJ3cQio7pfjoqIUwrasIA2jr$\u0026startDateUsecs=$activity.definition_activity_01SL45BKBLK294KnFrol2QGu500JjZMM0sD.output.script_queries.startDateUsecs$",
           "runtime_user": {
             "target_default": true
           },
           "skip_execution": false,
           "target": {
-            "use_workflow_target": true
+            "override_workflow_target": true,
+            "target_id": "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft"
           },
-          "user_agent": "SecureX-v1.1"
+          "user_agent": "SecureX-v1.3"
         },
         "object_type": "definition_activity"
       },
@@ -266,6 +269,41 @@
       "base_type": "category",
       "category_type": "custom",
       "object_type": "category"
+    }
+  },
+  "targets": {
+    "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft": {
+      "unique_name": "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft",
+      "name": "Cohesity Helios",
+      "title": "Cohesity Helios",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": true,
+        "display_name": "Cohesity Helios",
+        "host": "helios.cohesity.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "path": "/",
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "variables": {
+    "variable_01OD0GHYPQ8JJ3cQio7pfjoqIUwrasIA2jr": {
+      "unique_name": "variable_01OD0GHYPQ8JJ3cQio7pfjoqIUwrasIA2jr",
+      "properties": {
+        "value": "1000",
+        "scope": "global",
+        "name": "Cohesity Helios Ransomware Alerts Filter",
+        "type": "datatype.string",
+        "description": "Specifies the number of hours. This is used to filter alerts detected in the last specified number of hours",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
     }
   }
 }
