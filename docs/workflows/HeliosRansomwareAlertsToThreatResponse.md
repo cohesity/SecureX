@@ -39,6 +39,8 @@ This workflow executes on the `Cohesity Helios` HTTP endpoint under Default Targ
 | Cohesity Threat Response: Create Sighting | Private_CTIA_Target | This is a Default Endpoint already present. |
 | Cohesity Threat Response: Create Relationship | Private_CTIA_Target | This is a Default Endpoint already present. |
 
+Note: In this Workflow: Threat Response - Generate Access Token uses (HTTP Endpoint : CTR_For_Access_Token) , Make sure you have created the CTR Target for Access Token Target Type. Refer [CTR Access Token Target](../misc/CTRAccessToken.md)
+
 #### <a name="helios-client"></a> Create Cohesity Helios API Key
 
 In order to run the workflow on SecureX, you need to pass Helios APIKey. To create it, login to Cohesity Helios and [create the APIKey.](https://developer.cohesity.com/docs/helios-getting-started)
