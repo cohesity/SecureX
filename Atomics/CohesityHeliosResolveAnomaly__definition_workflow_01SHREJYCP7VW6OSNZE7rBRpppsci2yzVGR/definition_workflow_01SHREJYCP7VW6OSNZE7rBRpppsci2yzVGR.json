@@ -41,7 +41,7 @@
         "is_atomic": true
       },
       "delete_workflow_instance": false,
-      "description": "Atomic to Resolve Cohesity Anomalous Object",
+      "description": "Atomic to Resolve Cohesity Anomalous Object\n\nTarget: Uses Workflow Target, Use Http Endpoint for \"Cohesity Helios\"\n\nAccount Key: HTTP API Key of Cohesity Helios User\n\n\nSteps:\n[] Sends an API call to Cohesity Helios to resolve the anamolus alert. \n[] Check if the API request succeeded:\n[]\u003e If it did, returns success.\n[]\u003e If it didn't, output failed.",
       "display_name": "[Atomic] Cohesity Helios: Resolve Anomaly v1.2 Atomic",
       "runtime_user": {
         "target_default": true
@@ -62,6 +62,7 @@
         "properties": {
           "action_timeout": 180,
           "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
           "body": "{\n\"status\": \"kResolved\"\n}",
           "content_type": "application/json",
           "continue_on_error_status_code": true,
