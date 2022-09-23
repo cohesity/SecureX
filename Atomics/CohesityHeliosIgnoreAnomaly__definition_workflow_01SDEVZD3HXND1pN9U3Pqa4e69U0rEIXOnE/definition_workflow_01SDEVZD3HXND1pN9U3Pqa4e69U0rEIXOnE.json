@@ -41,7 +41,7 @@
         "is_atomic": true
       },
       "delete_workflow_instance": false,
-      "description": "Atomic to Ignore Anomaly Alerts on Cohesity Helios\n\nTarget: Uses Workflow Target, Use Http Endpoint for \"Cohesity Helios\"\n\nAccount Key: HTTP API Key of Cohesity Helios User\n\nSteps:\nSteps:\n[] Sends an API call to Cohesity Helios to ignore the Anamoly alert\n[] Check if the API request succeeded:\n[]\u003e If it did, returns success.\n[]\u003e If it didn't, output failed.",
+      "description": "Atomic to Ignore Anomaly Alerts on Cohesity Helios\n\nTarget: Uses Workflow Target, Use Http Endpoint for \"Cohesity Helios\"\n\nAccount Key: HTTP API Key of Cohesity Helios User\n\nSteps:\n[] Sends an API call to Cohesity Helios to ignore the Anamoly alert\n[] Check if the API request succeeded:\n[]\u003e If it did, returns success.\n[]\u003e If it didn't, output failed.",
       "display_name": "[Atomic] Cohesity Helios:Ignore Anomaly v1.2",
       "runtime_user": {
         "target_default": true
