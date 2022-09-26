@@ -7,76 +7,6 @@
     "base_type": "workflow",
     "variables": [
       {
-        "schema_id": "datatype.secure_string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Access Token",
-          "type": "datatype.secure_string",
-          "description": "An access token for the Threat Response API. This is often obtained using the \"Threat Response - Generate Access Token\" atomic",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCLPSOLO03G7glCWucHVyq8wp6cWMNJkc",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Incident Title",
-          "type": "datatype.string",
-          "description": "A short title for the incident",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCLR8DF1K705mJUpiA8LiQU5I6TjOV1V5",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "External ID",
-          "type": "datatype.string",
-          "description": "External ID can be used to uniquely identify the SecureX Incident",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCLSC1X898J3uTjDcWJdTd6QNIPhfWxUf",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "output",
-          "name": "Short Incident ID",
-          "type": "datatype.string",
-          "description": "The plain incident ID without the CTIA URL",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCLRI0TD8IO5bzBpHLAb7BjWti7xpzSMH",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Incident Description",
-          "type": "datatype.string",
-          "description": "This can be a string of plain text or can be formatted with Markdown",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCLQHP4Y0TQ545nnq4VDJHsMMtSRAUO3E",
-        "object_type": "variable_workflow"
-      },
-      {
         "schema_id": "datatype.string",
         "properties": {
           "value": "Cohesity Helios",
@@ -91,17 +21,17 @@
         "object_type": "variable_workflow"
       },
       {
-        "schema_id": "datatype.string",
+        "schema_id": "datatype.secure_string",
         "properties": {
           "value": "",
           "scope": "input",
-          "name": "Incident Status",
-          "type": "datatype.string",
-          "description": "Must be one of the following: New, Closed, Rejected, Open, Restoration Achieved, Incident Reported, Stalled, or Containment Achieved",
+          "name": "Access Token",
+          "type": "datatype.secure_string",
+          "description": "An access token for the Threat Response API. This is often obtained using the \"Threat Response - Generate Access Token\" atomic",
           "is_required": true,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01SCLQZKG28FT64EWwbgXcB9d80vYOh10zq",
+        "unique_name": "variable_workflow_01SCLPSOLO03G7glCWucHVyq8wp6cWMNJkc",
         "object_type": "variable_workflow"
       },
       {
@@ -123,13 +53,13 @@
         "properties": {
           "value": "",
           "scope": "input",
-          "name": "Incident Confidence",
+          "name": "Incident Title",
           "type": "datatype.string",
-          "description": "Must be one of the following: Medium, Info, Unknown, None, High, or Low",
+          "description": "A short title for the incident",
           "is_required": true,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01SCLQ4WZTQEU0Q0txB1NYY1CuVasi69Fq2",
+        "unique_name": "variable_workflow_01SCLR8DF1K705mJUpiA8LiQU5I6TjOV1V5",
         "object_type": "variable_workflow"
       },
       {
@@ -145,6 +75,76 @@
         },
         "unique_name": "variable_workflow_01SCLRPXGQ4HZ1PkxK4I6FG7b7BPknmalZK",
         "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "External ID",
+          "type": "datatype.string",
+          "description": "External ID can be used to uniquely identify the SecureX Incident",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLSC1X898J3uTjDcWJdTd6QNIPhfWxUf",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident Confidence",
+          "type": "datatype.string",
+          "description": "Must be one of the following: Medium, Info, Unknown, None, High, or Low",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLQ4WZTQEU0Q0txB1NYY1CuVasi69Fq2",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident Description",
+          "type": "datatype.string",
+          "description": "This can be a string of plain text or can be formatted with Markdown",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLQHP4Y0TQ545nnq4VDJHsMMtSRAUO3E",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Incident Status",
+          "type": "datatype.string",
+          "description": "Must be one of the following: New, Closed, Rejected, Open, Restoration Achieved, Incident Reported, Stalled, or Containment Achieved",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLQZKG28FT64EWwbgXcB9d80vYOh10zq",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "Short Incident ID",
+          "type": "datatype.string",
+          "description": "The plain incident ID without the CTIA URL",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCLRI0TD8IO5bzBpHLAb7BjWti7xpzSMH",
+        "object_type": "variable_workflow"
       }
     ],
     "properties": {
@@ -153,7 +153,7 @@
         "is_atomic": true
       },
       "delete_workflow_instance": false,
-      "description": "This atomic will be used to create Securex Incident. The different between this and the existing one is that this one supports passing more incident payload object like external_ids and others. Check the input variables to know more. ",
+      "description": "This atomic will be used to create Securex Incident. The different between this and the existing one is that this one supports passing more incident payload object like external_ids and others. Check the input variables to know more. \n\n\nTarget: Uses Workflow Target\n\nAccount Key: CTIA access token\n\n\nSteps:\n[] Sends an API call to CTIA to create an incident from Cohesity Alert  \n[] API call to get Incident by External ID\n[]\u003e If it was successful, extract incident ID and set the output variable\n[]\u003e If it didn't, output failed.\n",
       "display_name": "[Atomic] Cohesity Threat Response: Create Incidents",
       "runtime_user": {
         "target_default": true
@@ -205,6 +205,7 @@
         "properties": {
           "action_timeout": 180,
           "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
           "content_type": "application/json",
           "continue_on_error_status_code": false,
           "continue_on_failure": false,
@@ -270,6 +271,7 @@
                   "accept": "application/json",
                   "action_timeout": 180,
                   "allow_auto_redirect": true,
+                  "allow_headers_redirect": false,
                   "body": "$activity.definition_activity_01SCLP2RWOEFY1OpGPUANWt5f82fVLogxux.output.script_queries.incident_json$",
                   "content_type": "application/json",
                   "continue_on_error_status_code": true,
