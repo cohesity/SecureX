@@ -1,11 +1,25 @@
 {
   "workflow": {
     "unique_name": "definition_workflow_01SCN4EE93SG32dgZWXTdsy3Y12UQnRajmb",
-    "name": "Cohesity Threat Response: Create Sightings",
-    "title": "Cohesity Threat Response: Create Sightings",
+    "name": "[Atomic] Cohesity Threat Response: Create Sightings",
+    "title": "[Atomic] Cohesity Threat Response: Create Sightings",
     "type": "generic.workflow",
     "base_type": "workflow",
     "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Observables",
+          "type": "datatype.string",
+          "description": "A JSON-formatted list of observables. Example:\n[ { \"type\": \"ip\", \"value\": \"192.168.1.1\" }, { \"type\": \"domain\", \"value\": \"cisco.com\" } ]",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCN8JZLOI5W3V8Ze2TpZvFd3d4c1Tf5cj",
+        "object_type": "variable_workflow"
+      },
       {
         "schema_id": "datatype.string",
         "properties": {
@@ -52,20 +66,6 @@
         "schema_id": "datatype.string",
         "properties": {
           "value": "",
-          "scope": "output",
-          "name": "Sighting ID",
-          "type": "datatype.string",
-          "description": "The ID of the new sighting. This can be used when creating relationships to other objects",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCN4EEFT3VR76QJ6FqD7jbtmBU8M3Y2m8",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
           "scope": "input",
           "name": "Sighting Description",
           "type": "datatype.string",
@@ -80,28 +80,14 @@
         "schema_id": "datatype.string",
         "properties": {
           "value": "",
-          "scope": "input",
-          "name": "Sighting Title",
+          "scope": "output",
+          "name": "Sighting ID",
           "type": "datatype.string",
-          "description": "A short title for the sighting",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SCN4EEFTD3N6yKu1jEHY0UQmYlYB8eDAq",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Observables",
-          "type": "datatype.string",
-          "description": "A JSON-formatted list of observables. Example:\n[ { \"type\": \"ip\", \"value\": \"192.168.1.1\" }, { \"type\": \"domain\", \"value\": \"cisco.com\" } ]",
+          "description": "The ID of the new sighting. This can be used when creating relationships to other objects",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01SCN8JZLOI5W3V8Ze2TpZvFd3d4c1Tf5cj",
+        "unique_name": "variable_workflow_01SCN4EEFT3VR76QJ6FqD7jbtmBU8M3Y2m8",
         "object_type": "variable_workflow"
       },
       {
@@ -116,6 +102,20 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01SCNEBZ7LU7D4JTVmcek77tLk2Owz4DNAX",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Sighting Title",
+          "type": "datatype.string",
+          "description": "A short title for the sighting",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SCN4EEFTD3N6yKu1jEHY0UQmYlYB8eDAq",
         "object_type": "variable_workflow"
       },
       {
@@ -139,8 +139,8 @@
         "is_atomic": true
       },
       "delete_workflow_instance": false,
-      "description": "This atomic will be used to create Securex sighting. The different between this and the existing one is that this one supports passing more incident payload object like external_ids and others. Check the input variables to know more. ",
-      "display_name": "Cohesity Threat Response: Create Sightings",
+      "description": "This atomic will be used to create Securex Sighting. The different between this and the existing one is that this one supports passing more incident payload object like external_ids and others. Check the input variables to know more. \n\n\nTarget: Uses Workflow Target\n\nAccount Key: CTIA access token\n\n\nSteps:\n[] Sends an API call to CTIA to create a sighting from Cohesity Alert  \n[] API call to get Sighting by External ID\n[]\u003e If it was successful, extract incident ID and set the output variable\n[]\u003e If it didn't, output failed.",
+      "display_name": "[Atomic] Cohesity Threat Response: Create Sightings",
       "runtime_user": {
         "target_default": true
       },
@@ -191,6 +191,7 @@
         "properties": {
           "action_timeout": 180,
           "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
           "content_type": "application/json",
           "continue_on_error_status_code": false,
           "continue_on_failure": false,
@@ -256,6 +257,7 @@
                   "accept": "application/json",
                   "action_timeout": 180,
                   "allow_auto_redirect": true,
+                  "allow_headers_redirect": false,
                   "body": "$activity.definition_activity_01SCN4EH0UR921P2xgG2eQ5f6DJWE2s4pvc.output.script_queries.sighting_json$  ",
                   "content_type": "application/json",
                   "continue_on_error_status_code": true,
