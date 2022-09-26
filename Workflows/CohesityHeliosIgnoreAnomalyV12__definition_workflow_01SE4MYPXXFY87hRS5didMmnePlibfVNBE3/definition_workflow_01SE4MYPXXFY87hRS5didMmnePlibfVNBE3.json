@@ -23,6 +23,20 @@
       {
         "schema_id": "datatype.string",
         "properties": {
+          "value": "no",
+          "scope": "input",
+          "name": "DeleteSightingIncident",
+          "type": "datatype.string",
+          "description": "Delete Sighting and Incident? Value can be \"yes\" or \"no\". Defaults to No, which means incident will be resolved by default",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SE4MYQ6SCSZ5u6VhryNvV9EMlbvM6pLtS",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
           "value": "",
           "scope": "input",
           "name": "observable_type",
@@ -47,20 +61,6 @@
         },
         "unique_name": "variable_workflow_01SE4MYQ6SV973kIxwz8Azn9ijFBLtIsohy",
         "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "no",
-          "scope": "input",
-          "name": "DeleteSightingIncident",
-          "type": "datatype.string",
-          "description": "Delete Sighting and Incident? Value can be \"yes\" or \"no\". Defaults to No, which means incident will be resolved by default",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01SE4MYQ6SCSZ5u6VhryNvV9EMlbvM6pLtS",
-        "object_type": "variable_workflow"
       }
     ],
     "properties": {
@@ -68,7 +68,7 @@
         "is_atomic": false
       },
       "delete_workflow_instance": false,
-      "description": "This workflow ignores anomaly on Helios",
+      "description": "This workflow ignores the anamoly alert on Cohesity Helios, and resolves \u0026 deletes incident, sightings and relationship between them respectively.\n\nTarget Group: Default TargetGroup, HTTP Endpoint \"Cohesity Helios\"\n\nSteps:\n[] Set all the input variables\n[] Atomic for get Anamolous Object from Cohesity Helios. \n[] Extract the Alert ID\n[] Ignore the anamoly alert on Cohesity Helios. \n[] Generate CTIA Access Token.\n[] Get the Incident , Sighting and Relationship ID.\n[] Resolve the Incident Sighting and Relationship ID. \n[] Resolve the Incident Sighting and Relationship ID. ",
       "display_name": "Cohesity Helios: Ignore Anomaly v1.2",
       "runtime_user": {
         "target_default": true
@@ -137,7 +137,9 @@
           },
           "skip_execution": false,
           "target": {
-            "use_workflow_target_group": true
+            "execute_on_this_target": true,
+            "target_id": "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft",
+            "target_type": "web-service.endpoint"
           },
           "workflow_id": "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
           "workflow_name": "[Atomic] Cohesity Helios: Get Anomalous Objects v1.2"
@@ -194,7 +196,9 @@
           },
           "skip_execution": false,
           "target": {
-            "use_workflow_target_group": true
+            "execute_on_this_target": true,
+            "target_id": "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft",
+            "target_type": "web-service.endpoint"
           },
           "workflow_id": "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE",
           "workflow_name": "[Atomic] Cohesity Helios:Ignore Anomaly v1.2"
@@ -423,6 +427,26 @@
       "object_type": "category"
     }
   },
+  "targets": {
+    "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft": {
+      "unique_name": "definition_target_01NUXYJSHWS6R5qkNnOhUAZKHNF4i5nH4ft",
+      "name": "Cohesity Helios",
+      "title": "Cohesity Helios",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": true,
+        "display_name": "Cohesity Helios",
+        "host": "helios.cohesity.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "path": "/",
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
   "target_groups": {
     "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH": {
       "unique_name": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
@@ -462,12 +486,12 @@
     }
   },
   "atomic_workflows": [
-    "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4",
     "definition_workflow_01SDDK56JTL3Y1cMmAPgx5WsHBw0diMJ0Lw",
+    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
+    "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5",
     "definition_workflow_01SDEVZD3HXND1pN9U3Pqa4e69U0rEIXOnE",
     "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
-    "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
-    "definition_workflow_01SDBZKS4MC3M3ANjy3Lxa0FJclu1GSkMx5"
+    "definition_workflow_01SDEEISXFSNZ0vP1V7yabH2u0MzwH63hp4"
   ],
   "dependent_workflows": [
     "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
