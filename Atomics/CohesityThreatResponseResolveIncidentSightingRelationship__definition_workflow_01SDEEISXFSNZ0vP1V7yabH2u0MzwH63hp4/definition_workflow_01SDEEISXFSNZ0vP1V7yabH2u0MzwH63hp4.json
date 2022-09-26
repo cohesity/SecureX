@@ -55,7 +55,7 @@
         "is_atomic": true
       },
       "delete_workflow_instance": false,
-      "description": "Resolve SecureX Incident, Sighting and Relationship by their IDs",
+      "description": "This Atomic resolves SecureX Incident, Sighting and Relationship by their IDs\n\nTarget: Uses Workflow Target\n\nAccount Key: CTIA access token\n\n\nSteps:\n[]\u003e Gets the Incident from Cisco SecureX\n[]\u003e Resolves the Incident.\n[]\u003e  Gets the Sighting from Cisco SecureX \n[]\u003e Resolves the Sighting.\n",
       "display_name": "[Atomic] Cohesity Threat Response: Resolve Incident/Sighting/Rel",
       "runtime_user": {
         "target_default": true
@@ -76,6 +76,7 @@
         "properties": {
           "action_timeout": 180,
           "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
           "content_type": "application/json",
           "continue_on_error_status_code": false,
           "continue_on_failure": false,
@@ -132,6 +133,7 @@
         "properties": {
           "action_timeout": 180,
           "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
           "body": "$activity.definition_activity_01SDEEZ0ASPRN0OViJ8u8z0nqXNrD7Hkeup.output.script_queries.incident$",
           "content_type": "application/json",
           "continue_on_error_status_code": false,
@@ -164,6 +166,7 @@
         "properties": {
           "action_timeout": 180,
           "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
           "content_type": "application/json",
           "continue_on_error_status_code": false,
           "continue_on_failure": false,
@@ -220,6 +223,7 @@
         "properties": {
           "action_timeout": 180,
           "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
           "body": "$activity.definition_activity_01SDEG6XG6DVS3rgQDEA1Fi5NT9Yy9qTuit.output.script_queries. sighting$",
           "content_type": "application/json",
           "continue_on_error_status_code": false,
