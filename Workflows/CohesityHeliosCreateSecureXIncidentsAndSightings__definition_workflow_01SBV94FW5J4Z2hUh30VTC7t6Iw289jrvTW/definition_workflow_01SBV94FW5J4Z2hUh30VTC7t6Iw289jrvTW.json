@@ -54,7 +54,7 @@
         "is_atomic": false
       },
       "delete_workflow_instance": false,
-      "description": "This workflow gets Cohesity Helios Anomalous Objects and creates corresponding SecureX Incidents and Sightings. ",
+      "description": "This workflow gets Cohesity Helios Anomalous Objects and creates corresponding SecureX Incidents and Sightings. \n\nTarget Group: Default TargetGroup, HTTP Endpoint\n\nSteps:\n[] Set all the input variables\n[] Atomic to get the Anamalous Objects from Cohesity Helios. \n[] Covert Cohesity Helios Json into array objects.\n[] Atomic to generate CTIA Access Token\n[] For each of the array object, Create Incidents, Create Response.\n[] If both of them are successful, create a relationship between them\n[] Check if the variable: Create_ServiceNow_Ticket is set.\n[] If Yes, for each array object create a ServiceNow Incident. ",
       "display_name": "Cohesity Helios: Anomalous Objects to SecureX v1.2",
       "runtime_user": {
         "target_default": true
@@ -63,20 +63,10 @@
         "execute_on_target_group": true,
         "target_group": {
           "target_group_id": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
-          "run_on_all_targets": false,
+          "run_on_all_targets": true,
           "selected_target_types": [
             "web-service.endpoint"
-          ],
-          "use_criteria": {
-            "choose_target_using_algorithm": "choose_first_with_matching_criteria",
-            "conditions": [
-              {
-                "operator": "eq",
-                "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
-                "right_operand": "Cohesity Helios"
-              }
-            ]
-          }
+          ]
         }
       }
     },
@@ -613,12 +603,12 @@
     }
   },
   "atomic_workflows": [
-    "definition_workflow_01SCN4EE93SG32dgZWXTdsy3Y12UQnRajmb",
     "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
-    "definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3",
     "definition_workflow_01C0BYD0GI1KZ0mxScCSxVrfX70zrUdqLlW",
     "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
-    "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE"
+    "definition_workflow_01SCLOQBQVD061i6vZsjTkmc4FjyUGJW0eE",
+    "definition_workflow_01SCN4EE93SG32dgZWXTdsy3Y12UQnRajmb",
+    "definition_workflow_01SDCIREBT0T96UZPqKLx3GUNpskpz8pgs3"
   ],
   "dependent_workflows": [
     "definition_workflow_01SBR0JK0J9RK4L7zbKYW1B1ZeKZeoOjNbw",
